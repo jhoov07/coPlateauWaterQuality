@@ -1,0 +1,81 @@
+---
+title: "Arsenic data"
+output: 
+  html_document:
+author: "Austin Martinez"
+date: "2024-06-13"
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+## Background
+
+#please give a brief summary of the goal of this data report. Mention the data source (USGS paper), and a 3-5 sentence overview of what is contained. Then let's move into variable summaries. 
+
+```{r setup, include=FALSE}
+#setwd("~/Desktop")   #Set working directory for your local version of the cloned github repo
+setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality")
+library(kableExtra)
+arsenicdata = read.csv("./01_data/Model_input_definitions 1.csv")
+selected_predictors <- c("rt_clast_u", "rt_meta", "rt_plut_qtz", "PRMS8110Re", "LP2")
+data <- subset(arsenicdata, Predictor_name %in% selected_predictors)
+```
+## Geologic Predictor Variables
+#provide summaries of geologic predictor variables here, examples may include rocks, soils and other geologic factors
+
+**rt_clast_u**: Generalized lithology classified as CLAST_U: sediments
+and sedimentary rocks. Clastic sediments/rocks of unknown or highly
+variable clast sizes.
+
+**rt_meta**:Generalized lithology classified as META: Metamorphic rocks.
+
+**rt_plut_qtz**: Generalized lithology classified as PLUT_QTZ: Igneous,
+generally felsic, quartz-rich plutonic rocks such as granitoids,
+granite, granodacite. Lithology of plutonics and volcanics are split out
+based on quartz content using the IUGS classification presented in
+Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
+1985, page 33, fields 1-5.
+
+
+## Hydrology Predictor Variables
+#provide summaries of hydrologic predictor variables here, examples may include depth to groundwater, lateral hydrologic position, stream flow, etc, acquifer characteristics
+
+**PRMS8110Re**: average annual recharge to groundwater.
+
+**LP2**: Lateral position for fourth order streams
+
+
+## Climate Predictor Variables
+#provide summaries of hydrologic predictor variables here, examples may include precipitation, temperature, evapotranspiration
+
+## Land use/land cover Predictor Variables
+#if applicable, provide summaries of Land use/land cover predictor variables here
+
+
+# Predictor variable descriptions
+
+```{r descriptions, include=TRUE}
+NameDescription <- data.frame(data$Predictor_name, data$Description)
+kable(NameDescription)
+```
+
+```{r all data, include=TRUE}
+kable(data)
+```
+
+# Predictor variable descriptions2
+
+
+
+
+
+```{r NameMax, include=TRUE}
+NameMax <- data.frame(data$Predictor_name, data$Max)
+kable(NameMax)
+```
+
+```{r NameMin, include=TRUE}
+NameMin <- data.frame(data$Predictor_name, data$Min)
+kable(NameMin)
+```
