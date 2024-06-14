@@ -13,6 +13,12 @@ editor_options:
 
 #please give a brief summary of the goal of this data report. Mention the data source (USGS paper), and a 3-5 sentence overview of what is contained. Then let's move into variable summaries. 
 
+### Overview Statement
+
+This dataset that is provided by the  U.S. Geological Survey (USGS) was compiled and published by Melissa A. Lombard in 2021. This data spans from 1970 to 2013. This data was originally sourced to aid in the development of models that estimate the probability of private well arsenic concentrations exceeding various thresholds (1, 5, and 10 micrograms per liter) throughout the conterminous United States. 
+
+The purpose of retrieving this dataset is to develop a model that uses this data to predict which areas of the Colorado Plateau are most at risk for underground water contamination by arsenic.
+
 ```{r setup, include=FALSE}
 #setwd("~/Desktop")   #Set working directory for your local version of the cloned github repo
 setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality")
