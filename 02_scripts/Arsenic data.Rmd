@@ -160,8 +160,6 @@ kable(data)
 
 
 
-
-
 ```{r NameMax, include=TRUE}
 NameMax <- data.frame(data$Predictor_name, data$Max)
 kable(NameMax)
@@ -170,4 +168,26 @@ kable(NameMax)
 ```{r NameMin, include=TRUE}
 NameMin <- data.frame(data$Predictor_name, data$Min)
 kable(NameMin)
+```
+# Categorical Variables stats summary
+
+```{r arsenic_catagorical_data, include=TRUE}
+library(kableExtra)
+setwd("~/Desktop/Biosphere 2/Arsenic data")
+arsenic_catagorical_data <- read.csv("Arsenic_catagorical_variables.csv")
+# Extracting specific columns
+catagorical_data <- arsenic_catagorical_data[, c("Predictor_name", "Category_levels", "Categorical_observation_amounts")]
+kable(catagorical_data)
+```
+
+# Continuous Variables stats summary
+
+```{r arsenic_continous_data, include=TRUE}
+library(kableExtra)
+setwd("~/Desktop/Biosphere 2/Arsenic data")
+arsenic_continous_data <- read.csv("Arsenic_continuos_variables.csv")
+# Extracting specific columns
+extracted_data <- arsenic_continous_data[, c("Predictor_name", "Min", "Max", "X25._Quartile", "Mean", "X75._Quartile",
+                                  "Standard_Deviation")]
+kable(extracted_data)
 ```
