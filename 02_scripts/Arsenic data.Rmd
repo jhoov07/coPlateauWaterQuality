@@ -11,8 +11,6 @@ editor_options:
 
 ## Background
 
-#please give a brief summary of the goal of this data report. Mention the data source (USGS paper), and a 3-5 sentence overview of what is contained. Then let's move into variable summaries. 
-
 ### Overview Statement
 
 This dataset that is provided by the  U.S. Geological Survey (USGS) was compiled and published by Melissa A. Lombard in 2021. This data spans from 1970 to 2013. This data was originally sourced to aid in the development of models that estimate the probability of private well arsenic concentrations exceeding various thresholds (1, 5, and 10 micrograms per liter) throughout the conterminous United States. 
@@ -29,21 +27,6 @@ data <- subset(arsenicdata, Predictor_name %in% selected_predictors)
 ```
 ## Geologic Predictor Variables
 #provide summaries of geologic predictor variables here, examples may include rocks, soils and other geologic factors
-
-**rt_clast_u**: Generalized lithology classified as CLAST_U: sediments
-and sedimentary rocks. Clastic sediments/rocks of unknown or highly
-variable clast sizes.
-
-**rt_meta**:Generalized lithology classified as META: Metamorphic rocks.
-
-**rt_plut_qtz**: Generalized lithology classified as PLUT_QTZ: Igneous,
-generally felsic, quartz-rich plutonic rocks such as granitoids,
-granite, granodacite. Lithology of plutonics and volcanics are split out
-based on quartz content using the IUGS classification presented in
-Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
-1985, page 33, fields 1-5.
-
-### Variables I added
 
 **rt_carb**: Generalized lithology classified as CARB
 **rt_clast_c**: Generalized lithology classified as CLAST_C
@@ -95,9 +78,6 @@ Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
 ## Hydrology Predictor Variables
 #provide summaries of hydrologic predictor variables here, examples may include depth to groundwater, lateral hydrologic position, stream flow, etc, acquifer characteristics
 
-**PRMS8110Re**: average annual recharge to groundwater.
-
-### Variables I added
 **LP2**: Lateral position for fourth order streams
 **PRMS8110Re**: Average annual recharge to groundwater
 **LP2**: Lateral position for fourth order streams
@@ -110,15 +90,12 @@ Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
 ## Climate Predictor Variables
 #provide summaries of hydrologic predictor variables here, examples may include precipitation, temperature, evapotranspiration
 
-### Variables I added
 **DMppt8110**: Average annual precipitation from 1981 to 2010
 
 ## Land use/land cover Predictor Variables
 #if applicable, provide summaries of Land use/land cover predictor variables here
-
 ## Ecological Variables (idk if you wanna call this land cover Predictor Variables)
 
-### Variables I added
 **na_10.1**: Cold deserts ecoregion
 **na_11.1**: Mediterranean California ecoregion
 **na_12.1**: Western Sierra Madre piedmont ecoregion
@@ -135,7 +112,6 @@ Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
 
 ## Soil and Sediment Variables
 
-### Variables I added
 **uc_12**: Alluvial sediments
 **uc_221**: Coastal zone sediments
 **uc_312**: Eolian sediments
@@ -159,7 +135,6 @@ Hyndman's 'Petrology of Igneous and Metamorphic Rocks' second edition,
 
 ## Assigning/Indicating Code Variables (idk what else to name these)
 
-### Variables I added
 **As3Cat**: Code to assign observed arsenic concentration to categorical variable
 **bas1**: Code to assign observed arsenic concentration to binary variable
 **bas10**: Code to assign observed arsenic concentration to binary variable
