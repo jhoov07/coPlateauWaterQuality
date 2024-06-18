@@ -20,7 +20,9 @@ The purpose of retrieving this dataset is to develop a model that uses this data
 ```{r setup, include=FALSE}
 #setwd("~/Desktop")   #Set working directory for your local version of the cloned github repo
 setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality")
+
 library(kableExtra)
+
 arsenicdata = read.csv("./01_data/Model_input_definitions 1.csv")
 selected_predictors <- c("rt_clast_u", "rt_meta", "rt_plut_qtz", "PRMS8110Re", "LP2")
 data <- subset(arsenicdata, Predictor_name %in% selected_predictors)
@@ -173,7 +175,7 @@ kable(NameMin)
 
 ```{r arsenic_catagorical_data, include=TRUE}
 library(kableExtra)
-setwd("~/Desktop/Biosphere 2/Arsenic data")
+#setwd("~/Desktop/Biosphere 2/Arsenic data")
 arsenic_catagorical_data <- read.csv("Arsenic_catagorical_variables.csv")
 # Extracting specific columns
 catagorical_data <- arsenic_catagorical_data[, c("Predictor_name", "Category_levels", "Categorical_observation_amounts")]
