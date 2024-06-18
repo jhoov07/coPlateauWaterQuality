@@ -3,8 +3,7 @@ title: "Arsenic data"
 author: "Austin Martinez"
 date: "2024-06-13"
 output:
-  word_document: default
-  html_document: null
+  html_document: default
   pdf_document: default
 editor_options:
   markdown:
@@ -142,18 +141,20 @@ The purpose of retrieving this dataset is to develop a model that uses this data
 # U.S. Geological Survey (USGS) Dataset
 
 ```{r setup, include=TRUE}
-setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
-library(kableExtra)
-arsenicdata = read.csv("Model_input_definitions 1.csv")
-kable(arsenicdata)
+#setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+#setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+#arsenicdata = read.csv("Model_input_definitions 1.csv")
+#kable(arsenicdata)
 ```
 
 
 # Categorical Variables stats summary
 
 ```{r arsenic_catagorical_data, include=TRUE}
+# library(kableExtra)  #only need to load the library once
+#setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 library(kableExtra)
-setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 arsenic_catagorical_data <- read.csv("Arsenic_catagorical_variables.csv")
 # Extracting specific columns
 catagorical_data <- arsenic_catagorical_data[, c("Predictor_name", "Category_levels", "Categorical_observation_amounts")]
@@ -163,8 +164,9 @@ kable(catagorical_data)
 # Continuous Variables stats summary
 
 ```{r arsenic_continous_data, include=TRUE}
-library(kableExtra)
-setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+#library(kableExtra)
+#setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 arsenic_continous_data <- read.csv("Arsenic_continuos_variables.csv")
 # Extracting specific columns
 extracted_data <- arsenic_continous_data[, c("Predictor_name", "Min", "Max", "X25._Quartile", "Mean", "X75._Quartile",

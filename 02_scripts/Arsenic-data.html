@@ -359,296 +359,812 @@ display: none;
 
 <div id="background" class="section level2">
 <h2>Background</h2>
-<p>#please give a brief summary of the goal of this data report. Mention
-the data source (USGS paper), and a 3-5 sentence overview of what is
-contained. Then let’s move into variable summaries.</p>
+<div id="overview-statement" class="section level3">
+<h3>Overview Statement</h3>
+<p>This dataset that is provided by the U.S. Geological Survey (USGS)
+was compiled and published by Melissa A. Lombard in 2021. This data
+spans from 1970 to 2013. This data was originally sourced to aid in the
+development of models that estimate the probability of private well
+arsenic concentrations exceeding various thresholds (1, 5, and 10
+micrograms per liter) throughout the conterminous United States.</p>
+<p>The purpose of retrieving this dataset is to develop a model that
+uses this data to predict which areas of the Colorado Plateau are most
+at risk for underground water contamination by arsenic.</p>
+</div>
 </div>
 <div id="geologic-predictor-variables" class="section level2">
 <h2>Geologic Predictor Variables</h2>
 <p>#provide summaries of geologic predictor variables here, examples may
 include rocks, soils and other geologic factors</p>
-<p><strong>rt_clast_u</strong>: Generalized lithology classified as
-CLAST_U: sediments and sedimentary rocks. Clastic sediments/rocks of
-unknown or highly variable clast sizes.</p>
-<p><strong>rt_meta</strong>:Generalized lithology classified as META:
-Metamorphic rocks.</p>
-<p><strong>rt_plut_qtz</strong>: Generalized lithology classified as
-PLUT_QTZ: Igneous, generally felsic, quartz-rich plutonic rocks such as
-granitoids, granite, granodacite. Lithology of plutonics and volcanics
-are split out based on quartz content using the IUGS classification
-presented in Hyndman’s ‘Petrology of Igneous and Metamorphic Rocks’
-second edition, 1985, page 33, fields 1-5.</p>
+<ul>
+<li><strong>rt_carb</strong>: Generalized lithology classified as
+CARB</li>
+<li><strong>rt_clast_c</strong>: Generalized lithology classified as
+CLAST_C</li>
+<li><strong>rt_clast_f</strong>: Generalized lithology classified as
+CLAST_F</li>
+<li><strong>rt_clast_u</strong>: Generalized lithology classified as
+CLAST_U</li>
+<li><strong>rt_meta</strong>: Generalized lithology classified as
+META</li>
+<li><strong>rt_plut_qtz</strong>: Generalized lithology classified as
+PLUT_QTZ</li>
+<li><strong>D3</strong>: Devonian; stratified sequence</li>
+<li><strong>De</strong>: Devonian eugeosynclinal deposits</li>
+<li><strong>DSe</strong>: New England; Devonian and Silurian
+eugeosynclinal deposits</li>
+<li><strong>Kg</strong>: Plutonic and intrusive rocks; Cretaceous
+granitic rocks</li>
+<li><strong>O2</strong>: Ordovician; stratified sequence</li>
+<li><strong>Oe</strong>: Ordovician, eugeosynclinal</li>
+<li><strong>PP4</strong>: Upper Pennsylvanian; stratified sequence</li>
+<li><strong>Pzg1</strong>: Lower Paleozoic granitic rocks</li>
+<li><strong>Pzg2</strong>: Middle Paleozoic granitic rocks</li>
+<li><strong>Q</strong>: Quaternary; stratified sequence</li>
+<li><strong>Qv</strong>: Quaternary volcanic rocks</li>
+<li><strong>S2</strong>: Silurian; stratified sequence</li>
+<li><strong>Se</strong>: Silurian eugeosynclinal deposits</li>
+<li><strong>Te2</strong>: Tertiary; Eocene; stratified sequence</li>
+<li><strong>Tm</strong>: Tertiary; stratified sequence</li>
+<li><strong>Tmc</strong>: Tertiary; Miocene continental deposits</li>
+<li><strong>Toc</strong>: Tertiary; Oligocene continental deposits</li>
+<li><strong>Tp</strong>: Tertiary; stratified sequence</li>
+<li><strong>Tpc</strong>: Tertiary; Pliocene continental deposits</li>
+<li><strong>Tpv</strong>: Tertiary; Pliocene volcanic rocks</li>
+<li><strong>Tr</strong>: Triassic; stratified sequence</li>
+<li><strong>Txc</strong>: Tertiary; Paleocene continental deposits</li>
+<li><strong>uK2</strong>: Upper Cretaceous Austin and Eagle Ford
+Groups</li>
+<li><strong>uK3</strong>: Upper Cretaceous Taylor Group</li>
+<li><strong>uK3b</strong>: Upper Cretaceous Taylor Group</li>
+<li><strong>uK4</strong>: Upper Cretaceous Navarro Group</li>
+<li><strong>uPz</strong>: Upper Paleozoic; stratified sequence</li>
+<li><strong>Wgn</strong>: PreCambrian; metamorphic rocks</li>
+<li><strong>as_c</strong>: Arsenic concentration in the soil C
+horizon</li>
+<li><strong>be_c</strong>: Beryllium concentration in the soil C
+horizon</li>
+<li><strong>bi_c</strong>: Bismuth concentration in the soil C
+horizon</li>
+<li><strong>inorgc_c</strong>: Inorganic carbon concentration in the
+soil C horizon</li>
+<li><strong>mo_c</strong>: Molybdenum concentration in the soil C
+horizon</li>
+<li><strong>ni_c</strong>: Nickel concentration in the soil C
+horizon</li>
+<li><strong>orgc_c</strong>: Phosphorus concentration in the soil C
+horizon</li>
+<li><strong>p_c</strong>: Organic carbon concentration in the soil C
+horizon</li>
+<li><strong>sb_c</strong>: Antimony concentration in the soil C
+horizon</li>
+<li><strong>se_c</strong>: Selenium concentration in the soil C
+horizon</li>
+</ul>
 </div>
 <div id="hydrology-predictor-variables" class="section level2">
 <h2>Hydrology Predictor Variables</h2>
 <p>#provide summaries of hydrologic predictor variables here, examples
 may include depth to groundwater, lateral hydrologic position, stream
 flow, etc, acquifer characteristics</p>
-<p><strong>PRMS8110Re</strong>: average annual recharge to
-groundwater.</p>
-<p><strong>LP2</strong>: Lateral position for fourth order streams</p>
+<ul>
+<li><strong>LP2</strong>: Lateral position for fourth order streams</li>
+<li><strong>PRMS8110Re</strong>: Average annual recharge to
+groundwater</li>
+<li><strong>LP2</strong>: Lateral position for fourth order streams</li>
+<li><strong>LP4</strong>: Lateral position for second order streams</li>
+<li><strong>LP6</strong>: Lateral position for sixth order streams</li>
+<li><strong>BFI</strong>: Mean annual base flow index</li>
+<li><strong>uc_999</strong>: Water</li>
+<li><strong>Percent_Ti</strong>: County estimates of U.S. tile
+drainage</li>
+</ul>
 </div>
 <div id="climate-predictor-variables" class="section level2">
 <h2>Climate Predictor Variables</h2>
 <p>#provide summaries of hydrologic predictor variables here, examples
 may include precipitation, temperature, evapotranspiration</p>
+<ul>
+<li><strong>DMppt8110</strong>: Average annual precipitation from 1981
+to 2010</li>
+</ul>
 </div>
-<div id="land-useland-cover-predictor-variables" class="section level2">
-<h2>Land use/land cover Predictor Variables</h2>
-<p>#if applicable, provide summaries of Land use/land cover predictor
-variables here</p>
+<div id="ecological-region-variables-idk-if-you-wanna-call-this-land-cover-predictor-variables" class="section level2">
+<h2>Ecological Region Variables (idk if you wanna call this land cover
+Predictor Variables)</h2>
+<ul>
+<li><strong>na_10.1</strong>: Cold deserts ecoregion</li>
+<li><strong>na_11.1</strong>: Mediterranean California ecoregion</li>
+<li><strong>na_12.1</strong>: Western Sierra Madre piedmont
+ecoregion</li>
+<li><strong>na_13.1</strong>: Upper Gila Mountains ecoregion</li>
+<li><strong>na_6.2</strong>: Western Cordillera ecoregion</li>
+<li><strong>na_7.1</strong>: Marine West Coast forest ecoregion</li>
+<li><strong>na_8.1</strong>: Mixed wood plains ecoregion</li>
+<li><strong>na_8.2</strong>: Central USA plains ecoregion</li>
+<li><strong>na_9.2</strong>: Temperate prairies ecoregion</li>
+<li><strong>na_9.3</strong>: West-Central semi-arid prairies
+ecoregion</li>
+<li><strong>na_9.4</strong>: South Central semi-arid prairies
+ecoregion</li>
+<li><strong>na_9.5</strong>: Texas-Louisiana coastal plain
+ecoregion</li>
+<li><strong>na_9.6</strong>: Tamaulipas-Texas semiarid plain
+ecoregion</li>
+</ul>
 </div>
-<div id="predictor-variable-descriptions" class="section level1">
-<h1>Predictor variable descriptions</h1>
-<pre class="r"><code>NameDescription &lt;- data.frame(data$Predictor_name, data$Description)
-kable(NameDescription)</code></pre>
-<table>
+<div id="soil-and-sediment-variables" class="section level2">
+<h2>Soil and Sediment Variables</h2>
+<ul>
+<li><strong>uc_12</strong>: Alluvial sediments</li>
+<li><strong>uc_221</strong>: Coastal zone sediments</li>
+<li><strong>uc_312</strong>: Eolian sediments</li>
+<li><strong>uc_321</strong>: Eolian sediments</li>
+<li><strong>uc_322</strong>: Eolian sediments</li>
+<li><strong>uc_331</strong>: Eolian sediments</li>
+<li><strong>uc_421</strong>: Glacial till sediments</li>
+<li><strong>uc_422</strong>: Glacial till sediments</li>
+<li><strong>uc_431</strong>: Glacial till sediments</li>
+<li><strong>uc_451</strong>: Glaciofluvial ice-contact sediments</li>
+<li><strong>uc_620</strong>: Colluvial and alluvial sediments</li>
+<li><strong>uc_811</strong>: Proglacial sediments</li>
+<li><strong>uc_812</strong>: Proglacial sediments</li>
+<li><strong>uc_821</strong>: Proglacial sediments</li>
+<li><strong>uc_822</strong>: Proglacial sediments</li>
+<li><strong>uc_910</strong>: Residual materials developed in igneous and
+metamorphic rocks</li>
+<li><strong>uc_920</strong>: Residual materials developed in sedimentary
+rocks</li>
+<li><strong>uc_940</strong>: Residual materials developed in carbonate
+rocks</li>
+<li><strong>uc_960</strong>: Residual materials developed in
+bedrock</li>
+<li><strong>uc_970</strong>: Residual materials developed in
+bedrock</li>
+</ul>
+</div>
+<div id="output-variables" class="section level2">
+<h2>Output Variables</h2>
+<ul>
+<li><strong>As3Cat</strong>: Code to assign observed arsenic
+concentration to categorical variable</li>
+<li><strong>bas1</strong>: Code to assign observed arsenic concentration
+to binary variable</li>
+<li><strong>bas10</strong>: Code to assign observed arsenic
+concentration to binary variable</li>
+<li><strong>bas5</strong>: Code to assign observed arsenic concentration
+to binary variable</li>
+<li><strong>spl1</strong>: Code to indicate if the location was used in
+the boosted regression tree As 1 model training or testing dataset</li>
+<li><strong>spl10</strong>: Code to indicate if the location was used in
+the boosted regression tree As 10 model training or testing dataset</li>
+<li><strong>spl3cat</strong>: Code to indicate if the location was used
+in the random forest model training or testing dataset</li>
+<li><strong>spl5</strong>: Code to indicate if the location was used in
+the boosted regression tree As 5 model training or testing dataset</li>
+</ul>
+</div>
+<div id="u.s.-geological-survey-usgs-dataset" class="section level1">
+<h1>U.S. Geological Survey (USGS) Dataset</h1>
+<pre class="r"><code>#setwd(&quot;/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+#setwd(&quot;C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+#arsenicdata = read.csv(&quot;Model_input_definitions 1.csv&quot;)
+#kable(arsenicdata)</code></pre>
+</div>
+<div id="categorical-variables-stats-summary" class="section level1">
+<h1>Categorical Variables stats summary</h1>
+<pre class="r"><code># library(kableExtra)  #only need to load the library once
+#setwd(&quot;/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+setwd(&quot;C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+library(kableExtra)</code></pre>
+<pre><code>## Warning: package &#39;kableExtra&#39; was built under R version 4.3.3</code></pre>
+<pre class="r"><code>arsenic_catagorical_data &lt;- read.csv(&quot;Arsenic_catagorical_variables.csv&quot;)
+# Extracting specific columns
+catagorical_data &lt;- arsenic_catagorical_data[, c(&quot;Predictor_name&quot;, &quot;Category_levels&quot;, &quot;Categorical_observation_amounts&quot;)]
+kable(catagorical_data)</code></pre>
+<table style="width:100%;">
 <colgroup>
-<col width="5%" />
-<col width="94%" />
+<col width="4%" />
+<col width="83%" />
+<col width="12%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">data.Predictor_name</th>
-<th align="left">data.Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">rt_clast_u</td>
-<td align="left">Generalized lithology classified as CLAST_U: sediments
-and sedimentary rocks. Clastic sediments/rocks of unknown or highly
-variable clast sizes.</td>
-</tr>
-<tr class="even">
-<td align="left">rt_meta</td>
-<td align="left">Generalized lithology classified as META: Metamorphic
-rocks.</td>
-</tr>
-<tr class="odd">
-<td align="left">rt_plut_qtz</td>
-<td align="left">Generalized lithology classified as PLUT_QTZ: Igneous,
-generally felsic, quartz-rich plutonic rocks such as granitoids,
-granite, granodacite. Lithology of plutonics and volcanics are split out
-based on quartz content using the IUGS classification presented in
-Hyndman’s ‘Petrology of Igneous and Metamorphic Rocks’ second edition,
-1985, page 33, fields 1-5.</td>
-</tr>
-<tr class="even">
-<td align="left">PRMS8110Re</td>
-<td align="left">average annual recharge to groundwater</td>
-</tr>
-<tr class="odd">
-<td align="left">LP2</td>
-<td align="left">Lateral position for fourth order streams</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>kable(data)</code></pre>
-<table>
-<colgroup>
-<col width="0%" />
-<col width="2%" />
-<col width="60%" />
-<col width="4%" />
-<col width="5%" />
-<col width="1%" />
-<col width="3%" />
-<col width="2%" />
-<col width="2%" />
-<col width="4%" />
-<col width="1%" />
-<col width="2%" />
-<col width="2%" />
-<col width="3%" />
-<col width="2%" />
-<col width="2%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left"></th>
 <th align="left">Predictor_name</th>
-<th align="left">Description</th>
 <th align="left">Category_levels</th>
-<th align="left">Categorical.observation.amounts</th>
-<th align="left">Data_type</th>
-<th align="left">Units</th>
-<th align="left">Missing_values</th>
-<th align="left">Time_period</th>
-<th align="left">Source</th>
-<th align="left">Mean</th>
-<th align="right">X25..Quartile</th>
-<th align="right">X75..Quartile</th>
-<th align="right">Standard.Deviation</th>
-<th align="left">Max</th>
-<th align="left">Min</th>
+<th align="left">Categorical_observation_amounts</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">4</td>
+<td align="left">rt_carb</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17306 1 = 3144</td>
+</tr>
+<tr class="even">
+<td align="left">rt_clast_c</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 15343 1 = 5107</td>
+</tr>
+<tr class="odd">
+<td align="left">rt_clast_f</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 16422 1 = 4028</td>
+</tr>
+<tr class="even">
 <td align="left">rt_clast_u</td>
-<td align="left">Generalized lithology classified as CLAST_U: sediments
-and sedimentary rocks. Clastic sediments/rocks of unknown or highly
-variable clast sizes.</td>
 <td align="left">1 (present) ; 0 (absent)</td>
 <td align="left">0 = 16287 1 = 4163</td>
-<td align="left">binary</td>
-<td align="left">NA</td>
-<td align="left">“NA”</td>
-<td align="left">NA</td>
-<td align="left">Anning and Ator (2017)</td>
-<td align="left">0.2036</td>
-<td align="right">0.00000</td>
-<td align="right">0.0000</td>
-<td align="right">0.4026624</td>
-<td align="left">1</td>
-<td align="left">0</td>
 </tr>
-<tr class="even">
-<td align="left">5</td>
+<tr class="odd">
 <td align="left">rt_meta</td>
-<td align="left">Generalized lithology classified as META: Metamorphic
-rocks.</td>
 <td align="left">1 (present) ; 0 (absent)</td>
 <td align="left">0 = 18520 1 = 1930</td>
-<td align="left">binary</td>
-<td align="left">NA</td>
-<td align="left">“NA”</td>
-<td align="left">NA</td>
-<td align="left">Anning and Ator (2017)</td>
-<td align="left">0.09438</td>
-<td align="right">0.00000</td>
-<td align="right">0.0000</td>
-<td align="right">0.2923590</td>
-<td align="left">1</td>
-<td align="left">0</td>
-</tr>
-<tr class="odd">
-<td align="left">6</td>
-<td align="left">rt_plut_qtz</td>
-<td align="left">Generalized lithology classified as PLUT_QTZ: Igneous,
-generally felsic, quartz-rich plutonic rocks such as granitoids,
-granite, granodacite. Lithology of plutonics and volcanics are split out
-based on quartz content using the IUGS classification presented in
-Hyndman’s ‘Petrology of Igneous and Metamorphic Rocks’ second edition,
-1985, page 33, fields 1-5.</td>
-<td align="left">1 (present) ; 0 (absent)</td>
-<td align="left">0 = 19475 1 = 975</td>
-<td align="left">binary</td>
-<td align="left">NA</td>
-<td align="left">“NA”</td>
-<td align="left">NA</td>
-<td align="left">Anning and Ator (2017)</td>
-<td align="left">0.04768</td>
-<td align="right">0.00000</td>
-<td align="right">0.0000</td>
-<td align="right">0.2130877</td>
-<td align="left">1</td>
-<td align="left">0</td>
 </tr>
 <tr class="even">
-<td align="left">7</td>
-<td align="left">PRMS8110Re</td>
-<td align="left">average annual recharge to groundwater</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">numeric</td>
-<td align="left">millimeters per year</td>
-<td align="left">“NA”</td>
-<td align="left">1981-2010</td>
-<td align="left">Hay (2019)</td>
-<td align="left">164.37</td>
-<td align="right">19.26016</td>
-<td align="right">254.1999</td>
-<td align="right">175.8661000</td>
-<td align="left">9.994490E+00</td>
-<td align="left">0.000000E+00</td>
+<td align="left">rt_plut_qtz</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19475 1 = 975</td>
 </tr>
 <tr class="odd">
-<td align="left">8</td>
-<td align="left">LP2</td>
-<td align="left">Lateral position for fourth order streams</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">numeric</td>
-<td align="left">percent times 100</td>
-<td align="left"></td>
-<td align="left">NA</td>
-<td align="left">Moore and others (2019)</td>
-<td align="left">5266</td>
-<td align="right">2616.25000</td>
-<td align="right">7944.0000</td>
-<td align="right">3005.1600000</td>
-<td align="left">10000</td>
-<td align="left">0</td>
+<td align="left">D3</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20117 1 = 333</td>
+</tr>
+<tr class="even">
+<td align="left">De</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20251 1 = 199</td>
+</tr>
+<tr class="odd">
+<td align="left">DSe</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20003 1 = 447</td>
+</tr>
+<tr class="even">
+<td align="left">Kg</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20301 1 = 149</td>
+</tr>
+<tr class="odd">
+<td align="left">O2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20116 1 = 334</td>
+</tr>
+<tr class="even">
+<td align="left">Oe</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20232 1 = 218</td>
+</tr>
+<tr class="odd">
+<td align="left">PP4</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20167 1 = 283</td>
+</tr>
+<tr class="even">
+<td align="left">Pzg1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20247 1 = 203</td>
+</tr>
+<tr class="odd">
+<td align="left">Pzg2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20096 1 = 354</td>
+</tr>
+<tr class="even">
+<td align="left">Q</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17478 1 = 2972</td>
+</tr>
+<tr class="odd">
+<td align="left">Qv</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20123 1 = 327</td>
+</tr>
+<tr class="even">
+<td align="left">S2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20282 1 = 168</td>
+</tr>
+<tr class="odd">
+<td align="left">Se</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20062 1 = 388</td>
+</tr>
+<tr class="even">
+<td align="left">Te2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20027 1 = 423</td>
+</tr>
+<tr class="odd">
+<td align="left">Tm</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20096 1 = 354</td>
+</tr>
+<tr class="even">
+<td align="left">Tmc</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20158 1 = 292</td>
+</tr>
+<tr class="odd">
+<td align="left">Toc</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20389 1 = 61</td>
+</tr>
+<tr class="even">
+<td align="left">Tp</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20309 1 = 141</td>
+</tr>
+<tr class="odd">
+<td align="left">Tpc</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19033 1 = 1417</td>
+</tr>
+<tr class="even">
+<td align="left">Tpv</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20285 1 = 165</td>
+</tr>
+<tr class="odd">
+<td align="left">Tr</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20027 1 = 423</td>
+</tr>
+<tr class="even">
+<td align="left">Txc</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20237 1 = 213</td>
+</tr>
+<tr class="odd">
+<td align="left">uK2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20049 1 = 401</td>
+</tr>
+<tr class="even">
+<td align="left">uK3</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19932 1 = 518</td>
+</tr>
+<tr class="odd">
+<td align="left">uK3b</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20417 1 = 33</td>
+</tr>
+<tr class="even">
+<td align="left">uK4</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20256 1 = 194</td>
+</tr>
+<tr class="odd">
+<td align="left">uPz</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20250 1 = 200</td>
+</tr>
+<tr class="even">
+<td align="left">Wgn</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20389 1 = 61</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_12</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17706 1 = 2740 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_221</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20386 1 = 60 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_312</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20381 1 = 65 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_321</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20065 1 = 381 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_322</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20403 1 = 43 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_331</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19889 1 = 557 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_421</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19324 1 = 1122 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_422</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19454 1 = 992 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_431</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19299 1 = 1147 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_451</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20194 1 = 252 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_620</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20383 1 = 63 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_811</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19622 1 = 824 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_812</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20407 1 = 39 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_821</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19837 1 = 609 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_822</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19921 1 = 525 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_910</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19535 1 = 911 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_920</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17966 1 = 2480 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_940</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19637 1 = 809 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_960</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20424 1 = 22 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">uc_970</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19655 1 = 791 NA = 4</td>
+</tr>
+<tr class="odd">
+<td align="left">uc_999</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20351 1 = 95 NA = 4</td>
+</tr>
+<tr class="even">
+<td align="left">na_10.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 18260 1 = 2190</td>
+</tr>
+<tr class="odd">
+<td align="left">na_11.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19284 1 = 1166</td>
+</tr>
+<tr class="even">
+<td align="left">na_12.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20366 1 = 84</td>
+</tr>
+<tr class="odd">
+<td align="left">na_13.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20135 1 = 315</td>
+</tr>
+<tr class="even">
+<td align="left">na_6.2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 18891 1 = 1559</td>
+</tr>
+<tr class="odd">
+<td align="left">na_7.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19776 1 = 674</td>
+</tr>
+<tr class="even">
+<td align="left">na_8.1</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17535 1 = 2915</td>
+</tr>
+<tr class="odd">
+<td align="left">na_8.2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19960 1 = 490</td>
+</tr>
+<tr class="even">
+<td align="left">na_9.2</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19278 1 = 1172</td>
+</tr>
+<tr class="odd">
+<td align="left">na_9.3</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 19941 1 = 509</td>
+</tr>
+<tr class="even">
+<td align="left">na_9.4</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 17115 1 = 3335</td>
+</tr>
+<tr class="odd">
+<td align="left">na_9.5</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20152 1 = 298</td>
+</tr>
+<tr class="even">
+<td align="left">na_9.6</td>
+<td align="left">1 (present) ; 0 (absent)</td>
+<td align="left">0 = 20128 1 = 322</td>
+</tr>
+<tr class="odd">
+<td align="left">As3Cat</td>
+<td align="left">C1 (Arsenic concentration is less than or equal to 5
+micrograms per liter); C2 (Arsenic concentration is greater than 5
+micrograms per liter and less than or equal to 10 micrograms per liter);
+C3 (Arsenic concentration is greater than or equal to 10 micrograms per
+liter)</td>
+<td align="left">C1 = 15659 C2 = 1663 C3 = 2383 NA = 745</td>
+</tr>
+<tr class="even">
+<td align="left">bas1</td>
+<td align="left">1 (Arsenic concentration is greater than 1 microgram
+per liter); 0 (Arsenic concentration is less than or equal to 1
+microgram per liter)</td>
+<td align="left">0 = 8750 1 = 8108 NA = 3592</td>
+</tr>
+<tr class="odd">
+<td align="left">bas10</td>
+<td align="left">1 (Arsenic concentration is greater than 10 micrograms
+per liter); 0 (Arsenic concentration is less than or equal to 10
+micrograms per liter)</td>
+<td align="left">0 = 18241 1 = 2209</td>
+</tr>
+<tr class="even">
+<td align="left">bas5</td>
+<td align="left">1 (Arsenic concentration is greater than 5 micrograms
+per liter); 0 (Arsenic concentration is less than or equal to 5
+micrograms per liter)</td>
+<td align="left">0 = 15874 1 = 3831 NA = 745</td>
+</tr>
+<tr class="odd">
+<td align="left">spl1</td>
+<td align="left">TRUE (Used in model training dataset for the boosted
+regression trees model predicting arsenic greater than 1 microgram per
+liter); FALSE (Used in model testing dataset for the boosted regression
+trees model predicting arsenic greater than 1 microgram per liter)</td>
+<td align="left">FALSE = 5057 TRUE = 11801 NA = 3592</td>
+</tr>
+<tr class="even">
+<td align="left">spl10</td>
+<td align="left">TRUE (Used in model training dataset for the boosted
+regression trees model predicting arsenic greater than 10 micrograms per
+liter); FALSE (Used in model testing dataset for the boosted regression
+trees model predicting arsenic greater than 10 micrograms per
+liter)</td>
+<td align="left">FALSE = 6135 TRUE = 14315</td>
+</tr>
+<tr class="odd">
+<td align="left">spl3cat</td>
+<td align="left">TRUE (Used in model training dataset for the random
+forest classification model); FALSE (Used in model testing dataset for
+the random forest classification model)</td>
+<td align="left">FALSE = 5912 TRUE = 13793 NA = 745</td>
+</tr>
+<tr class="even">
+<td align="left">spl5</td>
+<td align="left">TRUE (Used in model training dataset for the boosted
+regression trees model predicting arsenic greater than 5 micrograms per
+liter); FALSE (Used in model testing dataset for the boosted regression
+trees model predicting arsenic greater than 5 micrograms per liter)</td>
+<td align="left">FALSE = 5911 TRUE = 13794 NA = 745</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="predictor-variable-descriptions2" class="section level1">
-<h1>Predictor variable descriptions2</h1>
-<pre class="r"><code>NameMax &lt;- data.frame(data$Predictor_name, data$Max)
-kable(NameMax)</code></pre>
-<table>
+<div id="continuous-variables-stats-summary" class="section level1">
+<h1>Continuous Variables stats summary</h1>
+<pre class="r"><code>#library(kableExtra)
+#setwd(&quot;/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+setwd(&quot;C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data&quot;)
+arsenic_continous_data &lt;- read.csv(&quot;Arsenic_continuos_variables.csv&quot;)
+# Extracting specific columns
+extracted_data &lt;- arsenic_continous_data[, c(&quot;Predictor_name&quot;, &quot;Min&quot;, &quot;Max&quot;, &quot;X25._Quartile&quot;, &quot;Mean&quot;, &quot;X75._Quartile&quot;,
+                                  &quot;Standard_Deviation&quot;)]
+kable(extracted_data)</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="15%" />
+<col width="10%" />
+<col width="13%" />
+<col width="14%" />
+<col width="12%" />
+<col width="14%" />
+<col width="19%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">data.Predictor_name</th>
-<th align="left">data.Max</th>
+<th align="left">Predictor_name</th>
+<th align="right">Min</th>
+<th align="right">Max</th>
+<th align="right">X25._Quartile</th>
+<th align="right">Mean</th>
+<th align="right">X75._Quartile</th>
+<th align="right">Standard_Deviation</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">rt_clast_u</td>
-<td align="left">1</td>
-</tr>
-<tr class="even">
-<td align="left">rt_meta</td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left">rt_plut_qtz</td>
-<td align="left">1</td>
-</tr>
-<tr class="even">
 <td align="left">PRMS8110Re</td>
-<td align="left">9.994490E+00</td>
-</tr>
-<tr class="odd">
-<td align="left">LP2</td>
-<td align="left">10000</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>NameMin &lt;- data.frame(data$Predictor_name, data$Min)
-kable(NameMin)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">data.Predictor_name</th>
-<th align="left">data.Min</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">rt_clast_u</td>
-<td align="left">0</td>
+<td align="right">0.000000</td>
+<td align="right">9.994490</td>
+<td align="right">19.2601645</td>
+<td align="right">164.370000</td>
+<td align="right">254.1999226</td>
+<td align="right">175.8661000</td>
 </tr>
 <tr class="even">
-<td align="left">rt_meta</td>
-<td align="left">0</td>
+<td align="left">LP2</td>
+<td align="right">0.000000</td>
+<td align="right">10000.000000</td>
+<td align="right">2616.2500000</td>
+<td align="right">5266.000000</td>
+<td align="right">7944.0000000</td>
+<td align="right">3005.1600000</td>
 </tr>
 <tr class="odd">
-<td align="left">rt_plut_qtz</td>
-<td align="left">0</td>
+<td align="left">LP4</td>
+<td align="right">0.000000</td>
+<td align="right">10000.000000</td>
+<td align="right">2351.0000000</td>
+<td align="right">5098.000000</td>
+<td align="right">7826.7500000</td>
+<td align="right">3056.1670000</td>
 </tr>
 <tr class="even">
-<td align="left">PRMS8110Re</td>
-<td align="left">0.000000E+00</td>
+<td align="left">LP6</td>
+<td align="right">0.000000</td>
+<td align="right">10000.000000</td>
+<td align="right">2464.0000000</td>
+<td align="right">0.016280</td>
+<td align="right">7895.7500000</td>
+<td align="right">3045.5700000</td>
 </tr>
 <tr class="odd">
-<td align="left">LP2</td>
-<td align="left">0</td>
+<td align="left">as_c</td>
+<td align="right">0.000032</td>
+<td align="right">346.519989</td>
+<td align="right">4.2002700</td>
+<td align="right">6.943200</td>
+<td align="right">8.2973690</td>
+<td align="right">7.0556900</td>
+</tr>
+<tr class="even">
+<td align="left">be_c</td>
+<td align="right">0.000369</td>
+<td align="right">6.937769</td>
+<td align="right">1.0903990</td>
+<td align="right">1.520005</td>
+<td align="right">1.8808442</td>
+<td align="right">0.6400278</td>
+</tr>
+<tr class="odd">
+<td align="left">bi_c</td>
+<td align="right">0.000032</td>
+<td align="right">5.138909</td>
+<td align="right">0.1222275</td>
+<td align="right">0.183433</td>
+<td align="right">0.2208410</td>
+<td align="right">0.1211548</td>
+</tr>
+<tr class="even">
+<td align="left">inorgc_c</td>
+<td align="right">0.000000</td>
+<td align="right">0.099999</td>
+<td align="right">0.0021040</td>
+<td align="right">0.527658</td>
+<td align="right">0.6033572</td>
+<td align="right">0.9725496</td>
+</tr>
+<tr class="odd">
+<td align="left">mo_c</td>
+<td align="right">0.000179</td>
+<td align="right">61.774299</td>
+<td align="right">0.5514590</td>
+<td align="right">1.036690</td>
+<td align="right">1.1742600</td>
+<td align="right">1.3213120</td>
+</tr>
+<tr class="even">
+<td align="left">ni_c</td>
+<td align="right">0.000031</td>
+<td align="right">2836.270019</td>
+<td align="right">11.5861747</td>
+<td align="right">29.755300</td>
+<td align="right">26.1105000</td>
+<td align="right">99.2000500</td>
+</tr>
+<tr class="odd">
+<td align="left">orgc_c</td>
+<td align="right">0.000031</td>
+<td align="right">41.720901</td>
+<td align="right">0.2846100</td>
+<td align="right">0.882800</td>
+<td align="right">0.9617930</td>
+<td align="right">1.6647120</td>
+</tr>
+<tr class="even">
+<td align="left">p_c</td>
+<td align="right">0.054348</td>
+<td align="right">8195.280273</td>
+<td align="right">272.1010130</td>
+<td align="right">487.883000</td>
+<td align="right">622.9609980</td>
+<td align="right">319.0659000</td>
+</tr>
+<tr class="odd">
+<td align="left">sb_c</td>
+<td align="right">0.000217</td>
+<td align="right">15.530799</td>
+<td align="right">0.3864645</td>
+<td align="right">0.680345</td>
+<td align="right">0.7895045</td>
+<td align="right">0.7514792</td>
+</tr>
+<tr class="even">
+<td align="left">se_c</td>
+<td align="right">0.000122</td>
+<td align="right">6.379799</td>
+<td align="right">0.2035260</td>
+<td align="right">0.312980</td>
+<td align="right">0.3555420</td>
+<td align="right">0.2180525</td>
+</tr>
+<tr class="odd">
+<td align="left">Percent_Ti</td>
+<td align="right">0.000000</td>
+<td align="right">70.000000</td>
+<td align="right">0.0000000</td>
+<td align="right">1.631000</td>
+<td align="right">0.0000000</td>
+<td align="right">7.7308630</td>
+</tr>
+<tr class="even">
+<td align="left">DMppt8110</td>
+<td align="right">65.233300</td>
+<td align="right">3098.430000</td>
+<td align="right">494.2917500</td>
+<td align="right">848.370000</td>
+<td align="right">1200.3475000</td>
+<td align="right">387.9446000</td>
+</tr>
+<tr class="odd">
+<td align="left">BFI</td>
+<td align="right">0.000000</td>
+<td align="right">89.000000</td>
+<td align="right">29.0000000</td>
+<td align="right">43.560000</td>
+<td align="right">57.0000000</td>
+<td align="right">18.5439400</td>
 </tr>
 </tbody>
 </table>
