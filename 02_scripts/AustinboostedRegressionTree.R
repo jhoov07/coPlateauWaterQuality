@@ -1,4 +1,3 @@
-Asdata = read.csv("AsModelInput.csv")
 
 #setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
@@ -23,7 +22,20 @@ AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 Clean_As$As3Cat <- as.factor(Clean_As$As3Cat)
 
+# this one worked
+Arsenic_boost = train(
+  As3Cat ~.,
+  data = Clean_As[, -c(1:3, 5:8)],
+  method = "gbm",
+  tuneGrid = expand.grid(
+    "n.trees" = seq(25, 200, by = 25),
+    "interaction.depth" = 1:3,
+    "shrinkage" = c(0.1, 0.01, 0.001),
+    "n.minobsinnode" = 5))
 
+
+
+#this one didn't work
 Arsenic_boost <- train(
   As3Cat ~ .,  
   data = Clean_As[, -c(1:3, 5:8)],
