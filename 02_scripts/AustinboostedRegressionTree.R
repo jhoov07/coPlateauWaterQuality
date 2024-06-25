@@ -1,0 +1,43 @@
+setwd("~/Desktop/Biosphere 2/Arsenic data")
+Asdata = read.csv("AsModelInput.csv")
+
+#setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+#setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+
+# Filter data into train and test sets based on logical variable 'spl3cat'
+train <- Asdata[Asdata$spl5 == TRUE, ]
+test <- Asdata[Asdata$spl5 == FALSE, ]
+
+# Split the data into training (70%) and testing (30%) sets
+#sample_indices <- sample(1:nrow(Asdata), 0.7 * nrow(Asdata))
+#train_data <- Asdata[sample_indices, ]
+#test_data <- Asdata[-sample_indices, ]
+
+# Drop rows with NA values in columns 9 to 93 for test data
+AsTrain <- train[complete.cases(train[, 9:93]), ]
+AsTest <- test[complete.cases(test[, 9:93]), ]
+
+Clean_As <- rbind(AsTrain ,AsTest)
+
+#Ensure As3Cat is a Factor (Categorical Variable)
+AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
+AsTest$As3Cat <- as.factor(AsTest$As3Cat)
+Clean_As$As3Cat <- as.factor(Clean_As$As3Cat)
+
+
+Arsenic_boost = train(
+  factor(Clean_As[,4])~.,
+  data = Clean_As[,-(1:8)],
+  method = "gbm",
+  trControl = trainControl(
+    method = "cv",
+    number = 5
+  ),
+  tuneGrid = expand.grid(
+    "n.trees" = seq(25, 200, by = 25),
+    "interaction.depth" = 1:3,
+    "shrinkage" = c(0.1, 0.01, 0.001),
+    "n.minobsinnode" = 5)
+)
+
+
