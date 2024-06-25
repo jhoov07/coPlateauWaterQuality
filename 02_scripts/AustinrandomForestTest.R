@@ -1,15 +1,12 @@
-# Loading package 
-
 library(caTools) 
 library(randomForest)
 library(caret)
 library(tidyverse)
 
-setwd("~/Desktop/Biosphere 2/Arsenic data")
-Asdata = read.csv("AsModelInput.csv")
 
-setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+#setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
+Asdata = read.csv("AsModelInput.csv")
 
 # Filter data into train and test sets based on logical variable 'spl3cat'
 train <- Asdata[Asdata$spl3cat == TRUE, ]
