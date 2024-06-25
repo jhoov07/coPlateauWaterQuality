@@ -23,22 +23,10 @@ AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 Clean_As$As3Cat <- as.factor(Clean_As$As3Cat)
 
 # this one worked
-Arsenic_boost = train(
-  As3Cat ~.,
-  data = Clean_As[, -c(1:3, 5:8)],
-  method = "gbm",
-  tuneGrid = expand.grid(
-    "n.trees" = seq(25, 200, by = 25),
-    "interaction.depth" = 1:3,
-    "shrinkage" = c(0.1, 0.01, 0.001),
-    "n.minobsinnode" = 5))
 
-
-
-#this one didn't work
 Arsenic_boost <- train(
-  As3Cat ~ .,  
-  data = Clean_As[, -c(1:3, 5:8)],
+  As3Cat ~ .,  # Specify the target variable as As3Cat
+  data = Clean_As[, -c(1:3, 5:8)],  
   method = "gbm", 
   trControl = trainControl(
     method = "cv",
@@ -46,11 +34,9 @@ Arsenic_boost <- train(
     verboseIter = TRUE  # Enable verbose output for troubleshooting
   ),
   tuneGrid = expand.grid(
-    n.trees = seq(50, 200, by = 50),
-    interaction.depth = 1:3,
-    shrinkage = c(0.1, 0.01, 0.001),
-    n.minobsinnode = 5
-  )
-)
+    "n.trees" = seq(50, 200, by = 50),
+    "interaction.depth" = 1:3,
+    "shrinkage" = c(0.1, 0.01, 0.001),
+    "n.minobsinnode" = 5))
 
 
