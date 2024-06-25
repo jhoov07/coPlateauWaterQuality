@@ -40,3 +40,10 @@ Arsenic_boost <- train(
     "n.minobsinnode" = 5))
 
 
+# Check the results
+summary(Arsenic_boost)
+
+#Evaluate the model on the test set
+predictions <- predict(Arsenic_boost, newdata = AsTest[, -(1:8)])
+confusionMatrix(predictions, AsTest$As3Cat)
+
