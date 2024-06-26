@@ -1,3 +1,8 @@
+library(caret)
+library(caTools)
+library(ggplot2)
+library(readr)
+library(gbm)
 
 #setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
