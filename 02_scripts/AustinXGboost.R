@@ -88,7 +88,7 @@ test_data <- test_data[complete.cases(test_data)]
 train_labels <- train_labels[complete.cases(train_labels)]
 test_labels <- test_labels[complete.cases(test_labels)]
 
-# put our testing & training data into two seperates Dmatrixs objects
+# putting the testing and training data into two seperates Dmatrixs
 dtrain <- xgb.DMatrix(data = train_data, label= train_labels)
 dtest <- xgb.DMatrix(data = test_data, label= test_labels)
 #i get this error everytime
