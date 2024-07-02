@@ -52,4 +52,12 @@ importance
 accuracy <- sum(diag(confusion_mtx)) / sum(confusion_mtx)
 accuracy
 
+# Calculate kappa value
+kappa_value <- kappa(confusion_mtx)
+kappa_value
+
+#print values
+classifier_RF
+accuracy
+kappa_value
 
