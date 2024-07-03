@@ -3,6 +3,7 @@ library(caret)
 library(gbm)
 library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
+library(smotefamily) #use to balance the training dataset
 
 setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 #setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
@@ -28,6 +29,9 @@ As_test = Asdata[-sample_set,]
 As_trainComp <- As_train[complete.cases(As_train[,c(3,9:93)]),]  #col 3, testing on As >10 ug/L category
 As_testComp<- As_test[complete.cases(As_test[,c(3,9:93)]),] #col 3testing on As >10 ug/L category
 
+As_trainComp <- As_trainComp[,c(3,9:93)] #col 3, testing on As >10 ug/L category
+As_testComp<- As_testComp[,c(3,9:93)] #col 3testing on As >10 ug/L category
+
 #define predictor and response variables in training set
 train_x<-data.matrix(As_trainComp[, -c(1:8)])
 train_y<-As_trainComp[,3]
@@ -46,10 +50,33 @@ watchlist = list(train=xgb_train, test=xgb_test)
 #fit XGBoost model and display training and testing data at each round
 model = xgb.train(data = xgb_train, max.depth = 4, watchlist=watchlist, nrounds = 70, objective = "binary:logistic")
 
+#This model took ~20 minutes to run on my laptop, can still tune a few other parameters
+model<-train(
+  factor(bas10) ~ ., 
+  data = As_trainComp, 
+  metric = "Accuracy",
+  method = "xgbTree",
+  trControl = trainControl(method="cv", number = 3),
+  tuneGrid = expand.grid(
+    nrounds = seq(from = 500, to = 2000, by = 500),
+    max_depth = seq(from = 8, to = 14, by = 2),
+    eta = 0.3, 
+    gamma = 0,
+    colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
+    min_child_weight = 1,
+    subsample = 1
+  )
+)
+
+model
+
+model$resample %>%
+  arrange(Resample)
 
 
 
-##I didn't use this code below
+
+x##I didn't use this code below
 #turning all 1-0(true and false) to booleans
 # List of non-numeric variables
 non_numeric_vars <- c(
