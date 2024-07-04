@@ -28,37 +28,36 @@ AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 Clean_As$As3Cat <- as.factor(Clean_As$As3Cat)
 
 # original boost
+#Arsenic_boost <- train(
+#  As3Cat ~ .,  # Specify the target variable as As3Cat
+#  data = Clean_As[, -c(1:3, 5:8)],  
+#  method = "gbm", 
+#  trControl = trainControl(
+#    method = "cv",
+#    number = 5,
+#    verboseIter = TRUE  # Enable verbose output for troubleshooting
+#  ),
+#  tuneGrid = expand.grid(
+#    "n.trees" = seq(50, 200, by = 50),
+#    "interaction.depth" = 1:3,
+#    "shrinkage" = c(0.1, 0.01, 0.001),
+#    "n.minobsinnode" = 5))
+
 Arsenic_boost <- train(
   As3Cat ~ .,  # Specify the target variable as As3Cat
   data = Clean_As[, -c(1:3, 5:8)],  
   method = "gbm", 
   trControl = trainControl(
     method = "cv",
-    number = 5,
+    number = 10,
     verboseIter = TRUE  # Enable verbose output for troubleshooting
   ),
   tuneGrid = expand.grid(
-    "n.trees" = seq(50, 200, by = 50),
-    "interaction.depth" = 1:3,
-    "shrinkage" = c(0.1, 0.01, 0.001),
-    "n.minobsinnode" = 5))
-
-
-# adjusting the numbr of trees, plus or minus 50. So rerun at ntree=50 & ntree = 250
-Arsenic_boost <- train(
-  As3Cat ~ .,  # Specify the target variable as As3Cat
-  data = Clean_As[, -c(1:3, 5:8)],  
-  method = "gbm", 
-  trControl = trainControl(
-    method = "cv",
-    number = 5,
-    verboseIter = TRUE  # Enable verbose output for troubleshooting
-  ),
-  tuneGrid = expand.grid(
-    "n.trees" = c(50, seq(100, 250, by = 50)),
-    "interaction.depth" = 1:3,
-    "shrinkage" = c(0.1, 0.01, 0.001),
-    "n.minobsinnode" = 5))
+    "n.trees" = seq(from = 1000, to = 5000, by = 500),  #from USGS paper, might want to scale down for our work here
+    "interaction.depth" = seq(from = 2, to = 16, by = 4),  #adapted from USGS paper, might want to scale down for our work here
+    "shrinkage" = seq(from = 0.004, to = 0.012, by = 0.004),  #adapted from USGS paper, might want to scale down for our work here
+    "n.minobsinnode" = 8) #from USGS paper, might want to scale down for our work here
+)
 
 
 

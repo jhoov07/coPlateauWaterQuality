@@ -41,16 +41,16 @@ test_x<-data.matrix(As_testComp[, -c(1:8)])
 test_y<-As_testComp[,3]
 
 #define final training and testing sets
-xgb_train = xgb.DMatrix(data = train_x, label = train_y)  #OK, this runs when the outcome variable is numeric
-xgb_test = xgb.DMatrix(data = test_x, label = test_y)
+#xgb_train = xgb.DMatrix(data = train_x, label = train_y)  #OK, this runs when the outcome variable is numeric
+#xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 
 #define watchlist
-watchlist = list(train=xgb_train, test=xgb_test)
+#watchlist = list(train=xgb_train, test=xgb_test)
 
 #fit XGBoost model and display training and testing data at each round
-model = xgb.train(data = xgb_train, max.depth = 4, watchlist=watchlist, nrounds = 70, objective = "binary:logistic")
+#model = xgb.train(data = xgb_train, max.depth = 4, watchlist=watchlist, nrounds = 70, objective = "binary:logistic")
 
-#This model took ~20 minutes to run on my laptop, can still tune a few other parameters
+#This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab. 
 model<-train(
   factor(bas10) ~ ., 
   data = As_trainComp, 
@@ -60,11 +60,11 @@ model<-train(
   tuneGrid = expand.grid(
     nrounds = seq(from = 500, to = 2000, by = 500),
     max_depth = seq(from = 8, to = 14, by = 2),
-    eta = 0.3, 
+    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
     gamma = 0,
     colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
     min_child_weight = 1,
-    subsample = 1
+    subsample = seq(from = 0.25, to = 0.75, by = 0.25)
   )
 )
 
@@ -73,10 +73,16 @@ model
 model$resample %>%
   arrange(Resample)
 
+##Take a look at this reference to read about SHAP plots: https://christophm.github.io/interpretable-ml-book/shap.html
+##Try implementing some of this code: https://github.com/liuyanguu/SHAPforxgboost try the summary plot and dependence plots
+#Check out what they did in this USGS paper: https://pubs.acs.org/doi/10.1021/acs.est.3c03315
+
+#Rerun the model and tune for >1 ug/L, >5 ug/L and >10 ug/L (the current model)`
 
 
 
-x##I didn't use this code below
+
+##I didn't use this code below
 #turning all 1-0(true and false) to booleans
 # List of non-numeric variables
 non_numeric_vars <- c(
