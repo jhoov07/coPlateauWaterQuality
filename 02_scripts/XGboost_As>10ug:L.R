@@ -58,6 +58,24 @@ model<-train(
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
   tuneGrid = expand.grid(
+    nrounds = seq(from = 500, to = 2000, by = 500),
+    max_depth = seq(from = 8, to = 14, by = 2),
+    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
+    gamma = 0,
+    colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
+    min_child_weight = 1,
+    subsample = seq(from = 0.25, to = 0.75, by = 0.25)
+  )
+)
+
+#This model takes ~5 minutes to run on my laptop
+model<-train(
+  factor(bas10) ~ ., 
+  data = As_trainComp, 
+  metric = "Accuracy",
+  method = "xgbTree",
+  trControl = trainControl(method="cv", number = 3),
+  tuneGrid = expand.grid(
     #nrounds = seq(from = 500, to = 2000, by = 500),
     nrounds = 20,
     max_depth = c(6, 8, 10),
