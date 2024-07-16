@@ -5,7 +5,7 @@ library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
 library(smotefamily) #use to balance the training dataset
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 
 #Clean up the workspace
