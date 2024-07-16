@@ -13,6 +13,11 @@ rm(list=ls())
 
 #Load data
 All_Asdata = read.csv("AsModelInput.csv")
+# Turns As3Cat(C1,C2,C3) into a dummy variable/integer called As3CatInt where: C1=0 and C2/C3=1
+All_Asdata$As3CatInt <- ifelse(All_Asdata$As3Cat == "C1", 0, 1)
+
+# Check the structure to verify the transformation
+str(All_Asdata$As3CatInt)
 
 # set a random seed & shuffle data frame
 set.seed(1234)
@@ -26,19 +31,19 @@ As_train = Asdata[sample_set,]
 As_test = Asdata[-sample_set,]
 
 #Complete cases
-As_trainComp <- As_train[complete.cases(As_train[,c(2,3,9:93)]),]  #col 2,3, testing on As >5/10 ug/L category
-As_testComp<- As_test[complete.cases(As_test[,c(2,3,9:93)]),] #col 2,3, testing on As >5/10 ug/L category
+As_trainComp <- As_train[complete.cases(As_train[,c(9:94)]),]  #col 94, testing on As >5/10 ug/L category
+As_testComp<- As_test[complete.cases(As_test[,c(9:94)]),] #col 94, testing on As >5/10 ug/L category
 
-As_trainComp <- As_trainComp[,c(2,3,9:93)] #col 2,3, testing on As >5/10 ug/L category
-As_testComp<- As_testComp[,c(2,3,9:93)] #col 2,3, testing on As >5/10 ug/L category
+As_trainComp <- As_trainComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
+As_testComp<- As_testComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
 
 #define predictor and response variables in training set
-train_x<-data.matrix(As_trainComp[, -c(1:8)])
-train_y<-As_trainComp[,2,3]
+train_x<-data.matrix(As_trainComp[, -c(1:8,86)])
+train_y<-As_trainComp[,86]
 
 #define predictor and response variables in testing set
-test_x<-data.matrix(As_testComp[, -c(1:8)])
-test_y<-As_testComp[,2,3]
+test_x<-data.matrix(As_testComp[, -c(1:8,86)])
+test_y<-As_testComp[,86]
 
 #define final training and testing sets
 #xgb_train = xgb.DMatrix(data = train_x, label = train_y)  #OK, this runs when the outcome variable is numeric
@@ -53,7 +58,7 @@ test_y<-As_testComp[,2,3]
 
 #This model takes ~5 minutes to run
 model<-train(
-  factor(bas5 + bas10) ~ ., 
+  factor(As3CatInt) ~ ., 
   data = As_trainComp, 
   metric = "Accuracy",
   method = "xgbTree",
@@ -72,7 +77,7 @@ model<-train(
 
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab.  
 model<-train(
-  factor(bas5 + bas10) ~ ., 
+  factor(As3CatInt) ~ ., 
   data = As_trainComp, 
   metric = "Accuracy",
   method = "xgbTree",
