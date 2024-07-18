@@ -105,21 +105,37 @@ rwMod$evaluation_log %>%
   ggplot(aes(x = iter, y = value, color = RMSE)) + geom_line()
 
 
+##Run the model with a different code block, outcome should be the same
+pb <- txtProgressBar(style = 3) 
+model<-train(
+  data = As_trainComp[,c(3,9:93)],
+  factor(bas10) ~ .,
+  metric = "Accuracy",
+  method = "xgbTree",
+  verbose = FALSE,
+  trControl = trainControl(method="cv", number = 1),
+  tuneGrid = expand.grid(
+    nrounds = 1000,
+    max_depth = 14,
+    eta = 0.0025,  #Shrinkage
+    gamma = 0,
+    colsample_bytree = 0.75,
+    min_child_weight = 1,
+    subsample = 0.75
+  )
+)
+close(pb) # done with the progress bar
+
 #Prediction using test data
-pred <- predict(rwMod, test_x)
-
-err <-mean(as.numeric(pred >0.5) != test_y)
-
-pred$class<-NA
-pred$class[as.numeric(pred >0.5)]<-1
+predictions <- predict(model, newdata = As_testComp[,c(3,9:93)])
 
 ##
 # Calculate confusion matrix
-#conf_matrix <- confusionMatrix(pred, factor(test_y))
+conf_matrix <- confusionMatrix(predictions, factor(test_y))
 #> # Extract sensitivity, specificity, and balanced accuracy
-#  > sensitivity <- conf_matrix$byClass["Sensitivity"]
-#> specificity <- conf_matrix$byClass["Specificity"]
-#> balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+sensitivity <- conf_matrix$byClass["Sensitivity"]; sensitivity
+specificity <- conf_matrix$byClass["Specificity"]; specificity
+balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]; balanced_accuracy
 
 
 
