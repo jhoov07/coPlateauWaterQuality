@@ -3,9 +3,10 @@ library(caret)
 library(gbm)
 library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
-library(smotefamily) #use to balance the training dataset
+#library(smotefamily) #use to balance the training dataset
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 #setwd("C:/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 
 #Clean up the workspace
@@ -29,8 +30,8 @@ As_test = Asdata[-sample_set,]
 As_trainComp <- As_train[complete.cases(As_train[,c(3,9:93)]),]  #col 3, testing on As >10 ug/L category
 As_testComp<- As_test[complete.cases(As_test[,c(3,9:93)]),] #col 3testing on As >10 ug/L category
 
-As_trainComp <- As_trainComp[,c(3,9:93)] #col 3, testing on As >10 ug/L category
-As_testComp<- As_testComp[,c(3,9:93)] #col 3testing on As >10 ug/L category
+#As_trainComp <- As_trainComp[,c(3,9:93)] #col 3, testing on As >10 ug/L category
+#As_testComp<- As_testComp[,c(3,9:93)] #col 3testing on As >10 ug/L category
 
 #define predictor and response variables in training set
 train_x<-data.matrix(As_trainComp[, -c(1:8)])
@@ -40,27 +41,179 @@ train_y<-As_trainComp[,3]
 test_x<-data.matrix(As_testComp[, -c(1:8)])
 test_y<-As_testComp[,3]
 
-#define final training and testing sets
-#xgb_train = xgb.DMatrix(data = train_x, label = train_y)  #OK, this runs when the outcome variable is numeric
-#xgb_test = xgb.DMatrix(data = test_x, label = test_y)
+#Create DMatrix for xgb
+dTrain <- xgb.DMatrix(data = train_x, label= train_y)
+dTest <- xgb.DMatrix(data = test_x, label= test_y)
 
-#define watchlist
-#watchlist = list(train=xgb_train, test=xgb_test)
 
-#fit XGBoost model and display training and testing data at each round
-#model = xgb.train(data = xgb_train, max.depth = 4, watchlist=watchlist, nrounds = 70, objective = "binary:logistic")
+#Create a list of parameters
+paramDF <- expand.grid(
+  max_depth = seq(from = 8, to = 14, by = 2),
+  eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
+  colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
+  subsample = seq(from = 0.25, to = 0.75, by = 0.25),
+  gamma = 0,
+  min_child_weight = 1
+)
+
+#Turn into a list of lists
+paramList <- lapply(split(paramDF, 1:nrow(paramDF)), as.list)
+
+#Loop through the parameter list and use a text progress bar
+bestResults <- tibble()
+set.seed(1234)
+pb <- txtProgressBar(style = 3) 
+for(i in seq(length(paramList))) {
+  rwCV <- xgb.cv(params = paramList[[i]], 
+                 data = dTrain, 
+                 nrounds = seq(from = 500, to = 2000, by = 500),  #this didn't work, it ran for nrounds = 500
+                 nfold = 3,
+                 early_stopping_rounds = 10,
+                 verbose = FALSE)
+  bestResults <- bestResults %>% 
+    bind_rows(rwCV$evaluation_log[rwCV$best_iteration])
+  gc() # Free unused memory after each loop iteration
+  setTxtProgressBar(pb, i/length(paramList))
+}
+close(pb) # done with the progress bar
+
+etasearch <- bind_cols(paramDF, bestResults)
+View(etasearch)
+
+#Display the folds sorted by RMSE
+rwCV$evaluation_log %>% arrange(test_rmse_mean)
+
+#WRite the best iteration
+rwCV$evaluation_log[rwCV$best_iteration]
+
+
+
+#Run XGB with tuned parameters
+set.seed(1234)
+rwMod <- xgb.train(data = dTrain, verbose = 3,
+                   watchlist = list(train = dTrain, test = dTest), 
+                   nrounds = 1000,
+                   max_depth = 10,
+                   eta = 0.005,  #Shrinkage
+                   colsample_bytree = 0.75,
+                   subsample = 0.5,
+                   gamma = 0,
+                   min_child_weight = 1)
+
+rwMod$evaluation_log %>% 
+  pivot_longer(cols = c(train_rmse, test_rmse), names_to = "RMSE") %>% 
+  ggplot(aes(x = iter, y = value, color = RMSE)) + geom_line()
+
+
+#Prediction using test data
+pred <- predict(rwMod, test_x)
+
+err <-mean(as.numeric(pred >0.5) != test_y)
+
+pred$class<-NA
+pred$class[as.numeric(pred >0.5)]<-1
+
+##
+# Calculate confusion matrix
+#conf_matrix <- confusionMatrix(pred, factor(test_y))
+#> # Extract sensitivity, specificity, and balanced accuracy
+#  > sensitivity <- conf_matrix$byClass["Sensitivity"]
+#> specificity <- conf_matrix$byClass["Specificity"]
+#> balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+
+
+
+
+
+
+
+
+# set up the cross-validated hyper-parameter search
+xgb_grid_1 = expand.grid(
+  nrounds = seq(from = 500, to = 2000, by = 500),
+  max_depth = seq(from = 8, to = 14, by = 2),
+  eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
+  gamma = 0,
+  colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
+  min_child_weight = 1,
+  subsample = seq(from = 0.25, to = 0.75, by = 0.25)
+)
+
+# pack the training control parameters
+xgb_trcontrol_1 = trainControl(
+  method = "cv",
+  number = 5,
+  verboseIter = TRUE,
+  returnData = FALSE,
+  returnResamp = "all",                                                        # save losses across all models
+  classProbs = TRUE,                                                           # set to TRUE for AUC to be computed
+  summaryFunction = twoClassSummary,
+  allowParallel = TRUE
+)
+
+
+# train the model for each parameter combination in the grid, 
+#   using CV to evaluate
+xgb_train_1 = xgb.train(
+  data=dTrain,
+  params = 
+  objective = "binary:logistic"
+)
+
+
+
+
+
+model<-xgb.train(
+  data=dTrain,
+  seq(from = 500, to = 2000, by = 500),
+  max.depth = 8,
+  eta = 0.005,
+  gamma = 0,
+  colsample_bytree = 0.25,
+  min_child_weight = 1,
+  subsample = 0.25,
+  nthread = 6,
+  objective = "binary:logistic",
+  verbose = 2
+)
+
 
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab. 
+model<-train(
+  factor(bas10) ~ ., 
+  data = dTrain, 
+  metric = "Accuracy",
+  method = "xgbTree",
+  verbose = 2,
+  trControl = trainControl(method="cv", number = 5),
+  tuneGrid = expand.grid(
+    nrounds = seq(from = 500, to = 2000, by = 500),
+    max_depth = seq(from = 8, to = 14, by = 2),
+    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
+    gamma = 0,
+    colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
+    min_child_weight = 1,
+    subsample = seq(from = 0.25, to = 0.75, by = 0.25)
+  )
+)
+
+
+dtest <- xgb.DMatrix(data = test_data, label= test_labels)
+#i get this error everytime
+# > dtest <- xgb.DMatrix(data = test_data, label= test_labels)
+
 model<-train(
   factor(bas10) ~ ., 
   data = As_trainComp, 
   metric = "Accuracy",
   method = "xgbTree",
-  trControl = trainControl(method="cv", number = 3),
+  verbose = 1,
+  trControl = trainControl(method="cv", number = 1),
   tuneGrid = expand.grid(
-    nrounds = seq(from = 500, to = 2000, by = 500),
-    max_depth = seq(from = 8, to = 14, by = 2),
-    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
+    nrounds = seq(from = 500, to = 500, by = 500),
+    max_depth = seq(from = 8, to = 8, by = 2),
+    eta = seq(from = 0.005, to = 0.01, by = 0.0025),  #Shrinkage
     gamma = 0,
     colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
     min_child_weight = 1,
