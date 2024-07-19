@@ -91,3 +91,21 @@ model
 
 model$resample %>%
   arrange(Resample)
+
+
+#make prediction and take out bas1 from data set
+predictions <- predict(model, newdata = As_testComp[,-1])
+
+#calculates the confusion matrix
+conf_matrix <- confusionMatrix(predictions, factor(test_y))
+
+#extract sensitivity, specificity, and balanced accuracy
+sensitivity <- conf_matrix$byClass["Sensitivity"]
+specificity <- conf_matrix$byClass["Specificity"]
+balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+
+#results
+sensitivity
+specificity
+balanced_accuracy
+conf_matrix
