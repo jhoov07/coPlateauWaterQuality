@@ -29,8 +29,8 @@ As_test = Asdata[-sample_set,]
 As_trainComp <- As_train[complete.cases(As_train[,c(1,9:93)]),]  #col 1, testing on As >11 ug/L category
 As_testComp<- As_test[complete.cases(As_test[,c(1,9:93)]),] #col 3testing on As >11 ug/L category
 
-As_trainComp <- As_trainComp[,c(1,9:93)] #col 1, testing on As >1 ug/L category
-As_testComp<- As_testComp[,c(1,9:93)] #col 1, testing on As >1 ug/L category
+#As_trainComp <- As_trainComp[,c(1,9:93)] #col 1, testing on As >1 ug/L category
+#As_testComp<- As_testComp[,c(1,9:93)] #col 1, testing on As >1 ug/L category
 
 #define predictor and response variables in training set
 train_x<-data.matrix(As_trainComp[, -c(1:8)])
