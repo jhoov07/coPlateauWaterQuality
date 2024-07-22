@@ -34,16 +34,16 @@ As_test = Asdata[-sample_set,]
 As_trainComp <- As_train[complete.cases(As_train[,c(9:94)]),]  #col 94, testing on As >5/10 ug/L category
 As_testComp<- As_test[complete.cases(As_test[,c(9:94)]),] #col 94, testing on As >5/10 ug/L category
 
-As_trainComp <- As_trainComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
-As_testComp<- As_testComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
+#As_trainComp <- As_trainComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
+#As_testComp<- As_testComp[,c(9:94)] #col 94, testing on As >5/10 ug/L category
 
 #define predictor and response variables in training set
-train_x<-data.matrix(As_trainComp[, -c(1:8,86)])
-train_y<-As_trainComp[,86]
+train_x<-data.matrix(As_trainComp[, -c(1:8,94)])
+train_y<-As_trainComp[,94]
 
 #define predictor and response variables in testing set
-test_x<-data.matrix(As_testComp[, -c(1:8,86)])
-test_y<-As_testComp[,86]
+test_x<-data.matrix(As_testComp[, -c(1:8,94)])
+test_y<-As_testComp[,94]
 
 #define final training and testing sets
 #xgb_train = xgb.DMatrix(data = train_x, label = train_y)  #OK, this runs when the outcome variable is numeric
@@ -59,7 +59,7 @@ test_y<-As_testComp[,86]
 #This model takes ~5 minutes to run
 model<-train(
   factor(As3CatInt) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[9:94], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -78,7 +78,7 @@ model<-train(
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab.  
 model<-train(
   factor(As3CatInt) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[9:94], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -97,3 +97,19 @@ model
 
 model$resample %>%
   arrange(Resample)
+
+predictions <- predict(model, newdata = As_testComp[9:93])
+
+#calculates the confusion matrix
+conf_matrix <- confusionMatrix(predictions, factor(test_y))
+
+#extract sensitivity, specificity, and balanced accuracy
+sensitivity <- conf_matrix$byClass["Sensitivity"]
+specificity <- conf_matrix$byClass["Specificity"]
+balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+
+#results
+sensitivity
+specificity
+balanced_accuracy
+conf_matrix
