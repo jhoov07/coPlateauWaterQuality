@@ -29,8 +29,8 @@ As_test = Asdata[-sample_set,]
 As_trainComp <- As_train[complete.cases(As_train[,c(2,9:93)]),]  #col 2, testing on As >5 ug/L category
 As_testComp<- As_test[complete.cases(As_test[,c(2,9:93)]),] #col 2, testing on As >5 ug/L category
 
-As_trainComp <- As_trainComp[,c(2,9:93)] #col 2, testing on As >5 ug/L category
-As_testComp<- As_testComp[,c(2,9:93)] #col 2, testing on As >5 ug/L category
+#As_trainComp <- As_trainComp[,c(2,9:93)] #col 2, testing on As >5 ug/L category
+#As_testComp<- As_testComp[,c(2,9:93)] #col 2, testing on As >5 ug/L category
 
 #define predictor and response variables in training set
 train_x<-data.matrix(As_trainComp[, -c(1:8)])
@@ -54,7 +54,7 @@ test_y<-As_testComp[,2]
 #This model takes ~5 minutes to run
 model<-train(
   factor(bas5) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[2,9:93], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -73,7 +73,7 @@ model<-train(
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab.  
 model<-train(
   factor(bas10) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[2,9:93], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -92,3 +92,20 @@ model
 
 model$resample %>%
   arrange(Resample)
+
+#make prediction and take out bas1 from data set
+predictions <- predict(model, newdata = As_testComp[9:93])
+
+#calculates the confusion matrix
+conf_matrix <- confusionMatrix(predictions, factor(test_y))
+
+#extract sensitivity, specificity, and balanced accuracy
+sensitivity <- conf_matrix$byClass["Sensitivity"]
+specificity <- conf_matrix$byClass["Specificity"]
+balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+
+#results
+sensitivity
+specificity
+balanced_accuracy
+conf_matrix
