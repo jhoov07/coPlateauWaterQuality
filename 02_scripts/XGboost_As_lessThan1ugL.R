@@ -53,7 +53,7 @@ test_y<-As_testComp[,1]
 #This model takes ~5 minutes to run 
 model<-train(
   factor(bas1) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[,c(1,9:93)], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -72,7 +72,7 @@ model<-train(
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab. 
 model<-train(
   factor(bas1) ~ ., 
-  data = As_trainComp, 
+  data = As_trainComp[,c(1,9:93)], 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 3),
@@ -94,7 +94,7 @@ model$resample %>%
 
 
 #make prediction and take out bas1 from data set
-predictions <- predict(model, newdata = As_testComp[,-1])
+predictions <- predict(model, newdata = As_testComp[9:93])
 
 #calculates the confusion matrix
 conf_matrix <- confusionMatrix(predictions, factor(test_y))
