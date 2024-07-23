@@ -48,7 +48,7 @@ data <- data %>%
     bas10 = ifelse(ResultMeasureValue > 10, 1, 0)
   )
 
-# - "US_L3NAME", -"ORIG_LABEL", "FID_Surficial_materials", "US_L3CODE", "UNIT_CODE"
-data <- subset(data, select = -c(WellDepthMeasureUnitCode, US_L3NAME, WellHoleDepthMeasureUnitCode, UNIT_NAME, ResultMeasureMeasureUnitCode, ORIG_LABEL, ElevationUnitCode, FID_Surficial_materials, US_L3CODE, UNIT_CODE, GENERALIZE))
+# - "US_L3NAME", -"ORIG_LABEL", "FID_Surficial_materials", "US_L3CODE", "UNIT_CODE ect."
+data <- subset(data, select = -c(WellHoleDepthMeasureValue, Built, WellDepthMeasureUnitCode, US_L3NAME, WellHoleDepthMeasureUnitCode, UNIT_NAME, ResultMeasureMeasureUnitCode, ORIG_LABEL, ElevationUnitCode, FID_Surficial_materials, US_L3CODE, UNIT_CODE, GENERALIZE))
 
 write.csv(data, file = "~/Desktop/Cleaned_As_GIS_Filtered.csv", row.names = FALSE)
