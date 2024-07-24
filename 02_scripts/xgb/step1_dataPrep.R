@@ -22,11 +22,11 @@ Asdata = read.csv("./CoPlateau_As/20240723_Cleaned_As_GIS_Filtered.csv",
 #Create categorical variable for splits
 Asdata <- Asdata %>%
   mutate(
-    As3Cat = ifelse(ResultMeasureValue <= 1, 0, 
-                    ifelse(ResultMeasureValue > 1 & ResultMeasureValue < 5, 1, 
-                           ifelse(ResultMeasureValue < 10 & ResultMeasureValue > 5, 2, 3)))
+    As3Cat = ifelse(ResultMeasureValue > 1, 'C1', 
+                    ifelse(ResultMeasureValue > 5, 'C2', 
+                           ifelse(ResultMeasureValue > 10, 'C3', 'C1')))
   )
-
+summary(factor(Asdata$As3Cat))
 
 # get the numb 70/30 training test split
 #split into training (70%) and testing set (30%), keep traing set balances with overall distribution
