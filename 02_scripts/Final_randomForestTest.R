@@ -4,9 +4,14 @@ library(caret)
 library(tidyverse)
 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
-setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
-Asdata = read.csv("Cleaned_As_GIS_Filtered.csv")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
+#setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
+
+#Clean up the workspace
+rm(list=ls())
+
+Asdata = read.csv("Cleaned_As_GIS_Filtered.csv", na.strings = "NULL")
+#Asdata = read.csv("Cleaned_As_GIS_Filtered.csv")
 
 #take out NAs
 Asdata <- Asdata[complete.cases(Asdata), ]
@@ -18,8 +23,8 @@ test <- Asdata[Asdata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-AsTrain<-train[,-c(1:7,212:214, 216:217)]
-AsTest<-test[,-c(1:7,212:214, 216:217)]
+AsTrain<-train[,-c(1:5,212:214, 216:217)]
+AsTest<-test[,-c(1:5,212:214, 216:217)]
 
 #Ensure As3Cat is a Factor (Categorical Variable)
 AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
@@ -45,15 +50,15 @@ classifier_RF<-train(
 y_pred = predict(classifier_RF, newdata = AsTest) 
 
 # Confusion Matrix 
-confusion_mtx = table(AsTest[,205], y_pred) 
+confusion_mtx = table(AsTest[,207], y_pred) 
 confusion_mtx
 
 # Plotting model 
 plot(classifier_RF) 
 
 # Importance
-importance <- importance(classifier_RF)
-importance
+#importance <- importance(classifier_RF)
+#importance
 
 # Calculate Accuracy
 accuracy <- sum(diag(confusion_mtx)) / sum(confusion_mtx)
