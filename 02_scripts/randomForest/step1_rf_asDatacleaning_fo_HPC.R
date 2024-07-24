@@ -19,9 +19,12 @@ Asdata = read.csv("./CoPlateau_As/20240723_Cleaned_As_GIS_Filtered.csv",
 
 Asdata <- Asdata %>%
   mutate(
-    As3Cat = ifelse(ResultMeasureValue <= 1, 0, 
-                    ifelse(ResultMeasureValue > 1 & ResultMeasureValue < 5, 1, 
-                           ifelse(ResultMeasureValue < 10 & ResultMeasureValue > 5, 2, 3)))
+    As3Cat = case_when(
+      ResultMeasureValue > 10 ~ "C3",
+      ResultMeasureValue > 5 ~ "C2",
+      ResultMeasureValue >= 1 ~ "C1",
+      TRUE ~ "C1"  # Values below 1 will also be C1
+    )
   )
 
 # Drop rows with NA values in predictor varialble fields and outcome for test data
