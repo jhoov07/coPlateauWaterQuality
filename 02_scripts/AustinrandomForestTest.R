@@ -49,6 +49,7 @@ classifier_RF<-train(
   verboseIter = TRUE  # Enable verbose output for troubleshooting
   )
 
+saveRDS(classifier_RF, "./final_model.rds")
 
 # Predicting the Test set results 
 y_pred = predict(classifier_RF, newdata = AsTest[-c(1:8)]) 
