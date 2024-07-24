@@ -6,7 +6,11 @@ library(gbm)
 
 #setwd("C:/Users/jhoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
-Asdata = read.csv("Cleaned_As_GIS_Filtered.csv")
+
+rm(list=ls())
+
+Asdata = read.csv("Cleaned_As_GIS_Filtered.csv", na.strings = "NULL")
+
 
 #take out NAs
 Asdata <- Asdata[complete.cases(Asdata), ]
@@ -16,8 +20,8 @@ train <- Asdata[Asdata$spl5 == TRUE, ]
 test <- Asdata[Asdata$spl5 == FALSE, ]
 
 #Drop unused fields
-AsTrain<-train[,-c(1:6,212:214, 216:217)]
-AsTest<-test[,-c(1:6,212:214, 216:217)]
+AsTrain<-train[,-c(1:5,212:214, 216:217)]
+AsTest<-test[,-c(1:5,212:214, 216:217)]
 
 
 #Ensure As3Cat is a Factor (Categorical Variable)

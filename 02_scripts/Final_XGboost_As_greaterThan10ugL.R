@@ -12,7 +12,7 @@ setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPl
 rm(list=ls())
 
 #Load data
-Asdata = read.csv("Cleaned_As_GIS_Filtered.csv")
+Asdata = read.csv("Cleaned_As_GIS_Filtered.csv", na.strings = "NULL")
 
 # set a random seed & shuffle data frame
 set.seed(1234)
@@ -27,23 +27,23 @@ test <- Asdata[Asdata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-AsTrain<-train[,-c(1:7,212:213, 215:217)]
-AsTest<-test[,-c(1:7,212:213, 215:217)]
+AsTrain<-train[,-c(1:5,212:213, 215:217)]
+AsTest<-test[,-c(1:5,212:213, 215:217)]
 
 #Ensure As3Cat is a Factor (Categorical Variable)
 AsTrain$As3Cat <- as.factor(AsTrain$bas10)
 AsTest$As3Cat <- as.factor(AsTest$bas10)
 
-AsTrain<-AsTrain[,-206]
-AsTest<-AsTest[,-206]
+AsTrain<-AsTrain[,-208]
+AsTest<-AsTest[,-208]
 
 #define predictor and response variables in training set
 train_x<-data.matrix(AsTrain)
-train_y<-AsTrain[,205]
+train_y<-AsTrain[,207]
 
 #define predictor and response variables in testing set
 test_x<-data.matrix(AsTest)
-test_y<-AsTest[,205]
+test_y<-AsTest[,207]
 
 
 #This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab. 
@@ -64,24 +64,6 @@ model<-train(
   )
 )
 
-#This model takes ~5 minutes to run on my laptop
-model<-train(
-  factor(bas10) ~ ., 
-  data = As_trainComp[3,9:93], 
-  metric = "Accuracy",
-  method = "xgbTree",
-  trControl = trainControl(method="cv", number = 3),
-  tuneGrid = expand.grid(
-    #nrounds = seq(from = 500, to = 2000, by = 500),
-    nrounds = 20,
-    max_depth = c(6, 8, 10),
-    eta = c(0.01, 0.02),  #Shrinkage
-    gamma = 0,
-    colsample_bytree = c(0.5, 0.75),
-    min_child_weight = 1,
-    subsample = c(0.5, 0.75)
-  )
-)
 
 model
 

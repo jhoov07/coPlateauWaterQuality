@@ -4,14 +4,13 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
-#setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
+setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_As")
 
 #Clean up the workspace
 rm(list=ls())
 
 Asdata = read.csv("Cleaned_As_GIS_Filtered.csv", na.strings = "NULL")
-#Asdata = read.csv("Cleaned_As_GIS_Filtered.csv")
 
 #take out NAs
 Asdata <- Asdata[complete.cases(Asdata), ]
