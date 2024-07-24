@@ -11,7 +11,7 @@ setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
 rm(list=ls())
 
 #Load RF model
-classifier_RF<-readRDS("2024-07-23mtry15_cv3_final_model_rf.rds")
+classifier_RF<-readRDS("2024-07-24mtry2_cv3_final_model_rf.rds")
 
 #Load data
 Asdata = read.csv("./CoPlateau_As/20240723_randomForest_As_dataClean.csv",

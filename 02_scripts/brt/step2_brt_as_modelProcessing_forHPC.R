@@ -29,28 +29,22 @@ AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 #Drop unused fields
 AsTrain<-AsTrain[,-c(1:6,213:215, 217)]
 
-#Set a tune grid
-n<-ncol(AsTrain)-1
-#tunegrid <- expand.grid(mtry = 1:n) #Change to 1:84 if testing for real, 1:3 was used for model development
-tunegrid <- expand.grid(mtry = 1:15) #Change to 1:84 if testing for real, 1:3 was used for model development
-
-#Turn into a list of lists
-paramList <- lapply(split(tunegrid, 1:nrow(tunegrid)), as.list)
-#
-
 # Fitting Random Forest to the train dataset 
 #classifier_RF 
+Arsenic_boost <- train(
+  As3Cat ~ .,  # Specify the target variable as As3Cat
+  data = AsTrain,  
+  method = "gbm", 
+  trControl = trainControl(
+    method = "cv",
+    number = 10,    #Use 10 fold for real runs
+    verboseIter = TRUE  # Enable verbose output for troubleshooting
+  ),
+  tuneGrid = expand.grid(
+    "n.trees" = seq(from = 100, to = 500, by = 10),  #from USGS paper, might want to scale down for our work here
+    "interaction.depth" = seq(from = 2, to = 16, by = 2),  #adapted from USGS paper, might want to scale down for our work here
+    "shrinkage" = seq(from = 0.004, to = 0.012, by = 0.002),  #adapted from USGS paper, might want to scale down for our work here
+    "n.minobsinnode" = 8) #from USGS paper, might want to scale down for our work here
+)
 
-for(i in seq(length(paramList))) {
-  classifier_RF<-train(
-    data = AsTrain, 
-    factor(As3Cat) ~ .,
-    metric = "Accuracy",
-    method = "rf",
-    trControl = trainControl(method="cv", number = 3),    #change number = 10 if doing for real
-    tuneGrid  = tunegrid,
-    ntree = 500,
-    verboseIter = TRUE)  # Enable verbose output for troubleshooting
-}
-
-saveRDS(classifier_RF, paste("./",date, "mtry15_cv3_final_model_rf.rds", sep=""))
+saveRDS(Arsenic_boost, paste("./",date, "cv10_final_model_brt.rds", sep=""))
