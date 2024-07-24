@@ -16,16 +16,16 @@ date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
 #Load data
-Asdata = read.csv("./CoPlateau_As/20240723_Cleaned_As_GIS_Filtered.csv", 
+Asdata = read.csv("./CoPlateau_As/2_20240724_randomForest_As_dataClean.csv", 
                   na.strings = "NULL") #Probably need to simplify the path so the script and data are in the same folder for the HPC
 
 #Create categorical variable for splits
-Asdata <- Asdata %>%
-  mutate(
-    As3Cat = ifelse(ResultMeasureValue > 1, 'C1', 
-                    ifelse(ResultMeasureValue > 5, 'C2', 
-                           ifelse(ResultMeasureValue > 10, 'C3', 'C1')))
-  )
+#Asdata <- Asdata %>%
+#  mutate(
+#    As3Cat = ifelse(ResultMeasureValue > 1, 'C1', 
+#                    ifelse(ResultMeasureValue > 5, 'C2', 
+#                           ifelse(ResultMeasureValue > 10, 'C3', 'C1')))
+#  )
 summary(factor(Asdata$As3Cat))
 
 # get the numb 70/30 training test split

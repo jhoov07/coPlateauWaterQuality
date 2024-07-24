@@ -1,3 +1,11 @@
+#Load and install packages
+
+install.packages("caTools")
+install.packages("randomForest")
+install.packages("caret")
+install.packages("tidyverse")
+
+#Call packages
 library(caTools) 
 library(randomForest)
 library(caret)
@@ -14,7 +22,7 @@ date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
 #Load data
-Asdata = read.csv("./CoPlateau_As/20240723_randomForest_As_dataClean.csv",
+Asdata = read.csv("./CoPlateau_As/2_20240724_randomForest_As_dataClean.csv",
                   na.strings = "NA") #Probably need to simplify the path so the script and data are in the same folder for the HPC
 
 Asdata <- Asdata[complete.cases(Asdata), ]
@@ -41,7 +49,7 @@ tunegrid <- expand.grid(mtry = 1:2) #Change to 1:206 if testing for real, 1:3 wa
     factor(As3Cat) ~ .,
     metric = "Accuracy",
     method = "rf",
-    trControl = trainControl(method="cv", number = 10),    #change number = 10 if doing for real
+    trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
     tuneGrid  = tunegrid,
     ntree = 500,
     verboseIter = TRUE)  # Enable verbose output for troubleshooting
