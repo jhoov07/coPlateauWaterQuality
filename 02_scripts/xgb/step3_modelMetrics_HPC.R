@@ -5,24 +5,24 @@ library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
 #library(smotefamily) #use to balance the training dataset
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/")
 #setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 
 #Clean up the workspace
 rm(list=ls())
 
 #Load RF model
-Arsenic_xgb<-readRDS("2024-07-24as_cv10_final_model_xgb.rds")
+Arsenic_xgb<-readRDS("./03_modelOutputs/03_xgb/2024-07-24_xgb_10ugL.rds")
 
 #Load data
-Asdata = read.csv("./CoPlateau_As/20240724_xgb_As_dataClean.csv",
+Asdata = read.csv("./01_data/CoPlateau_As/20240724_xgb_As_dataClean.csv",
                   na.strings = "NA") #Probably need to simplify the path so the script and data are in the same folder for the HPC
 
 #Subset to test set
 AsTest<-subset(Asdata, trainCat3==FALSE)
 
 #Drop unused fields
-Asdata<-Asdata[,-c(1:6,214:217)]
+AsTest<-AsTest[,-c(1:6,213:214,216:217)]
 
 #Predictions
 y_pred = predict(Arsenic_xgb, newdata = AsTest) 
@@ -31,7 +31,7 @@ y_pred = predict(Arsenic_xgb, newdata = AsTest)
 #confusion_mtx = table(AsTest[,216], y_pred) 
 #confusion_mtx
 
-confusionMatrix(y_pred, factor(AsTest[,216]))
+confusionMatrix(y_pred, factor(AsTest[,207]))
 
 # Plotting model 
 plot(Arsenic_boost) 
