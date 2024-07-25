@@ -3,9 +3,10 @@ library(caret)
 library(gbm)
 library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
+
 #library(smotefamily) #use to balance the training dataset
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/")
 #setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 
 #Clean up the workspace
@@ -17,18 +18,19 @@ set.seed(1234)  # Setting seed
 
 
 #Load data
-Asdata = read.csv("./CoPlateau_As/20240724_xgb_As_dataClean.csv",
-                  na.strings = "NA") #Probably need to simplify the path so the script and data are in the same folder for the HPC
-
+#Asdata = read.csv("./01_data/CoPlateau_As/20240724_xgb_As_dataClean.csv",
+#                  na.strings = "NA") #Probably need to simplify the path so the script and data are in the same folder for the HPC
+Asdata = read.csv("./01_data/CoPlateau_As/Cleaned_As_GIS_Filtered.csv",
+                  na.strings = "NULL")
 
 #Subset to training set
-AsTrain<-subset(Asdata, trainCat3==TRUE)
+AsTrain<-subset(Asdata, spl3cat==TRUE)
 
 #Drop unused fields for bas1 outcome
-AsTrain<-AsTrain[,-c(1:6,214:217)]
+AsTrain<-AsTrain[,-c(1:5,212:214, 216:217)]
 
 #Ensure bas1 is a Factor (Categorical Variable)
-AsTrain$As3Cat <- as.factor(AsTrain$bas1)
+AsTrain$bas1 <- as.factor(AsTrain$bas1)
 
 #This model takes ~5 minutes to run on my laptop
 model<-train(

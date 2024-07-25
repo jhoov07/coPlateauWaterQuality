@@ -24,8 +24,10 @@ AsTest<-subset(Asdata, trainCat3==FALSE)
 #Drop unused fields
 AsTest<-AsTest[,-c(1:6,213:214,216:217)]
 
+AsTestbas10<-data.frame(AsTest[,207])
+
 #Predictions
-y_pred = predict(Arsenic_xgb, newdata = AsTest) 
+y_pred = predict(Arsenic_xgb, newdata = AsTest[,-c(1:6,213:214,216:217)], type="prob") 
 
 # Confusion Matrix 
 #confusion_mtx = table(AsTest[,216], y_pred) 
@@ -34,10 +36,10 @@ y_pred = predict(Arsenic_xgb, newdata = AsTest)
 confusionMatrix(y_pred, factor(AsTest[,207]))
 
 # Plotting model 
-plot(Arsenic_boost) 
+plot(Arsenic_xgb) 
 
 #Calculate variable importance
-gbmImp <- varImp(Arsenic_boost, scale=T)
+gbmImp <- varImp(Arsenic_xgb, scale=T)
 gbmImp
 
 #Plot variable importance

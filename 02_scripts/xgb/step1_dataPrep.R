@@ -5,7 +5,7 @@ library(xgboost) # for xgboost
 library(tidyverse) # general utility functions
 #library(smotefamily) #use to balance the training dataset
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality")
 #setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data")
 
 #Clean up the workspace
@@ -16,7 +16,7 @@ date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
 #Load data
-Asdata = read.csv("./CoPlateau_As/2_20240724_randomForest_As_dataClean.csv", 
+Asdata = read.csv("./01_data/CoPlateau_As/2_20240724_randomForest_As_dataClean.csv", 
                   na.strings = "NULL") #Probably need to simplify the path so the script and data are in the same folder for the HPC
 
 #Create categorical variable for splits
@@ -38,6 +38,14 @@ Asdata2 <- Asdata %>%
   )
 
 write.csv(Asdata2, "./CoPlateau_As/20240724_xgb_As_dataClean.csv")
+
+
+
+
+
+
+
+
 
 Asdata <- All_Asdata[sample(1:nrow(All_Asdata)), ]
 #Asdata<-as.data.frame(Asdata)
