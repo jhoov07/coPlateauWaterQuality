@@ -33,6 +33,9 @@ AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 
 tunegrid <- expand.grid(mtry = (1:3)) #Change to 1:84 if testing for real, 1:3 was used for model development
 
+classifier_RF = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/01_randomForest/2024-07-25_rf.rds")
+
+# This model runs in legit 2 seconds
 classifier_RF<-train(
   factor(As3Cat) ~ ., 
   data = AsTrain, 
@@ -55,9 +58,6 @@ confusion_mtx
 # Plotting model 
 plot(classifier_RF) 
 
-# Importance
-#importance <- importance(classifier_RF)
-#importance
 
 # Calculate Accuracy
 accuracy <- sum(diag(confusion_mtx)) / sum(confusion_mtx)
@@ -67,12 +67,18 @@ accuracy
 kappa_value <- kappa(confusion_mtx)
 kappa_value
 
+# Extract all Sensitivity and Specificity values
+sensitivity <- conf_matrix$byClass[, "Sensitivity"]
+specificity <- conf_matrix$byClass[, "Specificity"]
+
 #print values
 classifier_RF
 accuracy
 kappa_value
+sensitivity
+specificity
 
 importance <- varImp(classifier_RF, scale = FALSE)
 
 # Plot variable importance
-plot(importance, top = 20)
+plot(importance, top = 10, col = "blue",  main = "Random Forest Classification")
