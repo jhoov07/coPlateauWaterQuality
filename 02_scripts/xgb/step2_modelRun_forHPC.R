@@ -32,17 +32,20 @@ AsTrain<-AsTrain[,-c(1:5,212:214, 216:217)]
 #Ensure bas1 is a Factor (Categorical Variable)
 AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 
+wlist = list(train = AsTrain)
+
 #This model takes ~5 minutes to run on my laptop
 model<-train(
   factor(As3Cat) ~ ., 
   data = AsTrain, 
   metric = "Accuracy",
   method = "xgbTree",
-  trControl = trainControl(method="cv", number = 10, verboseIter = TRUE),
+  early_stopping_rounds=10,
+  trControl = trainControl(method="cv", number = 2, verboseIter = TRUE, ),
   na.action = 'na.pass',
   tuneGrid = expand.grid(
     #nrounds = seq(from = 500, to = 2000, by = 500),
-    nrounds = 500,
+    nrounds = 100,
     max_depth = 10,
     #max_depth = c(6, 8, 10),
     #eta = c(0.01, 0.02),  #Shrinkage
