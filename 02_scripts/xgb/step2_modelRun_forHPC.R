@@ -30,31 +30,39 @@ AsTrain<-subset(Asdata, spl3cat==TRUE)
 AsTrain<-AsTrain[,-c(1:5,212:214, 216:217)]
 
 #Ensure bas1 is a Factor (Categorical Variable)
-AsTrain$bas1 <- as.factor(AsTrain$bas1)
+AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 
 #This model takes ~5 minutes to run on my laptop
 model<-train(
-  factor(bas1) ~ ., 
+  factor(As3Cat) ~ ., 
   data = AsTrain, 
   metric = "Accuracy",
   method = "xgbTree",
-  trControl = trainControl(method="cv", number = 2),
+  trControl = trainControl(method="cv", number = 10, verboseIter = TRUE),
   na.action = 'na.pass',
   tuneGrid = expand.grid(
     #nrounds = seq(from = 500, to = 2000, by = 500),
-    nrounds = 20,
-    max_depth = 2,
+    nrounds = 500,
+    max_depth = 10,
     #max_depth = c(6, 8, 10),
     #eta = c(0.01, 0.02),  #Shrinkage
-    eta = 0.02,  #Shrinkage
+    eta = 0.01,  #Shrinkage
     gamma = 0,
-    colsample_bytree = 0.5,
+    colsample_bytree = 0.75,
     #colsample_bytree = c(0.5, 0.75),
     min_child_weight = 1,
     subsample = 0.5
     #subsample = c(0.5, 0.75)
   )
 )
+
+
+saveRDS(model, paste("./",date, "20240726_as_cv10_final_modelTuned_xgb.rds", sep=""))
+
+
+
+
+
 
 #Tune hyperparameters using tunegrid 
 model<-train(
@@ -75,7 +83,7 @@ model<-train(
   )
 )
 
-saveRDS(model, paste("./",date, "as_cv10_final_model_xgb.rds", sep=""))
+
 
 
 

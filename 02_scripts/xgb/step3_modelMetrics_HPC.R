@@ -12,28 +12,35 @@ setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/")
 rm(list=ls())
 
 #Load RF model
-Arsenic_xgb<-readRDS("./03_modelOutputs/03_xgb/2024-07-24_xgb_10ugL.rds")
+Arsenic_xgb<-readRDS("./03_modelOutputs/03_xgb/20240726_as_cv10_final_modelTuned_xgb.rds")
 
 #Load data
-Asdata = read.csv("./01_data/CoPlateau_As/20240724_xgb_As_dataClean.csv",
-                  na.strings = "NA") #Probably need to simplify the path so the script and data are in the same folder for the HPC
+Asdata = read.csv("./01_data/CoPlateau_As/Cleaned_As_GIS_Filtered.csv",
+                  na.strings = "NULL") #Probably need to simplify the path so the script and data are in the same folder for the HPC
 
 #Subset to test set
-AsTest<-subset(Asdata, trainCat3==FALSE)
+AsTest<-subset(Asdata, spl3cat==FALSE)
+#AsTest<-subset(Asdata, spl3cat==TRUE)
 
 #Drop unused fields
-AsTest<-AsTest[,-c(1:6,213:214,216:217)]
+AsTest2<-AsTest[,-c(212:214,216:217)]
 
-AsTestbas10<-data.frame(AsTest[,207])
+AsTest3 <- AsTest2[complete.cases(AsTest2[,c(6:212)]), ]
 
 #Predictions
-y_pred = predict(Arsenic_xgb, newdata = AsTest[,-c(1:6,213:214,216:217)], type="prob") 
+y_pred2 = predict(Arsenic_xgb, newdata = AsTest3[,-1], type="prob") 
+y_pred = predict(Arsenic_xgb, newdata = AsTest3[,-1], missing ="NULL"); length(y_pred)
+
+#Write predictions to file for mapping
+a<-cbind(AsTest3[,c(1:5)], y_pred, y_pred2)
+write.csv(a, "20240726_wellPredictions_forMapping_xgb.csv")
+#b<-merge(Asdata[,c(1:5)], a, by="SiteID")
 
 # Confusion Matrix 
 #confusion_mtx = table(AsTest[,216], y_pred) 
 #confusion_mtx
 
-confusionMatrix(y_pred, factor(AsTest[,207]))
+confusionMatrix(factor(AsTest3$As3Cat), y_pred)
 
 # Plotting model 
 plot(Arsenic_xgb) 
@@ -44,7 +51,7 @@ gbmImp
 
 #Plot variable importance
 # - Variable importance
-plot(gbmImp, top=20) 
+plot(gbmImp, top=10) 
 
 
 
