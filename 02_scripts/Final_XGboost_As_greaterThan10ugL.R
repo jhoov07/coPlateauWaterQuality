@@ -45,8 +45,9 @@ train_y<-AsTrain[,207]
 test_x<-data.matrix(AsTest)
 test_y<-AsTest[,207]
 
+model = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-24_xgb_10ugL.rds")
 
-#This model took ~40 minutes to run on my laptop, can still tune a few other parameters, you could try increasing the number to 5 or 10 but that will add lots more time. Might be best to run on a desktop in the lab. 
+#This model took ~5 minutes to run on my laptop 
 model<-train(
   factor(bas10) ~ ., 
   data = AsTrain, 
@@ -90,4 +91,4 @@ conf_matrix
 importance <- varImp(model, scale = FALSE)
 
 # Plot variable importance
-plot(importance, top = 20)
+plot(importance, top = 10, col = "blue",  main = "XGBoost")
