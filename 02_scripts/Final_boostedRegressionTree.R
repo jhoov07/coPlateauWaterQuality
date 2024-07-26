@@ -28,7 +28,9 @@ AsTest<-test[,-c(1:5,212:214, 216:217)]
 AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 
+Arsenic_boost = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/02_boostedRegTrees/2024-07-25_as_brt.rds")
 
+#this runs in 5 mims
 Arsenic_boost <- train(
   As3Cat ~ .,  # Specify the target variable as As3Cat
   data = AsTrain,  
@@ -54,7 +56,13 @@ summary(Arsenic_boost)
 predictions <- predict(Arsenic_boost, newdata = AsTest)
 confusionMatrix(predictions, AsTest$As3Cat)
 
+# Extract sensitivity and specificity
+sensitivity <- conf_matrix$byClass[, "Sensitivity"]
+specificity <- conf_matrix$byClass[, "Specificity"]
+sensitivity
+specificity
+
 importance <- varImp(Arsenic_boost, scale = FALSE)
 
 # Plot variable importance
-plot(importance, top = 20)
+plot(importance, top = 10, col = "blue",  main = "Boosted Regression Tree")
