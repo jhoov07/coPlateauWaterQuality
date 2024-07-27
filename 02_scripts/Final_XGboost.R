@@ -27,12 +27,12 @@ test <- Asdata[Asdata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-AsTrain<-train[,-c(1:5,212:213, 215:217)]
-AsTest<-test[,-c(1:5,212:213, 215:217)]
+AsTrain<-train[,-c(1:5,212:214, 216:217)]
+AsTest<-test[,-c(1:5,212:214, 216:217)]
 
 #Ensure As3Cat is a Factor (Categorical Variable)
-AsTrain$As3Cat <- as.factor(AsTrain$bas10)
-AsTest$As3Cat <- as.factor(AsTest$bas10)
+AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
+AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 
 AsTrain<-AsTrain[,-208]
 AsTest<-AsTest[,-208]
@@ -45,48 +45,54 @@ train_y<-AsTrain[,207]
 test_x<-data.matrix(AsTest)
 test_y<-AsTest[,207]
 
-model = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-24_xgb_10ugL.rds")
+model =  readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-26_As3Cat_cv5_xgb.rds")
 
 #This model took ~5 minutes to run on my laptop 
 model<-train(
-  factor(bas10) ~ ., 
+  factor(As3Cat) ~ ., 
   data = AsTrain, 
   metric = "Accuracy",
   method = "xgbTree",
-  trControl = trainControl(method="cv", number = 3),
+  trControl = trainControl(method="cv", number = 10),
   tuneGrid = expand.grid(
-    nrounds = 20,
-    max_depth = c(6, 8, 10),
-    eta = c(0.01, 0.02),  #Shrinkage
+    nrounds = 500,
+    max_depth = c(10),
+    eta = c(0.01),  #Shrinkage
     gamma = 0,
-    colsample_bytree = c(0.5, 0.75),
+    colsample_bytree = c(0.75),
     min_child_weight = 1,
-    subsample = c(0.5, 0.75)
+    subsample = c(0.5)
   )
 )
 
 
 model
 
+# training data accuracy and kappa
+# AvgAcc = accuracy  Avgkap = kappa
 model$resample %>%
-  arrange(Resample)
+  arrange(Resample) %>%
+  mutate (AvgAcc = mean(Accuracy)) %>%
+  mutate (Avgkap = mean(Kappa))
 
-#make prediction and take out bas1 from data set
-predictions <- predict(model, newdata = AsTest)
+#make prediction and take out collum 207 from data set
+predictions <- predict(model, newdata = AsTest[-207])
 
 #calculates the confusion matrix
 conf_matrix <- confusionMatrix(predictions, factor(test_y))
+conf_matrix
 
 #extract sensitivity, specificity, and balanced accuracy
-sensitivity <- conf_matrix$byClass["Sensitivity"]
-specificity <- conf_matrix$byClass["Specificity"]
-balanced_accuracy <- conf_matrix$byClass["Balanced Accuracy"]
+sensitivity <- conf_matrix$byClass[, "Sensitivity"]
+specificity <- conf_matrix$byClass[, "Specificity"]
+accuracy <- conf_matrix$overall['Accuracy']
+kappa_value <- conf_matrix$overall['Kappa']
 
-#results
+# Test data values
+accuracy
+kappa_value
 sensitivity
 specificity
-balanced_accuracy
-conf_matrix
 
 importance <- varImp(model, scale = FALSE)
 
