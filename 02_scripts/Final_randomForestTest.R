@@ -31,8 +31,10 @@ AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 
 # Fitting Random Forest to the train dataset 
 
-tunegrid <- expand.grid(mtry = (1:3)) #Change to 1:84 if testing for real, 1:3 was used for model development
+tunegrid <- expand.grid(mtry = (1:2)) #Change to 1:84 if testing for real, 1:3 was used for model development
 
+#this is the more acurate model out put 
+#it was ran on the super computer
 classifier_RF = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/01_randomForest/2024-07-25_rf.rds")
 
 # This model runs in legit 2 seconds
@@ -41,38 +43,47 @@ classifier_RF<-train(
   data = AsTrain, 
   metric = "Accuracy",
   method = "rf",
-  trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
+  trControl = trainControl(method="cv", number = 10),    #change number = 10 if doing for real
   tuneGrid  = tunegrid,
-  ntree = 50,
+  ntree = 500,
   verboseIter = TRUE  # Enable verbose output for troubleshooting
 )
 
+classifier_RF
 
 # Predicting the Test set results 
-y_pred = predict(classifier_RF, newdata = AsTest) 
+y_pred <- predict(classifier_RF, newdata = AsTest) 
 
 # Confusion Matrix 
-confusion_mtx = table(AsTest[,207], y_pred) 
+confusion_mtx <- confusionMatrix(y_pred, AsTest$As3Cat)
 confusion_mtx
 
 # Plotting model 
-plot(classifier_RF) 
-
+plot(classifier_RF)
 
 # Calculate Accuracy
-accuracy <- sum(diag(confusion_mtx)) / sum(confusion_mtx)
+accuracy <- confusion_mtx$overall['Accuracy']
 accuracy
 
 # Calculate kappa value
-kappa_value <- kappa(confusion_mtx)
+kappa_value <- confusion_mtx$overall['Kappa']
 kappa_value
 
-# Extract all Sensitivity and Specificity values
-sensitivity <- conf_matrix$byClass[, "Sensitivity"]
-specificity <- conf_matrix$byClass[, "Specificity"]
+# Extract Sensitivity and Specificity for each class
+sensitivity <- confusion_mtx$byClass[,"Sensitivity"]
+sensitivity
+specificity <- confusion_mtx$byClass[,"Specificity"]
+specificity
 
-#print values
-classifier_RF
+# training data accuracy and kappa
+# AvgAcc = accuracy  Avgkap = kappa
+classifier_RF$resample %>%
+  arrange(Resample) %>%
+  mutate(AvgAcc = mean(Accuracy)) %>%
+  mutate(Avgkap = mean(Kappa))
+
+
+# Test data values
 accuracy
 kappa_value
 sensitivity
