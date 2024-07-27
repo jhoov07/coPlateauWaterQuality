@@ -28,6 +28,8 @@ AsTest<-test[,-c(1:5,212:214, 216:217)]
 AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 AsTest$As3Cat <- as.factor(AsTest$As3Cat)
 
+#this is the more acurate model output 
+#it was ran on the super computer
 Arsenic_boost = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/02_boostedRegTrees/2024-07-25_as_brt.rds")
 
 #this runs in 5 mims
@@ -54,15 +56,28 @@ summary(Arsenic_boost)
 
 #Evaluate the model on the test set
 predictions <- predict(Arsenic_boost, newdata = AsTest)
-confusionMatrix(predictions, AsTest$As3Cat)
+conf_matrix = confusionMatrix(predictions, AsTest$As3Cat)
+
+# training data accuracy and kappa
+# AvgAcc = accuracy  Avgkap = kappa
+Arsenic_boost$resample %>%
+  arrange(Resample) %>%
+  mutate (AvgAcc = mean(Accuracy)) %>%
+  mutate (Avgkap = mean(Kappa))
 
 # Extract sensitivity and specificity
 sensitivity <- conf_matrix$byClass[, "Sensitivity"]
 specificity <- conf_matrix$byClass[, "Specificity"]
+accuracy <- conf_matrix$overall['Accuracy']
+kappa_value <- conf_matrix$overall['Kappa']
+
+# Test data values
+accuracy
+kappa_value
 sensitivity
 specificity
 
 importance <- varImp(Arsenic_boost, scale = FALSE)
 
 # Plot variable importance
-plot(importance, top = 10, col = "blue",  main = "Boosted Regression Tree")
+plot(importance, top = 10, col = "blue",  main = "Boosted Regression Trees")
