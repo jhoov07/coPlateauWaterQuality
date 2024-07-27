@@ -80,4 +80,4 @@ specificity
 importance <- varImp(Arsenic_boost, scale = FALSE)
 
 # Plot variable importance
-plot(importance, top = 10, col = "blue",  main = "Boosted Regression Trees")
+plot(importance, top = 10, col = "blue",  main = "Boosted Regression Tree")
