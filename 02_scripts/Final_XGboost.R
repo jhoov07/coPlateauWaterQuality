@@ -45,7 +45,11 @@ train_y<-AsTrain[,207]
 test_x<-data.matrix(AsTest)
 test_y<-AsTest[,207]
 
-model =  readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-26_As3Cat_cv5_xgb.rds")
+#5 folds
+#model =  readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-26_As3Cat_cv5_xgb.rds")
+
+#10 folds
+model =  readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/03_xgb/2024-07-29_As3Cat_cv10_xgb.rds")
 
 #This model took ~5 minutes to run on my laptop 
 model<-train(
