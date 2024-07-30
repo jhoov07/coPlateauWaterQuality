@@ -12,7 +12,7 @@ setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/")
 rm(list=ls())
 
 #Load RF model
-Arsenic_xgb<-readRDS("./03_modelOutputs/03_xgb/20240726_as_cv10_final_modelTuned_xgb.rds")
+Arsenic_xgb<-readRDS("./03_modelOutputs/03_xgb/2024-07-26_As3Cat_cv5_xgb.rds")
 
 #Load data
 Asdata = read.csv("./01_data/CoPlateau_As/Cleaned_As_GIS_Filtered.csv",
@@ -25,7 +25,7 @@ AsTest<-subset(Asdata, spl3cat==FALSE)
 #Drop unused fields
 AsTest2<-AsTest[,-c(212:214,216:217)]
 
-AsTest3 <- AsTest2[complete.cases(AsTest2[,c(6:212)]), ]
+AsTest3 <- as.matrix(AsTest2[complete.cases(AsTest2[,c(6:212)]), ])
 
 #Predictions
 y_pred2 = predict(Arsenic_xgb, newdata = AsTest3[,-1], type="prob") 
@@ -46,7 +46,7 @@ confusionMatrix(factor(AsTest3$As3Cat), y_pred)
 plot(Arsenic_xgb) 
 
 #Calculate variable importance
-gbmImp <- varImp(Arsenic_xgb, scale=T)
+gbmImp <- varImp(Arsenic_xgb, scale=F)
 gbmImp
 
 #Plot variable importance
@@ -54,7 +54,8 @@ gbmImp
 plot(gbmImp, top=10) 
 
 
-
+xgb.plot.shap(AsTest3, model = Arsenic_xgb, shap_contrib = NULL, trees = trees0, target_class = 0, top_n = 4,
+              n_col = 2, col = col, pch = 16, pch_NA = 17)
 
 
 
