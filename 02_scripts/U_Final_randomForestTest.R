@@ -9,7 +9,7 @@ setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPl
 
 rm(list=ls())
 
-Udata = read.csv("Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
+Udata = read.csv("2Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
 
 #elevation kepted being viewed as catagorical so made it numeric
 Udata$Elevation <- as.numeric(Udata$Elevation)
@@ -24,12 +24,12 @@ test <- Udata[Udata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-UTrain<-train[,-c(1:5,208:210, 212:213)]
-UTest<-test[,-c(1:5,208:210, 212:213)]
+UTrain<-train[,-c(1:5,208:212)]
+UTest<-test[,-c(1:5,208:212)]
 
 #Ensure As3Cat is a Factor (Categorical Variable)
-UTrain$As3Cat <- as.factor(UTrain$As3Cat)
-UTest$As3Cat <- as.factor(UTest$As3Cat)
+UTrain$U3Cat <- as.factor(UTrain$U3Cat)
+UTest$U3Cat <- as.factor(UTest$U3Cat)
 
 # Fitting Random Forest to the train dataset 
 
@@ -41,7 +41,7 @@ tunegrid <- expand.grid(mtry = (1:2)) #Change to 1:84 if testing for real, 1:3 w
 
 # This model runs in legit 2 seconds
 classifier_RF<-train(
-  factor(As3Cat) ~ ., 
+  factor(U3Cat) ~ ., 
   data = UTrain, 
   metric = "Accuracy",
   method = "rf",
@@ -57,7 +57,7 @@ classifier_RF
 y_pred <- predict(classifier_RF, newdata = UTest) 
 
 # Confusion Matrix 
-confusion_mtx <- confusionMatrix(y_pred, UTest$As3Cat)
+confusion_mtx <- confusionMatrix(y_pred, UTest$U3Cat)
 confusion_mtx
 
 # Plotting model 
