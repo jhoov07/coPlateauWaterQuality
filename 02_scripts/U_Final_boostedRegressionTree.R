@@ -9,7 +9,7 @@ setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPl
 
 rm(list=ls())
 
-Udata = read.csv("Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
+Udata = read.csv("2Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
 
 #elevation kepted being viewed as catagorical so made it numeric
 Udata$Elevation <- as.numeric(Udata$Elevation)
@@ -22,14 +22,14 @@ train <- Udata[Udata$spl5 == TRUE, ]
 test <- Udata[Udata$spl5 == FALSE, ]
 
 #Drop unused fields
-UTrain<-train[,-c(1:5,208:210, 212:213)]
-UTest<-test[,-c(1:5,208:210, 212:213)]
+UTrain<-train[,-c(1:5,208:212)]
+UTest<-test[,-c(1:5,208:212)]
 
 
 #Ensure As3Cat is a Factor (Categorical Variable)
 
-UTrain$As3Cat <- as.factor(UTrain$As3Cat)
-UTest$As3Cat <- as.factor(UTest$As3Cat)
+UTrain$U3Cat <- as.factor(UTrain$U3Cat)
+UTest$U3Cat <- as.factor(UTest$U3Cat)
 
 #this is the more acurate model output 
 #it was ran on the super computer
@@ -37,7 +37,7 @@ UTest$As3Cat <- as.factor(UTest$As3Cat)
 
 #this runs in 5 mims
 Uranium_boost <- train(
-  As3Cat ~ .,  # Specify the target variable as As3Cat
+  U3Cat ~ .,  # Specify the target variable as As3Cat
   data = UTrain,  
   method = "gbm", 
   trControl = trainControl(
@@ -59,7 +59,7 @@ summary(Uranium_boost)
 
 #Evaluate the model on the test set
 predictions <- predict(Uranium_boost, newdata = UTest)
-conf_matrix = confusionMatrix(predictions, UTest$As3Cat)
+conf_matrix = confusionMatrix(predictions, UTest$U3Cat)
 
 # training data accuracy and kappa
 # AvgAcc = accuracy  Avgkap = kappa
