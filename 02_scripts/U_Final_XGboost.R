@@ -10,7 +10,7 @@ setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPl
 
 rm(list=ls())
 
-Udata = read.csv("Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
+Udata = read.csv("2Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
 
 #elevation kepted being viewed as catagorical so made it numeric
 Udata$Elevation <- as.numeric(Udata$Elevation)
@@ -28,12 +28,12 @@ test <- Udata[Udata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-UTrain<-train[,-c(1:5,208:210, 212:213)]
-UTest<-test[,-c(1:5,208:210, 212:213)]
+UTrain<-train[,-c(1:5,208:212)]
+UTest<-test[,-c(1:5,208:212)]
 
 #Ensure As3Cat is a Factor (Categorical Variable)
-UTrain$As3Cat <- as.factor(UTrain$As3Cat)
-UTest$As3Cat <- as.factor(UTest$As3Cat)
+UTrain$U3Cat <- as.factor(UTrain$U3Cat)
+UTest$U3Cat <- as.factor(UTest$U3Cat)
 
 #define predictor and response variables in training set
 train_x<-data.matrix(UTrain)
@@ -47,7 +47,7 @@ test_y<-UTest[,203]
 
 #This model took ~5 minutes to run on my laptop 
 model<-train(
-  factor(As3Cat) ~ ., 
+  factor(U3Cat) ~ ., 
   data = UTrain, 
   metric = "Accuracy",
   method = "xgbTree",
@@ -91,7 +91,7 @@ accuracy
 kappa_value
 sensitivity
 specificity
-
+table(Udata$U3Cat)
 importance <- varImp(model, scale = FALSE)
 
 # Plot variable importance
