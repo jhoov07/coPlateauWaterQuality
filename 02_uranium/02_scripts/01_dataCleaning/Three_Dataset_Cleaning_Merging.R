@@ -29,7 +29,15 @@ data3<- data3 %>%
   rename(welldpth = depth)
 
 
-#Need to find missing fields then create new blank fields
+#Need to find missing fields then create new blank fields, i started by comparing data and data1, need to repeat for data2
+a<-colnames(data)
+b<-colnames(data2)
+
+setdiff(a, b) #this will tell you the fields that don't match between a and b, anything not matching needs to be added to b
+setdiff(b, a) #this will tell you the fields that don't match between b and a, anything not matching needs to be added to a
+
+
+
 
 #Add in missing columns so all datasets have the same columns. 
 df <- read.csv("./02_uranium/01_data/Clean_Nure6_Data_ExportTable.csv")
