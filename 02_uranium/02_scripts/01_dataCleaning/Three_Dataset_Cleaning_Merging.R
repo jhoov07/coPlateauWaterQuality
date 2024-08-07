@@ -1,18 +1,35 @@
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality")
-data = read.csv("Clean_Nure6_Data_ExportTable.csv")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality")
+
+#Load libraries
+library(tidyverse)
+
+#Clean up the workspace
+rm(list=ls())
 
 
+#Load data
 data <- read.csv("./02_uranium/01_data/Clean_Nure6_Data_ExportTable.csv")
 data2 <- read.csv("./01_arsenic/01_data/Cleaned_As_GIS_Filtered.csv")
 data3 <- read.csv("./02_uranium/01_data/Clean_nnwells3_ExportTable.csv")
 
-#Rename columns so all datasets match
-data <- colnames(bfi48grd_ProjectRaster2, baseflow)
-data2 <- colnames(bfi48grd, baseflow)
-data <- colnames(PRISM_ppt_30yr_ProjectRaster1, prism30yr)
-data2 <- colnames(PRISM_30yrNorm, prism30yr)
-data2 <- colnames(WellDepthMeasureValue, welldpth)
-data3 <- colnames(depth, welldpth)
+#Rename fields in NURE dataset
+data<- data %>% 
+  rename(baseflow = bfi48grd_ProjectRaster2,
+    prism30yr = PRISM_ppt_30yr_ProjectRaster1)
+
+#Rename fields in NN Wells Data
+data2<- data2 %>% 
+  rename(baseflow = bfi48grd,
+         prism30yr = PRISM_30yrNorm,
+         welldpth = WellDepthMeasureValue)
+
+#Rename fields in data from Saurav
+data3<- data3 %>% 
+  rename(welldpth = depth)
+
+
+#Need to find missing fields then create new blank fields
 
 #Add in missing columns so all datasets have the same columns. 
 df <- read.csv("./02_uranium/01_data/Clean_Nure6_Data_ExportTable.csv")
