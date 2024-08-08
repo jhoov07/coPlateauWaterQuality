@@ -9,9 +9,9 @@ library(dplyr)
 rm(list=ls())
 
 #Load data
-data <- read.csv("./02_uranium/01_data/Clean_Nure6_Data_ExportTable.csv")
-data2 <- read.csv("./01_arsenic/01_data/LatLongCleaned_As_ExportTable.csv", na.strings = "NULL")
-data3 <- read.csv("./02_uranium/01_data/Clean_nnwells3_ExportTable.csv")
+data <- read.csv("./02_uranium/01_data/Nure7_Data_ExportTable.csv")
+data2 <- read.csv("./02_uranium/01_data/wqpData_cleaned_20240808.csv", na.strings = "NULL")
+data3 <- read.csv("./02_uranium/01_data/nnwells3_ExportTable.csv")
 
 #Rename fields in NURE dataset
 data<- data %>% 
