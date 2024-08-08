@@ -1,5 +1,5 @@
 #setwd("~/Desktop")
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality")
 
 #Load libraries
 library(tidyverse)
@@ -10,7 +10,7 @@ rm(list=ls())
 
 #Load data
 data <- read.csv("./02_uranium/01_data/Clean_Nure6_Data_ExportTable.csv")
-data2 <- read.csv("./01_arsenic/01_data/Cleaned_As_GIS_Filtered.csv", na.strings = "NULL")
+data2 <- read.csv("./01_arsenic/01_data/LatLongCleaned_As_ExportTable.csv", na.strings = "NULL")
 data3 <- read.csv("./02_uranium/01_data/Clean_nnwells3_ExportTable.csv")
 
 #Rename fields in NURE dataset
