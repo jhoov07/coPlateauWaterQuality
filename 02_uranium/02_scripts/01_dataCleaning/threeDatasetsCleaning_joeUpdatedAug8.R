@@ -1,5 +1,6 @@
 #setwd("~/Desktop")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality")
 
 #Load libraries
 library(tidyverse)
@@ -12,6 +13,9 @@ rm(list=ls())
 data <- read.csv("./02_uranium/01_data/Nure7_Data_ExportTable.csv")
 data2 <- read.csv("./02_uranium/01_data/wqpData_cleaned_20240808.csv", na.strings = "NULL")
 data3 <- read.csv("./02_uranium/01_data/nnwells3_ExportTable.csv")
+
+#Load file to correct NN Wells data frame field names
+newNNWellsColnames<-read.csv("./02_uranium/02_scripts/01_dataCleaning/newNNWellsColNames_Aug9.csv", check.names = FALSE)
 
 #Rename fields in NURE dataset
 data<- data %>% 
@@ -28,28 +32,29 @@ data2<- data2 %>%
 data3<- data3 %>% 
   rename(welldpth = depth,
          As = As_,
-         Fl = Fl_combined)
+         Fl = Fl_combine)
 
 ##Concatenate data source name to SiteID/WellID/Record Number
 data$SiteID<-paste("nure-",data$rec_no, sep="")
-data2$SiteID<-paste("nnWells-",data2$SiteID, sep="")
-data3$SiteID<-paste("wtrQalPort-",data3$well_id, sep="")
+data2$SiteID<-paste("wtrQulPort-",data2$SiteID, sep="")
+data3$SiteID<-paste("nnWells-",data3$well_id, sep="")
 
-#Update field types for a few variables so they match
-#nnwells$welldpth <- as.numeric(nnwells$welldpth)
-#Nure6$welldpth <- as.numeric(Nure6$welldpth)
-#Asdata$welldpth <- as.numeric(Asdata$welldpth)
+abc<-as.vector(unlist(newNNWellsColnames))
 
-
+#Assign updated colnames
+colnames(data3)<-abc
 
 #combine data sets
 combined_data <- bind_rows(data, data2, data3)
 
 # removes specified columns
-combined_data <- subset(combined_data, select = -c(OID_, rec_no, CharacteristicName, ResultSampleFractionText, well_id, code, bas1, bas5, bas10, As3Cat, spl3cat, spl5))
+combined_data <- subset(combined_data, select = -c(u_dn_ppb, OID_, OID1, Elevation, rec_no, CharacteristicName, ResultSampleFractionText, well_id, code, bas1, bas5, bas10, As3Cat, spl3cat, spl5))
 
 #Reorder data slightly for easier modeling
-combinedData_reorder<-combined_data[,c(218, 2, 219, 222, 220, 1, 3:217, 221, 223:232 )]
+combinedData_reorder<-combined_data[,c(180, 1, 2, 181, 218, 3:179, 182:217)]
+
+#Drop a few other fields
+combinedData_reorder2<-combinedData_reorder[,-c(6,7, 177:180, 211,212)]
 
 #Change NAs to 0 for dummy variables 177-221, 223-232
 # Replace NAs with 0s
@@ -58,16 +63,6 @@ combinedData_reorder<-combined_data[,c(218, 2, 219, 222, 220, 1, 3:217, 221, 223
 write.csv(combined_data, file = "~/Desktop/2combined_welldata.csv", row.names = FALSE)
 
 
-#Need to find missing fields then create new blank fields, i started by comparing data and data1, need to repeat for data2
-#a<-colnames(data)
-#b<-colnames(data2)
-#c<-colnames(data3)
-
-##setdiff(a, b) #this will tell you the fields that don't match between a and b, anything not matching needs to be added to b
-#setdiff(b, a) #this will tell you the fields that don't match between b and a, anything not matching needs to be added to a
-#setdiff(a, c)
-#setdiff(b, c)
-#setdiff(c, a)
 
 
 #Add in missing columns so all datasets have the same columns. 
