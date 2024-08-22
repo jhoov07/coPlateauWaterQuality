@@ -24,5 +24,8 @@ data2 <- data %>%
 #Convert to wide format
 dataW<-dcast(data2, well_id~analyte, value.var = "result", fun.aggregate = mean)
 
+#Merge by well_id or sample_id?
+dataM <- merge(data2, data3 by = well_id, all = true)
+
 write.csv(combined_data, file = "~/Desktop/3combined_welldata.csv", row.names = FALSE)
 
