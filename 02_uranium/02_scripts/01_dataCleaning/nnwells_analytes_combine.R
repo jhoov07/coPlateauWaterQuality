@@ -1,6 +1,5 @@
 setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/02_uranium")
 
-
 #Load libraries
 #library(tidyverse)
 library(dplyr)
@@ -30,7 +29,8 @@ dataW<-dcast(data2,
              fun.aggregate = mean)
 
 #Merge by well_id or sample_id?
-dataM <- merge(data3, dataW[,c(1,2,4:10)], by = "well_id", all.x = TRUE)
+dataM <- merge(data3[,-c(7:9)], dataW, by = "well_id", all = TRUE)  ##Drop the U, As and Fl data in Data 3 since they seem short for some reason
 
-write.csv(combined_data, file = "~/Desktop/3combined_welldata.csv", row.names = FALSE)
+
+write.csv(combined_data, file = "~/Desktop/20combined_welldata.csv", row.names = FALSE)
 
