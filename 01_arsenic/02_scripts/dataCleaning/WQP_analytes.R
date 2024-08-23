@@ -14,16 +14,12 @@ ca <- read.csv("Ca.csv" , na.strings = "NULL")
 alkalinity <- read.csv("Alkalinity.csv" , na.strings = "NULL")
 ph <- read.csv("pH.csv" , na.strings = "NULL")
 
-#Load existing WQP data file that's already been cleaned
-#data <-read.csv()
-
-#data2 <- data %>%
-#  filter(analyte == "As" |
   
 #Filter fields in new WQP data
 fe <- fe %>%
   select(SiteID, ActivityStartDate, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, ResultMeasureMeasureUnitCode) %>%
-  filter(ResultSampleFractionText == "Dissolved")
+  filter(ResultSampleFractionText == "Dissolved") %>%
+  filter(CharacteristicName == "Fe")
 
 ca <- ca %>%
   select(SiteID, ActivityStartDate, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, ResultMeasureMeasureUnitCode) %>%
@@ -31,11 +27,12 @@ ca <- ca %>%
 
 ph <- ph %>%
   select(SiteID, ActivityStartDate, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, ResultMeasureMeasureUnitCode) %>%
-  filter(ResultSampleFractionText == "Dissolved")
+  filter(ResultSampleFractionText == "Total")
 
 alkalinity <- alkalinity %>%
   select(SiteID, ActivityStartDate, CharacteristicName, ResultSampleFractionText, ResultMeasureValue, ResultMeasureMeasureUnitCode) %>%
-  filter(ResultSampleFractionText == "Dissolved")
+  filter(ResultSampleFractionText == "Total") %>%
+  filter(CharacteristicName == "Alkalinity")
 
 # Converted ResultMeasureValue from mg/L to ug/L for rows where ResultMeasureMeasureUnitCode is mg/L
 #Fe
@@ -52,8 +49,8 @@ ca$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
 
 # Alkalinity
 summary(factor(alkalinity$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
-ugL_indices <- which(alkalinity$ResultMeasureMeasureUnitCode == "ug/l" | alkalinity$ResultMeasureMeasureUnitCode == "ug/L") #Create an idex with records that we need to convert
-alkalinity$ResultMeasureValue[ugL_indices] <- alkalinity$ResultMeasureValue[ugL_indices]/1000 #Convert to ug/L to match NN Wells analyte data
+#ugL_indices <- which(alkalinity$ResultMeasureMeasureUnitCode == "ug/l" | alkalinity$ResultMeasureMeasureUnitCode == "ug/L") #Create an idex with records that we need to convert
+#alkalinity$ResultMeasureValue[ugL_indices] <- alkalinity$ResultMeasureValue[ugL_indices]/1000 #Convert to ug/L to match NN Wells analyte data
 alkalinity$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
  
 #Add in other analytes, pH and alkalinity
@@ -64,17 +61,24 @@ dataM<-rbind(fe, ca, ph, alkalinity)
 #Clear up field types
 dataM$SiteID<-factor(dataM$SiteID)
 dataM$CharacteristicName<-factor(dataM$CharacteristicName)
+
 #Wide format
 dataW<-dcast(dataM, SiteID~CharacteristicName, value.var="ResultMeasureValue", mean)
 
+#summary(dataW)
+
 #Isolate only "Alkalinity" in table and only "Fe" in table?
-dataW <- dataW %>% select(- "Alkalinity, bicarbonate") %>%
-  select(- "Alkalinity, carbonate") %>%
-  select(- "Ferric ion") %>% 
-  select(- "Ferrous ion") %>%
-  select(- "Iron-59")
+#dataW <- dataW %>% select(- "Alkalinity, bicarbonate") %>%
+# select(- "Alkalinity, carbonate") %>%
+#  select(- "Ferric ion") %>% 
+#  select(- "Ferrous ion") %>%
+# select(- "Iron-59")
 
 
 #I need to see where this code takes us and if we need any additional processing steps before combining with the other WQP data
-  
+#Load existing WQP data file that's already been cleaned
+data <-read.csv()
+abc<-merge(data, dataW, by="SiteID", all.x=TRUE)
+
+
 write.csv(dataW, file = "~/Desktop/combined_analytes_WQP.csv", row.names = FALSE)
