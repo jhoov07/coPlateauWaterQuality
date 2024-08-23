@@ -1,4 +1,5 @@
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/02_uranium")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/02_uranium")
+
 
 #Load libraries
 #library(tidyverse)
@@ -19,13 +20,17 @@ data2 <- data %>%
            analyte == "Nitrate" |
            analyte == "pH" |
            analyte == "Salinity" |
+           analyte == "Conductivity")
            
 
 #Convert to wide format
-dataW<-dcast(data2, well_id~analyte, value.var = "result", fun.aggregate = mean)
+dataW<-dcast(data2, 
+             well_id~analyte, 
+             value.var = "result", 
+             fun.aggregate = mean)
 
 #Merge by well_id or sample_id?
-dataM <- merge(data2, data3 by = well_id, all = true)
+dataM <- merge(data3, dataW[,c(1,2,4:10)], by = "well_id", all.x = TRUE)
 
 write.csv(combined_data, file = "~/Desktop/3combined_welldata.csv", row.names = FALSE)
 
