@@ -31,6 +31,10 @@ dataW<-dcast(data2,
 #Merge by well_id or sample_id?
 dataM <- merge(data3[,-c(7:9)], dataW, by = "well_id", all = TRUE)  ##Drop the U, As and Fl data in Data 3 since they seem short for some reason
 
+<<<<<<< Updated upstream
 
 write.csv(combined_data, file = "~/Desktop/20combined_welldata.csv", row.names = FALSE)
+=======
+write.csv(combined_data, file = "~/Desktop/combined_analytes_nnwells.csv", row.names = FALSE)
+>>>>>>> Stashed changes
 
