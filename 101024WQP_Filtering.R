@@ -3,9 +3,13 @@
 #Load libraries
 library(reshape2)
 library(dplyr)
+library(tidyr)
 
 #Set working directory
 setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
+
+#Clean up the workspace
+rm(list=ls())
 
 #Load csv files
 a<-read.csv("./02_Data/Raw_Data/WQP/00_archive/AZ_Uranium.csv")
@@ -16,57 +20,67 @@ e<-read.csv("./02_Data/Raw_Data/WQP/00_archive/ph.csv", na.strings = "NULL")
 f<-read.csv("./02_Data/Raw_Data/WQP/00_archive/alkalinity.csv", na.strings = "NULL")
 
 #Process the files
-
-#Alkalinity: convert ug/L to mg/L in ResultMeasureMeasureUnitCode (need to do)
-f2 <- f %>%
-  filter(ResultSampleFractionText == "Total") %>%
-  mutate() 
-f3 <- f2 %>% filter(ResultMeasureMeasureUnitCode != "NULL")
-#ug_to_mg <-0.001
-#f4 <- f3 %>%
-#  mutate(
-#    ResultMeasureValue = ifelse(ResultMeasureMeasureUnitCode == "ug/L", ResultMeasureValue * ug_to_mg, ResultMeasureValue)  # Convert values
-#    ResultMeasureMeasureUnitCode = ifelse(ResultMeasureMeasureUnitCode == "ug/L", "mg/L", ResultMeasureMeasureUnitCode)
-#write.csv(f4, file = "~/Desktop/alkalinitycheck.csv", row.names = FALSE)
-
-#pH 
-e2 <- e %>%
-  filter(ResultSampleFractionText == "Total") %>%
-  mutate() 
-e3 <- e2 %>% filter(ResultMeasureMeasureUnitCode != "NULL")
-#write.csv(e3, file = "~/Desktop/pHcheck.csv", row.names = FALSE)
-
-#Iron: unit conversions (need to do)
-d2 <- d %>%
-  filter(ResultSampleFractionText == "Total") %>%
-  mutate() 
-#write.csv(d2, file = "~/Desktop/ironcheck.csv", row.names = FALSE)
-
-#Calcium: keep mg/L (need to do)
-c2 <- c %>%
-  filter(ResultSampleFractionText == "Dissolved") %>%
-  mutate() 
-write.csv(c2, file = "~/Desktop/calciumcheck.csv", row.names = FALSE)
-
 #Uranium: AZ (keep "U" and "Uranium-238" in CharacteristicName), NM (keep "U" and "Uranium-238" in CharacteristicName)
-a2 <- a %>% 
-  filter(CharacteristicName == "Uranium-238" |
-        CharacteristicName == "U") %>%
-  mutate() 
-a3 <- a2 %>% filter(ResultMeasureValue != "NULL")
-b2 <- b %>%
-  filter(CharacteristicName == "Uranium-238" |
-        CharacteristicName == "U") %>%
-  mutate()
-b3 <- b2 %>% filter(ResultMeasureValue != "NULL")
-write.csv(a3, file = "~/Desktop/AZ_Ucheck.csv", row.names = FALSE)
-write.csv(b3, file = "~/Desktop/NM_Ucheck.csv", row.names = FALSE)
+#a2 <- a %>% 
+#  drop_na(ResultMeasureMeasureUnitCode) %>%
+#  filter(CharacteristicName == "Uranium-238" | CharacteristicName == "U") %>%
 
+  
+#a3 <- a2 %>% filter(ResultMeasureValue != "NULL")
+#b2 <- b %>%
+#  filter(CharacteristicName == "Uranium-238" |
+#           CharacteristicName == "U") %>%
+#  mutate()
+#b3 <- b2 %>% filter(ResultMeasureValue != "NULL")
+
+
+#Calcium: keep mg/L (done)
+c2 <- c %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%
+  filter(ResultSampleFractionText == "Dissolved")
+  
+summary(factor(c2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
+mgL_indices <- which(c2$ResultMeasureMeasureUnitCode == "ug/l" | c2$ResultMeasureMeasureUnitCode == "ug/L") #Create an index with records that we need to convert
+c2$ResultMeasureValue[mgL_indices] <- c2$ResultMeasureValue[mgL_indices] / 1000 #Convert to ug/L to match NN Wells analyte data
+c2$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
+
+#Iron: unit conversions (done)
+d2 <- d %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%
+  filter(ResultSampleFractionText == "Dissolved") %>%
+  filter(CharacteristicName == "Fe") #remove Ferric ion, Ferrous ion, and Iron-59
+
+summary(factor(d2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
+mgL_indices <- which(d2$ResultMeasureMeasureUnitCode == "mg/l" | d2$ResultMeasureMeasureUnitCode == "mg/L") #Create an index with records that we need to convert
+d2$ResultMeasureValue[mgL_indices] <- d2$ResultMeasureValue[mgL_indices] * 1000 #Convert to ug/L to match NN Wells analyte data
+d2$ResultMeasureMeasureUnitCode <- "ug/L"   # made all units mg/L
+
+#pH - check that all measurements are in standard units (done)
+e2 <- e %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%
+  filter(ResultSampleFractionText == "Total")
+
+#summary(factor(e2$ResultMeasureMeasureUnitCode))
+
+#Alkalinity: convert ug/L to mg/L in ResultMeasureMeasureUnitCode (done)
+f2 <- f %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%   #Remove rows with NA's using drop_na()
+  filter(ResultSampleFractionText == "Total") #filter to total results since we want to use raw water samples
+
+summary(factor(f2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
+mgL_indices <- which(f2$ResultMeasureMeasureUnitCode == "ug/l") #Create an index with records that we need to convert
+f2$ResultMeasureValue[mgL_indices] <- f2$ResultMeasureValue[mgL_indices] / 1000 #Convert to ug/L to match NN Wells analyte data
+f2$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
 
 #Merge files
 cdef<-rbind(c,d,e,f)
 
-length(unique(cdef$SiteID))
+cdef <- cdef %>%
+  filter(StateCode == 4 & (CountyCode == 1 | CountyCode == 5 | CountyCode == 7 | CountyCode == 15 | CountyCode == 17 | CountyCode == 25) |
+           (StateCode == 35 & (CountyCode == 3 | CountyCode ==6 | CountyCode ==31 | CountyCode ==39 | CountyCode ==43 | CountyCode ==45)) |
+           (StateCode == 08 & (CountyCode == 29 | CountyCode == 33 | CountyCode == 45 | CountyCode ==67 | CountyCode ==77 | CountyCode ==81 | CountyCode ==83 | CountyCode ==85 | CountyCode ==91 | CountyCode ==103 | CountyCode ==113)) |
+           (StateCode == 49 & (CountyCode == 1 | CountyCode == 7 | CountyCode ==13 | CountyCode ==15 | CountyCode ==17 | CountyCode == 19 | CountyCode ==21 | CountyCode ==23 | CountyCode ==25 | CountyCode ==27 | CountyCode ==31 | CountyCode == 37 | CountyCode ==39 | CountyCode ==41 | CountyCode ==47 | CountyCode ==49 | CountyCode ==51 | CountyCode == 53 | CountyCode ==55))) 
+
 
 #convert to wide format
 wide<-dcast(cdef, SiteID~CharacteristicName+ResultMeasureMeasureUnitCode, value.var="ResultMeasureValue", max)
