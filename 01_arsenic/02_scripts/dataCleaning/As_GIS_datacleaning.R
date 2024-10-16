@@ -10,7 +10,7 @@ table(data$ElevationUnitCode) #all feet or null
 
 
 
-#GENERALIZE
+#GENERALIZE, bedrock geology
 unique_vals <- unique(data$GENERALIZE)
 for (val in unique_vals) {
   col_name <- paste("GENERALIZE", gsub(" ", "_", gsub(",", "", val)), sep = "_")
