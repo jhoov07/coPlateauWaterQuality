@@ -41,7 +41,7 @@ c2 <- c %>%
   
 summary(factor(c2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
 mgL_indices <- which(c2$ResultMeasureMeasureUnitCode == "ug/l" | c2$ResultMeasureMeasureUnitCode == "ug/L") #Create an index with records that we need to convert
-c2$ResultMeasureValue[mgL_indices] <- c2$ResultMeasureValue[mgL_indices] / 1000 #Convert to ug/L to match NN Wells analyte data
+c2$ResultMeasureValue[mgL_indices] <- c2$ResultMeasureValue[mgL_indices] / 1000 #Convert to mg/L to match NN Wells analyte data
 c2$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
 
 #Iron: unit conversions (done)
@@ -53,7 +53,7 @@ d2 <- d %>%
 summary(factor(d2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
 mgL_indices <- which(d2$ResultMeasureMeasureUnitCode == "mg/l" | d2$ResultMeasureMeasureUnitCode == "mg/L") #Create an index with records that we need to convert
 d2$ResultMeasureValue[mgL_indices] <- d2$ResultMeasureValue[mgL_indices] * 1000 #Convert to ug/L to match NN Wells analyte data
-d2$ResultMeasureMeasureUnitCode <- "ug/L"   # made all units mg/L
+d2$ResultMeasureMeasureUnitCode <- "ug/L"   # made all units ug/L
 
 #pH - check that all measurements are in standard units (done)
 e2 <- e %>%
@@ -73,7 +73,7 @@ f2$ResultMeasureValue[mgL_indices] <- f2$ResultMeasureValue[mgL_indices] / 1000 
 f2$ResultMeasureMeasureUnitCode <- "mg/L"   # made all units mg/L
 
 #Merge files
-cdef<-rbind(c,d,e,f)
+cdef<-rbind(c2,d2,e2,f2)
 
 cdef <- cdef %>%
   filter(StateCode == 4 & (CountyCode == 1 | CountyCode == 5 | CountyCode == 7 | CountyCode == 15 | CountyCode == 17 | CountyCode == 25) |
