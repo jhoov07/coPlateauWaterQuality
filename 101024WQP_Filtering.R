@@ -18,20 +18,29 @@ c<-read.csv("./02_Data/Raw_Data/WQP/00_archive/Ca.csv", na.strings = "NULL")
 d<-read.csv("./02_Data/Raw_Data/WQP/00_archive/Iron.csv", na.strings = "NULL")
 e<-read.csv("./02_Data/Raw_Data/WQP/00_archive/ph.csv", na.strings = "NULL")
 f<-read.csv("./02_Data/Raw_Data/WQP/00_archive/alkalinity.csv", na.strings = "NULL")
+g<-read.csv("./02_Data/Raw_Data/WQP/00_archive/CO_Uranium.csv", na.strings = "NULL")
+h<-read.csv("./02_Data/Raw_Data/WQP/00_archive/UT_Uranium.csv", na.strings = "NULL")
 
 #Process the files
 #Uranium: AZ (keep "U" and "Uranium-238" in CharacteristicName), NM (keep "U" and "Uranium-238" in CharacteristicName)
-#a2 <- a %>% 
-#  drop_na(ResultMeasureMeasureUnitCode) %>%
-#  filter(CharacteristicName == "Uranium-238" | CharacteristicName == "U") %>%
-
+a2 <- a %>% 
+  select(a, c("SampleID", "CharacteristicName", "ResultSampleFractionText", "ResultMeasureValue", "ResultMeasureMeasureUnitCode") %>%
+  #a[, c("SampleID", "CharacteristicName", "ResultSampleFractionText", "ResultMeasureValue", "ResultMeasureMeasureUnitCode")] %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%
+  filter(CharacteristicName == "Uranium-238" | CharacteristicName == "U")
   
-#a3 <- a2 %>% filter(ResultMeasureValue != "NULL")
+  write.csv(a2, file = "~/Desktop/AZ_U.csv", row.names = FALSE)  
+  
 #b2 <- b %>%
 #  filter(CharacteristicName == "Uranium-238" |
 #           CharacteristicName == "U") %>%
 #  mutate()
 #b3 <- b2 %>% filter(ResultMeasureValue != "NULL")
+
+
+
+
+
 
 
 #Calcium: keep mg/L (done)
