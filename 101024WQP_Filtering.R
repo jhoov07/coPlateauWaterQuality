@@ -93,4 +93,4 @@ cdef2 <- cdef %>%
 wide<-dcast(cdef2, SiteID~CharacteristicName+ResultMeasureMeasureUnitCode, value.var="ResultMeasureValue", median)
 #write to csv
 
-write.csv("", file = "~/Desktop/.csv", row.names = FALSE)
+write.csv(cdef2, file = "~/Desktop/Complete_WQP_DataMerge.csv", row.names = FALSE)
