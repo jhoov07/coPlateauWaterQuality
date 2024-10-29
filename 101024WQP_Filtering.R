@@ -103,8 +103,11 @@ i<-read.csv("./02_Data/Raw_Data/WQP/00_archive/20241029_WQP_Export.csv", na.stri
 cleani<- i [-c(2:25,27:79)]
 write.csv(cleani, file = "~/Desktop/cleani.csv", row.names = FALSE)
 
+
+#class(cleani[["SiteID"]])
+#class(wide[["SiteID"]])
 #Merge with wide using SiteID
-WQP_All<-merge(wide, cleani, by="SiteID", all.y=TRUE)
+WQP_All<-merge(wide, cleani, by="SiteID", all.x=TRUE)
 
 #write to csv
 write.csv(cdef2, file = "~/Desktop/WQP_All.csv", row.names = FALSE)
