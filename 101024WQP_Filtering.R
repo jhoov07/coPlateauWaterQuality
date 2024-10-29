@@ -91,6 +91,20 @@ cdef2 <- cdef %>%
 
 #convert to wide format
 wide<-dcast(cdef2, SiteID~CharacteristicName+ResultMeasureMeasureUnitCode, value.var="ResultMeasureValue", median)
-#write to csv
 
-write.csv(cdef2, file = "~/Desktop/20241024_Complete_WQP_DataMerge.csv", row.names = FALSE)
+#Load in NN Wells table so you have the right fields
+#nnwells<-read.csv("./02_Data/Raw_Data/WQP/00_archive/Clean_nnwells3_ExportTable.csv", na.strings = "NULL")
+
+
+#Read GIS data from WQP
+i<-read.csv("./02_Data/Raw_Data/WQP/00_archive/20241029_WQP_Export.csv", na.strings = "NULL")
+
+#Clean up new dataframe, drop worthless fields
+cleani<- i [-c(2:25,27:79)]
+write.csv(cleani, file = "~/Desktop/cleani.csv", row.names = FALSE)
+
+#Merge with wide using SiteID
+WQP_All<-merge(wide, cleani, by="SiteID", all.y=TRUE)
+
+#write to csv
+write.csv(cdef2, file = "~/Desktop/WQP_All.csv", row.names = FALSE)
