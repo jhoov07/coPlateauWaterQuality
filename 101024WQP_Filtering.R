@@ -112,5 +112,7 @@ cleanNoDup<-distinct(cleani[,c(2:155)])  #only use
 #Merge with wide using SiteID
 WQP_All<-merge(wide, cleanNoDup, by="SiteID", all.x=TRUE)
 
+#Ensure WQP Merge table and NNwells table have same column names 
+
 #write to csv
 write.csv(cdef2, file = "~/Desktop/WQP_All.csv", row.names = FALSE)
