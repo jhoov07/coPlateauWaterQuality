@@ -109,5 +109,7 @@ write.csv(cleani, file = "~/Desktop/cleani.csv", row.names = FALSE)
 #Merge with wide using SiteID
 WQP_All<-merge(wide, cleani, by="SiteID", all.x=TRUE)
 
+#Ensure WQP Merge table and NNwells table have same column names 
+
 #write to csv
 write.csv(cdef2, file = "~/Desktop/WQP_All.csv", row.names = FALSE)
