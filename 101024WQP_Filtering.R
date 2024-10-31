@@ -91,6 +91,7 @@ cdef2 <- cdef %>%
 
 #convert to wide format
 wide<-dcast(cdef2, SiteID~CharacteristicName, value.var="ResultMeasureValue", median)
+#write.csv(wide, file = "~/Desktop/wide.csv", row.names = FALSE)
 
 #Load in NN Wells table so you have the right fields
 #nnwells<-read.csv("./02_Data/Raw_Data/WQP/00_archive/Clean_nnwells3_ExportTable.csv", na.strings = "NULL")
@@ -105,14 +106,58 @@ cleani<- i [-c(2:25,27:79)]
 
 #Return unique records
 cleanNoDup<-distinct(cleani[,c(2:155)])  #only use 
+#write.csv(cleanNoDup, file = "~/Desktop/cleanNoDup.csv", row.names = FALSE)
 
 
-#class(cleani[["SiteID"]])
+#class(cleanNoDup[["SiteID"]])
 #class(wide[["SiteID"]])
 #Merge with wide using SiteID
 WQP_All<-merge(wide, cleanNoDup, by="SiteID", all.x=TRUE)
 
 #Ensure WQP Merge table and NNwells table have same column names 
 
+#Import and merge As data with WQP_All
+j<-read.csv("./02_Data/Raw_Data/WQP/00_archive/AZ_Arsenic.csv", na.strings = "NULL")
+k<-read.csv("./02_Data/Raw_Data/WQP/00_archive/CO_Arsenic.csv", na.strings = "NULL")
+l<-read.csv("./02_Data/Raw_Data/WQP/00_archive/UT_Arsenic.csv", na.strings = "NULL")
+m<-read.csv("./02_Data/Raw_Data/WQP/00_archive/NM_Arsenic.csv", na.strings = "NULL")
+
+#Merge As files into a single data frame
+as<-rbind(j,k,l,m)
+#write.csv(as, file = "~/Desktop/as.csv", row.names = FALSE)
+
+
+#Process As data
+as2 <- as %>%
+  drop_na(ResultMeasureMeasureUnitCode) %>%
+  filter(ResultSampleFractionText == "Dissolved") %>%
+  filter(ResultMeasureMeasureUnitCode != "ratio") %>%
+  filter(CharacteristicName == "As")
+
+summary(factor(as2$ResultMeasureMeasureUnitCode)) #Check to see what units are noted in the field
+mgL_indices <- which(as2$ResultMeasureMeasureUnitCode == "mg/L") #Create an index with records that we need to convert
+as2$ResultMeasureValue[mgL_indices] <- as2$ResultMeasureValue[mgL_indices] / 1000 #Convert to mg/L to match NN Wells analyte data
+as2$ResultMeasureMeasureUnitCode <- "ug/L"   # made all units mg/L
+#write.csv(as2, file = "~/Desktop/as2.csv", row.names = FALSE)
+
+as3 <- as2 %>%
+  filter(StateCode == 4 & (CountyCode == 1 | CountyCode == 5 | CountyCode == 7 | CountyCode == 15 | CountyCode == 17 | CountyCode == 25) |
+           (StateCode == 35 & (CountyCode == 3 | CountyCode ==6 | CountyCode ==31 | CountyCode ==39 | CountyCode ==43 | CountyCode ==45)) |
+           (StateCode == 08 & (CountyCode == 29 | CountyCode == 33 | CountyCode == 45 | CountyCode ==67 | CountyCode ==77 | CountyCode ==81 | CountyCode ==83 | CountyCode ==85 | CountyCode ==91 | CountyCode ==103 | CountyCode ==113)) |
+           (StateCode == 49 & (CountyCode == 1 | CountyCode == 7 | CountyCode ==13 | CountyCode ==15 | CountyCode ==17 | CountyCode == 19 | CountyCode ==21 | CountyCode ==23 | CountyCode ==25 | CountyCode ==27 | CountyCode ==31 | CountyCode == 37 | CountyCode ==39 | CountyCode ==41 | CountyCode ==47 | CountyCode ==49 | CountyCode ==51 | CountyCode == 53 | CountyCode ==55))) 
+#write.csv(as3, file = "~/Desktop/as3.csv", row.names = FALSE)
+
+#Convert to Wide
+wide_as3<-dcast(as3, SiteID~CharacteristicName, value.var="ResultMeasureValue", median)
+write.csv(wide_as3, file = "~/Desktop/wide_as3.csv", row.names = FALSE)
+#class(wide_as3[["SiteID"]])
+
+#Merge with WQP_All using SiteID
+WQP_As_All<-merge(WQP_All, wide_as3, by="SiteID", all.x=TRUE)
+
+WQP_As_All_reorder <- WQP_As_All %>% 
+  select(1:6, "As", everything())
+
 #write to csv
-write.csv(cdef2, file = "~/Desktop/WQP_All.csv", row.names = FALSE)
+write.csv(WQP_As_All_reorder, file = "~/Desktop/WQP_As_All.csv", row.names = FALSE)
+
