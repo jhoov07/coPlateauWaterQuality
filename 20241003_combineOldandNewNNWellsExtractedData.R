@@ -55,5 +55,9 @@ newdata3<-subset(newdata2, select = -c(F30mElevationFoCo, X, Best_Guess__ac_))
 #add NNWells identifying column
 newdata3$Data_Source <- "NNWells"
 
+#Delete rows where OID_ = NA since there is no well or geochem data, just analyte data
+#newdata4 <- subset(newdata3, OID_ != "NA")
+
+
 write.csv(newdata3, file = "~/Desktop/Clean_nnwells3_ExportTable.csv", row.names = FALSE)
 
