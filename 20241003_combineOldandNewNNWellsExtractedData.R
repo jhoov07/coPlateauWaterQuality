@@ -5,6 +5,9 @@ library(reshape2)
 library(dplyr)
 library(tidyr)
 
+#Clean up the workspace
+rm(list=ls())
+
 dataOld <- read.csv("./02_Data/Raw_Data/NNWells/nnwells3_Check_ExportTable.csv")
 dataNew <- read.csv("./02_Data/Raw_Data/NNWells/20241003_nnwellsData.csv")
 
