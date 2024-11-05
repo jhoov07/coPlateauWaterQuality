@@ -49,10 +49,9 @@ newdata <- subset(dataM, select = -c(US_L3CODE, ORIG_LABEL_1, UNIT_CODE, UNIT_NA
 
 #rename columns
 newdata2<- newdata %>% 
-  rename(SiteID = well_id,
-         SO4 = SO4.) 
+  rename(SiteID = well_id)
 
-newdata3<-subset(newdata2, select = -c(F30mElevationFoCo, X, Best_Guess__ac_))
+newdata3<-subset(newdata2, select = -c(F30mElevationFoCo, X, Best_Guess__ac_, B, Bicarbonate, Carbonate, Si, SO4., SpecificConductance, code, OID_))
 
 
 #add NNWells identifying column
