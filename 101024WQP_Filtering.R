@@ -149,7 +149,7 @@ as3 <- as2 %>%
 
 #Convert to Wide
 wide_as3<-dcast(as3, SiteID~CharacteristicName, value.var="ResultMeasureValue", median)
-write.csv(wide_as3, file = "~/Desktop/wide_as3.csv", row.names = FALSE)
+#write.csv(wide_as3, file = "~/Desktop/wide_as3.csv", row.names = FALSE)
 #class(wide_as3[["SiteID"]])
 
 #Merge with WQP_All using SiteID
@@ -160,8 +160,8 @@ WQP_As_All_reorder <- WQP_As_All %>%
 
 #rename columns 
 WQP2<- WQP_As_All_reorder %>% 
-  rename(bfi48grd_ProjectRaster = baseflow,
-         PRISM_ppt_30yr_ProjectRaster = prism30yr)
+  rename(baseflow = bfi48grd_ProjectRaster,
+         prism30yr = PRISM_ppt_30yr_ProjectRaster)
 
 #add WQP identifying column
 WQP2$Data_Source <- "WQP"
