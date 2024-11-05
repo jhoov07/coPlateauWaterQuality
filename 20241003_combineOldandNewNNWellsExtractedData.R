@@ -4,15 +4,33 @@ setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
 library(reshape2)
 library(dplyr)
 library(tidyr)
+library(gtools)
 
 #Clean up the workspace
 rm(list=ls())
 
+#NN Wells data
 dataOld <- read.csv("./02_Data/Raw_Data/NNWells/nnwells3_Check_ExportTable.csv")
 dataNew <- read.csv("./02_Data/Raw_Data/NNWells/20241003_nnwellsData.csv")
 
 #Merge data tables
-dataM<-merge(dataOld[,-c(7:9)], dataNew, by="well_id", all.y=TRUE)
+dataM<-merge(dataOld[,-c(7:9)], dataNew[,-c(1,5,6,8,11,12,13)], by="well_id", all.y=TRUE)
+dataM$Data_Source<-"NNWells"
+
+#Load WQP data, then clean and merge
+wqp<-read.csv("./02_Data/Raw_Data/202410105_WQP_As_All.csv")
+
+#rename columns 
+dataM<- dataM %>% 
+  rename(SiteID = well_id)
+
+x<-smartbind(wqp, dataM)
+
+write.csv(sort(colnames(wqp)))
+write.csv(sort(colnames(dataM)))
+
+
+
 
 #write.csv(dataM, file = "~/Desktop/nnwells_merge.csv", row.names = FALSE)
 
