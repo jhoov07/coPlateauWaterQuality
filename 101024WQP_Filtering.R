@@ -158,6 +158,14 @@ WQP_As_All<-merge(WQP_All, wide_as3, by="SiteID", all.x=TRUE)
 WQP_As_All_reorder <- WQP_As_All %>% 
   select(1:6, "As", everything())
 
+#rename columns 
+WQP2<- WQP_As_All_reorder %>% 
+  rename(bfi48grd_ProjectRaster = baseflow,
+         PRISM_ppt_30yr_ProjectRaster = prism30yr)
+
+#add WQP identifying column
+WQP2$Data_Source <- "WQP"
+
 #write to csv
-write.csv(WQP_As_All_reorder, file = "~/Desktop/WQP_As_All.csv", row.names = FALSE)
+write.csv(WQP2, file = "~/Desktop/WQP_As_All.csv", row.names = FALSE)
 
