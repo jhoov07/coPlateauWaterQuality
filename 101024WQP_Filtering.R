@@ -98,14 +98,14 @@ wide<-dcast(cdef2, SiteID~CharacteristicName, value.var="ResultMeasureValue", me
 
 
 #Read GIS data from WQP
-i<-read.csv("./02_Data/Raw_Data/WQP/00_archive/20241029_WQP_Export.csv", na.strings = "NULL")
+i<-read.csv("./02_Data/Raw_Data/WQP/00_archive/20241105_WQP_Export.csv", na.strings = "NULL")
 
 #Clean up new dataframe, drop worthless fields
-cleani<- i [-c(2:25,27:79)]
+cleani<- i [-c(1:25,27:54,56:59,61:68,70:79)]
 #write.csv(cleani, file = "~/Desktop/cleani.csv", row.names = FALSE)
 
 #Return unique records
-cleanNoDup<-distinct(cleani[,c(2:155)])  #only use 
+cleanNoDup<-distinct(cleani[,c(1:173)])  #only use 
 #write.csv(cleanNoDup, file = "~/Desktop/cleanNoDup.csv", row.names = FALSE)
 
 

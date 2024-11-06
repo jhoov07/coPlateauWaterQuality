@@ -42,7 +42,7 @@ table(dataM$GENERALIZE_1)
 table(dataM$GENERALIZE_1_Water)
 
 #removes columns from 'dataM'
-newdata <- subset(dataM, select = -c(US_L3CODE, ORIG_LABEL_1, UNIT_CODE, UNIT_NAME, US_L3NAME, GENERALIZE_1))
+newdata <- subset(dataM, select = -c(US_L3CODE, ORIG_LABEL_1, UNIT_CODE))
 
 #rename columns
 newdata2<- newdata %>% 
