@@ -17,7 +17,16 @@ dataWQ <- read.csv("./02_Data/Raw_Data/NNWells/20241003_nnwellsData.csv")
 dataM<-merge(dataGIS[,-c(1:3, 5:19, 21:28, 30:45, 47:48)], dataWQ[,-c(1,5,6,8,11,12,13)], by="well_id", all.y=TRUE)
 dataM$Data_Source<-"NNWells"
 
-write.csv(dataM, file = "~/Desktop/dataM.csv", row.names=FALSE)
+dataM2 <- dataM [,-c(174, 176, 179)]
+
+dataM2<- dataM2 %>% 
+  filter(well_id <= 7458)
+
+x<-drop_na(dataM2)
+
+
+
+#write.csv(dataM2, file = "~/Desktop/dataM.csv", row.names=FALSE)
 
 #Load WQP data, then clean and merge
 #wqp<-read.csv("./02_Data/Raw_Data/202410105_WQP_As_All.csv")
@@ -66,7 +75,7 @@ write.csv(dataM, file = "~/Desktop/dataM.csv", row.names=FALSE)
 
 
 #rename columns
-newdata<- dataM %>% 
+newdata<- dataM2 %>% 
   rename(SiteID = well_id)
 
 #Delete rows where OID_ = NA since there is no well or geochem data, just analyte data
