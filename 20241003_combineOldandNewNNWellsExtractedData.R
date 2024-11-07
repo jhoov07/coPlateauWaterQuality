@@ -75,7 +75,7 @@ x<-drop_na(dataM2)
 
 
 #rename columns
-newdata<- dataM2 %>% 
+newdata<- x %>% 
   rename(SiteID = well_id)
 
 #Delete rows where OID_ = NA since there is no well or geochem data, just analyte data
