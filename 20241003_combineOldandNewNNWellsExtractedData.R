@@ -10,24 +10,26 @@ library(gtools)
 rm(list=ls())
 
 #NN Wells data
-dataOld <- read.csv("./02_Data/Raw_Data/NNWells/nnwells3_Check_ExportTable.csv")
-dataNew <- read.csv("./02_Data/Raw_Data/NNWells/20241003_nnwellsData.csv")
+dataGIS <- read.csv("./02_Data/Raw_Data/NNWells/nnwells_redo.csv")
+dataWQ <- read.csv("./02_Data/Raw_Data/NNWells/20241003_nnwellsData.csv")
 
 #Merge data tables
-dataM<-merge(dataOld[,-c(7:9)], dataNew[,-c(1,5,6,8,11,12,13)], by="well_id", all.y=TRUE)
+dataM<-merge(dataGIS[,-c(1:3, 5:19, 21:28, 30:45, 47:48)], dataWQ[,-c(1,5,6,8,11,12,13)], by="well_id", all.y=TRUE)
 dataM$Data_Source<-"NNWells"
 
+write.csv(dataM, file = "~/Desktop/dataM.csv", row.names=FALSE)
+
 #Load WQP data, then clean and merge
-wqp<-read.csv("./02_Data/Raw_Data/202410105_WQP_As_All.csv")
+#wqp<-read.csv("./02_Data/Raw_Data/202410105_WQP_As_All.csv")
 
 #rename columns 
-dataM<- dataM %>% 
-  rename(SiteID = well_id)
+#dataM<- dataM %>% 
+ # rename(SiteID = well_id)
 
-x<-smartbind(wqp, dataM)
+#x<-smartbind(wqp, dataM)
 
-write.csv(sort(colnames(wqp)))
-write.csv(sort(colnames(dataM)))
+#write.csv(sort(colnames(wqp)))
+#write.csv(sort(colnames(dataM)))
 
 
 
@@ -36,48 +38,40 @@ write.csv(sort(colnames(dataM)))
 
 
 #US_L3NAME
-unique_vals <- unique(dataM$US_L3NAME)
-for (val in unique_vals) {
-  col_name <- paste("US_L3NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-  dataM[[col_name]] <- ifelse(dataM$US_L3NAME == val, 1, 0)
-}
-table(dataM$US_L3NAME)
-table(dataM$US_L3NAME_Southern_Rockies)
+#unique_vals <- unique(dataM$US_L3NAME)
+#for (val in unique_vals) {
+ # col_name <- paste("US_L3NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+  #dataM[[col_name]] <- ifelse(dataM$US_L3NAME == val, 1, 0)
+#}
+#table(dataM$US_L3NAME)
+#table(dataM$US_L3NAME_Southern_Rockies)
 
 #UNIT_NAME
-unique_vals <- unique(dataM$UNIT_NAME)
-for (val in unique_vals) {
-  col_name <- paste("UNIT_NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-  dataM[[col_name]] <- ifelse(dataM$UNIT_NAME == val, 1, 0)
-}
-table(dataM$UNIT_NAME)
-table(dataM$UNIT_NAME_Water)
+#unique_vals <- unique(dataM$UNIT_NAME)
+#for (val in unique_vals) {
+ # col_name <- paste("UNIT_NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+#  dataM[[col_name]] <- ifelse(dataM$UNIT_NAME == val, 1, 0)
+#}
+#table(dataM$UNIT_NAME)
+#table(dataM$UNIT_NAME_Water)
 
 #GENERALIZE
-unique_vals <- unique(dataM$GENERALIZE_1)
-for (val in unique_vals) {
-  col_name <- paste("GENERALIZE_1", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-  dataM[[col_name]] <- ifelse(dataM$GENERALIZE_1 == val, 1, 0)
-}
-table(dataM$GENERALIZE_1)
-table(dataM$GENERALIZE_1_Water)
+#unique_vals <- unique(dataM$GENERALIZE_1)
+#for (val in unique_vals) {
+ # col_name <- paste("GENERALIZE_1", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+  #dataM[[col_name]] <- ifelse(dataM$GENERALIZE_1 == val, 1, 0)
+#}
+#table(dataM$GENERALIZE_1)
+#table(dataM$GENERALIZE_1_Water)
 
-#removes columns from 'dataM'
-newdata <- subset(dataM, select = -c(US_L3CODE, ORIG_LABEL_1, UNIT_CODE))
 
 #rename columns
-newdata2<- newdata %>% 
+newdata<- dataM %>% 
   rename(SiteID = well_id)
-
-newdata3<-subset(newdata2, select = -c(F30mElevationFoCo, X, Best_Guess__ac_, B, Bicarbonate, Carbonate, Si, SO4., SpecificConductance, code, OID_))
-
-
-#add NNWells identifying column
-newdata3$Data_Source <- "NNWells"
 
 #Delete rows where OID_ = NA since there is no well or geochem data, just analyte data
 #newdata4 <- subset(newdata3, OID_ != "NA")
 
 
-write.csv(newdata3, file = "~/Desktop/Clean_nnwells3_ExportTable.csv", row.names = FALSE)
+write.csv(newdata, file = "~/Desktop/NNWells_As_All.csv", row.names = FALSE)
 
