@@ -166,6 +166,8 @@ WQP2<- WQP_As_All_reorder %>%
 #add WQP identifying column
 WQP2$Data_Source <- "WQP"
 
-#write to csv
-write.csv(WQP2, file = "WQP_As_All.csv", row.names = FALSE)
+#Keep only As, Fe, pH to match NNWells 
+WQP3 <- WQP2 [, -c(2, 3, 6)]
 
+#write to csv
+write.csv(WQP3, file = "~/Desktop/WQP_As_All.csv", row.names = FALSE)
