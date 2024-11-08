@@ -76,7 +76,9 @@ x<-drop_na(dataM2)
 
 #rename columns
 newdata<- x %>% 
-  rename(SiteID = well_id)
+  rename(SiteID = well_id,
+         prism30yr = PRISM_ppt_30yr_ProjectRaster,
+         baseflow = bfi48grd_ProjectRaster)
 
 #Delete rows where OID_ = NA since there is no well or geochem data, just analyte data
 #newdata4 <- subset(newdata3, OID_ != "NA")
