@@ -21,62 +21,19 @@ dataM2 <- dataM [,-c(174, 176, 179)]
 
 dataM2<- dataM2 %>% 
   filter(well_id <= 7458) %>%
-  drop_na(As)  #I added this line to the pipe, see if it works
-
-#x<-drop_na(dataM2)
-
-
+  drop_na(As) 
 
 #write.csv(dataM2, file = "~/Desktop/dataM.csv", row.names=FALSE)
 
 #Load WQP data, then clean and merge
 #wqp<-read.csv("./02_Data/Raw_Data/202410105_WQP_As_All.csv")
 
-#rename columns 
-#dataM<- dataM %>% 
- # rename(SiteID = well_id)
 
 #x<-smartbind(wqp, dataM)
 
-#write.csv(sort(colnames(wqp)))
-#write.csv(sort(colnames(dataM)))
-
-
-
-
-#write.csv(dataM, file = "~/Desktop/nnwells_merge.csv", row.names = FALSE)
-
-
-#US_L3NAME
-#unique_vals <- unique(dataM$US_L3NAME)
-#for (val in unique_vals) {
- # col_name <- paste("US_L3NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-  #dataM[[col_name]] <- ifelse(dataM$US_L3NAME == val, 1, 0)
-#}
-#table(dataM$US_L3NAME)
-#table(dataM$US_L3NAME_Southern_Rockies)
-
-#UNIT_NAME
-#unique_vals <- unique(dataM$UNIT_NAME)
-#for (val in unique_vals) {
- # col_name <- paste("UNIT_NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-#  dataM[[col_name]] <- ifelse(dataM$UNIT_NAME == val, 1, 0)
-#}
-#table(dataM$UNIT_NAME)
-#table(dataM$UNIT_NAME_Water)
-
-#GENERALIZE
-#unique_vals <- unique(dataM$GENERALIZE_1)
-#for (val in unique_vals) {
- # col_name <- paste("GENERALIZE_1", gsub(" ", "_", gsub(",", "", val)), sep = "_")
-  #dataM[[col_name]] <- ifelse(dataM$GENERALIZE_1 == val, 1, 0)
-#}
-#table(dataM$GENERALIZE_1)
-#table(dataM$GENERALIZE_1_Water)
-
 
 #rename columns
-newdata<- x %>% 
+newdata<- dataM2 %>% 
   rename(SiteID = well_id,
          prism30yr = PRISM_ppt_30yr_ProjectRaster,
          baseflow = bfi48grd_ProjectRaster)
