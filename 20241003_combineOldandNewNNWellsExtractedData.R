@@ -20,9 +20,10 @@ dataM$Data_Source<-"NNWells"
 dataM2 <- dataM [,-c(174, 176, 179)]
 
 dataM2<- dataM2 %>% 
-  filter(well_id <= 7458)
+  filter(well_id <= 7458) %>%
+  drop_na(As)  #I added this line to the pipe, see if it works
 
-x<-drop_na(dataM2)
+#x<-drop_na(dataM2)
 
 
 
