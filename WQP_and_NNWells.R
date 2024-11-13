@@ -4,6 +4,7 @@ library(reshape2)
 library(gtools)
 library(dplyr)
 library(tidyr)
+library(ggcorrplot)
 
 
 setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
@@ -11,10 +12,14 @@ setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
 #Clean up the workspace
 rm(list=ls())
 
-WQP <- read.csv("./02_Data/Raw_Data/WQP_As_All.csv", na.strings = "NULL")
-NNWells <- read.csv("./02_Data/Raw_Data/NNWells_As_All.csv", na.strings = "NULL")
+WQP <- read.csv("./02_Data/Raw_Data/WQP_As_All.csv", na.strings = "NA")
+#WQP <- read.csv("./02_Data/Raw_Data/WQP_As_All.csv")
+NNWells <- read.csv("./02_Data/Raw_Data/NNWells_As_All.csv", na.strings = "NA")
 
 As_COPlat_Data<-smartbind(WQP, NNWells)
+
+As_COPlat_Data<- As_COPlat_Data%>%
+  drop_na(AN_Top5_Ag_7_17)
 
 
 #US_L3NAME
@@ -44,16 +49,26 @@ for (val in unique_vals) {
 table(As_COPlat_Data$GENERALIZE)
 table(As_COPlat_Data$GENERALIZE_Water)
 
-#Categorize wells by As conc.
-As_COPlat_Data <- As_COPlat_Data %>%
+#Categorize wells by As conc
+As_COPlat_Data2 <- As_COPlat_Data %>%
   mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 1, 2)) %>%
+  mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 1, 2)) %>%
   mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 1, 2)) %>%
   mutate(ClassLTE5 = ifelse(as.numeric(As) <= 5, 1, 2)) %>%
   mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
   mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2)) 
-  
 
-write.csv(As_COPlat_Data, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
+#Compute a Correlation Matrix
+corr<- round(cor(As_COPlat_Data2[,-c(1,5:7, 178:228)], method="spearman", use = "pairwise.complete.obs"),2)
+
+ggcorrplot(corr, type = "lower")
+
+
+
+
+
+
+write.csv(As_COPlat_Data3, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
 
 
 

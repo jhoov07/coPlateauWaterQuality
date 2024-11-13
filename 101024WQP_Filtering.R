@@ -161,7 +161,8 @@ WQP_As_All_reorder <- WQP_As_All %>%
 #rename columns and drop As NA's
 WQP2<- WQP_As_All_reorder %>% 
   rename(baseflow = bfi48grd_ProjectRaster,
-         prism30yr = PRISM_ppt_30yr_ProjectRaster) %>%
+         prism30yr = PRISM_ppt_30yr_ProjectRaster,
+         DepthToGW = conus_MF6_SS_U_ProjectRaster) %>%
   drop_na(As)
 
 #add WQP identifying column
