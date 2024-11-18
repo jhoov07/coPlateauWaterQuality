@@ -63,6 +63,8 @@ corr<- round(cor(As_COPlat_Data2[,-c(1,5:7, 178:228)], method="spearman", use = 
 
 ggcorrplot(corr, type = "lower")
 
+#Exclude no variance fields and highly correlated fields
+As_COPlat_Data2 %>% select(where(function(x) var(x) != 0))
 
 
 
