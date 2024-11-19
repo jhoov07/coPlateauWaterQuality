@@ -6,6 +6,7 @@ library(dplyr)
 library(tidyr)
 library(ggcorrplot)
 library(recipes)
+library(caret)
 
 
 setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
@@ -70,7 +71,7 @@ table(As_COPlat_Data$GENERALIZE)
 table(As_COPlat_Data$GENERALIZE_Water)
 
 #Categorize wells by As conc
-As_COPlat_Data <- As_COPlat_Data %>%
+As_COPlat_Data2 <- As_COPlat_Data %>%
   mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 1, 2)) %>%
   mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 1, 2)) %>%
   mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 1, 2)) %>%
@@ -94,10 +95,10 @@ drop_variance <- step_zv( As_COPlat_Data2,
   skip = FALSE,
   id = rand_id("zv")
 )
-=======
+
 ##remove columns with zero variance
 As_COPlat_Data3<-As_COPlat_Data2[-as.numeric(which(apply(As_COPlat_Data2[,-c(1, 5:7,178)], 2, var) == 0.0 ))]
-=======
+
 As_COPlat_Data <-As_COPlat_Data[,-c(115,129,146)]
 
 #Deal with NAs
