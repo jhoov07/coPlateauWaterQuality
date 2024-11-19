@@ -79,29 +79,9 @@ As_COPlat_Data2 <- As_COPlat_Data %>%
   mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
   mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2)) 
 
-#Drop 3 fields that were categorical variables with NA as the field
-
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-#ggcorrplot(corr, type = "lower")
-
-#Exclude no variance fields and highly correlated fields
-drop_variance <- step_zv( As_COPlat_Data2,
-  recipe,
-  role = NA,
-  trained = FALSE,
-  group = NULL,
-  removals = NULL,
-  skip = FALSE,
-  id = rand_id("zv")
-)
-
-##remove columns with zero variance
-As_COPlat_Data3<-As_COPlat_Data2[-as.numeric(which(apply(As_COPlat_Data2[,-c(1, 5:7,178)], 2, var) == 0.0 ))]
-
-As_COPlat_Data <-As_COPlat_Data[,-c(115,129,146)]
-
 #Deal with NAs
+#Drop 3 fields that were categorical variables with NA as the field
+As_COPlat_Data <-As_COPlat_Data[,-c(115,129,146)]
 #row sum to identify the number of fields with NAs
 rowSums(is.na(As_COPlat_Data))
 
@@ -115,12 +95,31 @@ summary(rowSums(is.na(As_COPlat_Data_final))) #should be 0 NAs
 write.csv(As_COPlat_Data_final, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
 
 
+
+#<<<<<<< Updated upstream
+#<<<<<<< HEAD
+#ggcorrplot(corr, type = "lower")
+
+#Exclude no variance fields and highly correlated fields
+#drop_variance <- step_zv( As_COPlat_Data2,
+#  recipe,
+#  role = NA,
+#  trained = FALSE,
+#  group = NULL,
+#  removals = NULL,
+#  skip = FALSE,
+#  id = rand_id("zv")
+#)
+
+##remove columns with zero variance
+#As_COPlat_Data3<-As_COPlat_Data2[-as.numeric(which(apply(As_COPlat_Data2[,-c(1, 5:7,178)], 2, var) == 0.0 ))]
+
 #Extra stuff
->>>>>>> Stashed changes
+#>>>>>>> Stashed changes
 
 #Exclude no variance fields and highly correlated fields
 #As_COPlat_Data2 %>% select(where(function(x) var(x) != 0))
->>>>>>> 1183d826cd312a4a19e6ae542e861b32b27fd085
+#>>>>>>> 1183d826cd312a4a19e6ae542e861b32b27fd085
 
 #Add dummy variables back in
 #reduced_Data2<-merge(reduced_Data,As_COPlat_Data3[,c(178:227)], by = )
@@ -133,10 +132,10 @@ write.csv(As_COPlat_Data_final, file = "~/Desktop/All_As_Data.csv", row.names = 
 #as.numeric(which(apply(As_COPlat_Data[,-c(1, 5:7,176)], 2, var, na.rm=TRUE) == 0))
 #which(apply(As_COPlat_Data[,-c(1, 5:7,176)], 2, var) == 0.0 )
 
-<<<<<<< Updated upstream
-write.csv(drop_variance, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
-=======
->>>>>>> Stashed changes
+#<<<<<<< Updated upstream
+#write.csv(drop_variance, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
+#=======
+#>>>>>>> Stashed changes
 
 
 
