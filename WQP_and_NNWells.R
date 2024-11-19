@@ -70,15 +70,6 @@ for (val in unique_vals) {
 table(As_COPlat_Data$GENERALIZE)
 table(As_COPlat_Data$GENERALIZE_Water)
 
-#Categorize wells by As conc
-As_COPlat_Data2 <- As_COPlat_Data %>%
-  mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 1, 2)) %>%
-  mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 1, 2)) %>%
-  mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 1, 2)) %>%
-  mutate(ClassLTE5 = ifelse(as.numeric(As) <= 5, 1, 2)) %>%
-  mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
-  mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2)) 
-
 #Deal with NAs
 #Drop 3 fields that were categorical variables with NA as the field
 As_COPlat_Data <-As_COPlat_Data[,-c(115,129,146)]
@@ -92,7 +83,16 @@ As_COPlat_Data_final<-As_COPlat_Data %>%
 #Check result for NAs
 summary(rowSums(is.na(As_COPlat_Data_final))) #should be 0 NAs
 
-write.csv(As_COPlat_Data_final, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
+#Categorize wells by As conc
+As_COPlat_Data_final2 <- As_COPlat_Data_final %>%
+  mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 1, 2)) %>%
+  mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 1, 2)) %>%
+  mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 1, 2)) %>%
+  mutate(ClassLTE5 = ifelse(as.numeric(As) <= 5, 1, 2)) %>%
+  mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
+  mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2))
+
+write.csv(As_COPlat_Data_final2, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
 
 
 
