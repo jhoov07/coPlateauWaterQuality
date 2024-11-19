@@ -5,6 +5,7 @@ library(gtools)
 library(dplyr)
 library(tidyr)
 library(ggcorrplot)
+library(recipes)
 
 
 setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
@@ -58,19 +59,46 @@ As_COPlat_Data2 <- As_COPlat_Data %>%
   mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
   mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2)) 
 
-#Compute a Correlation Matrix
-corr<- round(cor(As_COPlat_Data2[,-c(1,5:7, 178:228)], method="spearman", use = "pairwise.complete.obs"),2)
+#Check the variance of each column and then remove
+#which(apply(As_COPlat_Data2, 2, var) == 0 )    ##the 2 indicates the look at variance by column, var = variance
 
-ggcorrplot(corr, type = "lower")
+<<<<<<< HEAD
+#ggcorrplot(corr, type = "lower")
 
 #Exclude no variance fields and highly correlated fields
-As_COPlat_Data2 %>% select(where(function(x) var(x) != 0))
+drop_variance <- step_zv( As_COPlat_Data2,
+  recipe,
+  role = NA,
+  trained = FALSE,
+  group = NULL,
+  removals = NULL,
+  skip = FALSE,
+  id = rand_id("zv")
+)
+=======
+##remove columns with zero variance
+As_COPlat_Data3<-As_COPlat_Data2[-as.numeric(which(apply(As_COPlat_Data2[,-c(1, 5:7,178)], 2, var) == 0.0 ))]
 
+#Exclude no variance fields and highly correlated fields
+#As_COPlat_Data2 %>% select(where(function(x) var(x) != 0))
+>>>>>>> 1183d826cd312a4a19e6ae542e861b32b27fd085
 
+#
+data<-As_COPlat_Data3[,-c(1,5:7, 167,177:227)]
 
+tmp<-cor(data, use = "pairwise.complete.obs")
+hc = findCorrelation(tmp, cutoff=0.8)
+reduced_Data = data[,-c(hc)]
 
+#Add dummy variables back in
+reduced_Data2<-merge(reduced_Data,As_COPlat_Data3[,c(178:227)], by = )
 
-write.csv(As_COPlat_Data3, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
+#Compute a Correlation Matrix
+corr<- round(cor(data.new, method="spearman", use = "pairwise.complete.obs"),2)
+
+ggcorrplot(corr, type = "lower", hc.order = TRUE)
+
+write.csv(drop_variance, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
 
 
 
