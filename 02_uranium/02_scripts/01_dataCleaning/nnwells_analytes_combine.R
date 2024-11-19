@@ -1,40 +1,36 @@
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/02_uranium")
+setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
 
-#Load libraries
-#library(tidyverse)
-library(dplyr)
+datawells <- read.csv("./02_Data/Raw_Data/nnwells_redo.csv")
+dataanalytes <- read.csv("./02_Data/Raw_Data/20241003_nnwellsAnalytes.csv")
 
-data<-read.csv("./01_data/analytes.csv")
-data3<-read.csv("./01_data/nnwells3_Check_ExportTable.csv")
+merged_nnwells_tables <- merge(datawells, dataanalytes, by = "well_id", all.x=TRUE)
 
-#Filter to fields we want, add or remove fields as needed
+##Reorder
+abc<-merged_nnwells_tables[,c(1,220:230,2:218)]
 
-data2 <- data %>%
-  filter(analyte == "As" |
-           analyte == "U" |
-           analyte == "Ca" |
-           analyte == "Alkalinity_Total" |
-           analyte == "Carbonate" |
-           analyte == "Fe" |
-           analyte == "Nitrate" |
-           analyte == "pH" |
-           analyte == "Salinity" |
-           analyte == "Conductivity")
-           
+##Drop unused field
+abc2<-abc[,-c(13:23, 26:30, 32:38, 40:56, 58:59, 229)]
 
-#Convert to wide format
-dataW<-dcast(data2, 
-             well_id~analyte, 
-             value.var = "result", 
-             fun.aggregate = mean)
+#GENERALIZE, bedrock geology
+unique_vals <- unique(data$GENERALIZE)
+for (val in unique_vals) {
+  col_name <- paste("GENERALIZE", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+  data[[col_name]] <- ifelse(data$GENERALIZE == val, 1, 0)
+}
 
-#Merge by well_id or sample_id?
-dataM <- merge(data3[,-c(7:9)], dataW, by = "well_id", all = TRUE)  ##Drop the U, As and Fl data in Data 3 since they seem short for some reason
+#UNIT_NAME
+unique_vals <- unique(data$UNIT_NAME)
+for (val in unique_vals) {
+  col_name <- paste("UNIT_NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+  data[[col_name]] <- ifelse(data$UNIT_NAME == val, 1, 0)
+}
 
-<<<<<<< Updated upstream
+#US_L3NAME
+unique_vals <- unique(data$US_L3NAME)
+for (val in unique_vals) {
+  col_name <- paste("US_L3NAME", gsub(" ", "_", gsub(",", "", val)), sep = "_")
+  data[[col_name]] <- ifelse(data$US_L3NAME == val, 1, 0)
+}
 
-write.csv(combined_data, file = "~/Desktop/20combined_welldata.csv", row.names = FALSE)
-=======
-write.csv(combined_data, file = "~/Desktop/combined_analytes_nnwells.csv", row.names = FALSE)
->>>>>>> Stashed changes
+write.csv(abc2, file = "~/Desktop/101024MergedNNwells.csv", row.names = FALSE)
 
