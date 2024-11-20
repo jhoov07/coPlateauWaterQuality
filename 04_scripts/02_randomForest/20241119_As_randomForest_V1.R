@@ -5,53 +5,50 @@ library(tidyverse)
 
 
 #setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_U")
-setwd("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_U")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
-Udata = read.csv("2Cleaned_U_GIS_Filtered.csv", na.strings = "NULL")
-
-#elevation kepted being viewed as catagorical so made it numeric
-Udata$Elevation <- as.numeric(Udata$Elevation)
+Asdata <- read.csv("All_As_Data.csv")
 
 #take out NAs
-Udata <- Udata[complete.cases(Udata), ]
+#Asdata <- Asdata[complete.cases(Asdata), ]
 
 # get the numb 70/30 training test split
 #split into training (70%) and testing set (30%), keep training set balances with overall distribution
-sample_set<-sample.split(Asdata2$As3Cat, SplitRatio = 0.7)
+sample_set<-sample.split(Asdata$ClassLTE1, SplitRatio = 0.7)
 
-Asdata2 <- Asdata2 %>%
+Asdata2 <- Asdata %>%
   mutate(
     trainCat3 = ifelse(sample_set == TRUE, 1, 0)
   )
 
 
 # Filter data into train and test sets based on logical variable 'spl3cat'
-train <- Udata[Udata$spl3cat == TRUE, ]
-test <- Udata[Udata$spl3cat == FALSE, ]
+train <- Asdata[Asdata$spl3cat == TRUE, ]
+test <- Asdata[Asdata$spl3cat == FALSE, ]
 
 
 #Drop unused fields
-UTrain<-train[,-c(1:5,208:212)]
-UTest<-test[,-c(1:5,208:212)]
+AsTrain<-train[,-c(4, 109:112, 158:162)]
+AsTest<-test[,-c(4, 109:112, 158:162)]
 
-#Ensure As3Cat is a Factor (Categorical Variable)
-UTrain$U3Cat <- as.factor(UTrain$U3Cat)
-UTest$U3Cat <- as.factor(UTest$U3Cat)
+#Ensure ClassLTE1 is a Factor (Categorical Variable)
+AsTrain$ClassLTE1 <- as.factor(AsTrain$As3Cat)
+AsTest$ClassLTE1 <- as.factor(AsTest$As3Cat)
 
 # Fitting Random Forest to the train dataset 
 
-tunegrid <- expand.grid(mtry = (1:2)) #Change to 1:84 if testing for real, 1:3 was used for model development
+tunegrid <- expand.grid(mtry = (1:3)) #Change to 1:84 if testing for real, 1:3 was used for model development
 
-#this is the more acurate model out put 
+#this is the more accurate model out put 
 #it was ran on the super computer
 #classifier_RF = readRDS("/Users/austinmartinez/Documents/GitHub/coPlateauWaterQuality/03_modelOutputs/01_randomForest/2024-07-25_rf.rds")
 
 # This model runs in legit 2 seconds
 classifier_RF<-train(
-  factor(U3Cat) ~ ., 
-  data = UTrain, 
+  factor(ClassLTE1) ~ . - SiteID, 
+  data = Asdata2, 
   metric = "Accuracy",
   method = "rf",
   trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
@@ -63,10 +60,10 @@ classifier_RF<-train(
 classifier_RF
 
 # Predicting the Test set results 
-y_pred <- predict(classifier_RF, newdata = UTest) 
+y_pred <- predict(classifier_RF, newdata = AsTest) 
 
 # Confusion Matrix 
-confusion_mtx <- confusionMatrix(y_pred, UTest$U3Cat)
+confusion_mtx <- confusionMatrix(y_pred, AsTest$ClassLTE1)
 confusion_mtx
 
 # Plotting model 
