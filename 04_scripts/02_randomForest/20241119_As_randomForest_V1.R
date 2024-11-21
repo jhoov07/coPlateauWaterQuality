@@ -1,11 +1,11 @@
 library(caTools) 
 library(randomForest)
 library(caret)
-#library(tidyverse)
+library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -81,9 +81,9 @@ kappa_value <- confusion_mtx$overall['Kappa']
 kappa_value
 
 # Extract Sensitivity and Specificity for each class
-sensitivity <- confusion_mtx$byClass[,"Sensitivity"]
+sensitivity <- confusion_mtx$byClass[[1]]
 sensitivity
-specificity <- confusion_mtx$byClass[,"Specificity"]
+specificity <- confusion_mtx$byClass[[2]]
 specificity
 
 # training data accuracy and kappa
