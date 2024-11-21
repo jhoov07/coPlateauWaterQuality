@@ -1,14 +1,15 @@
 library(caTools) 
 library(randomForest)
 library(caret)
-library(tidyverse)
+#library(tidyverse)
 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/01_data/CoPlateau_U")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
+#Load data
 Asdata <- read.csv("All_As_Data.csv")
 
 #take out NAs
@@ -20,26 +21,28 @@ sample_set<-sample.split(Asdata$ClassLTE1, SplitRatio = 0.7)
 
 Asdata2 <- Asdata %>%
   mutate(
-    trainCat3 = ifelse(sample_set == TRUE, 1, 0)
+    trainCat2 = ifelse(sample_set == TRUE, 1, 0)
   )
 
 
-# Filter data into train and test sets based on logical variable 'spl3cat'
-train <- Asdata[Asdata$spl3cat == TRUE, ]
-test <- Asdata[Asdata$spl3cat == FALSE, ]
+# Filter data into train and test sets based on logical variable 'trainCat2'
+train <- Asdata2[Asdata2$trainCat2 == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+test <- Asdata2[Asdata2$trainCat2 == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
+#Make SiteID the row name so we can drop that field
+rownames(train)<-train$SiteID
+rownames(test)<-test$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(4, 109:112, 158:162)]
-AsTest<-test[,-c(4, 109:112, 158:162)]
+AsTrain<-train[,-c(1, 4, 109:112, 158:163)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-test[,-c(1, 4, 109:112, 158:163)]
 
 #Ensure ClassLTE1 is a Factor (Categorical Variable)
-AsTrain$ClassLTE1 <- as.factor(AsTrain$As3Cat)
-AsTest$ClassLTE1 <- as.factor(AsTest$As3Cat)
+AsTrain$ClassLTE1 <- as.factor(AsTrain$ClassLTE1)
+AsTest$ClassLTE1  <- as.factor(AsTest$ClassLTE1)
 
 # Fitting Random Forest to the train dataset 
-
-tunegrid <- expand.grid(mtry = (1:3)) #Change to 1:84 if testing for real, 1:3 was used for model development
+tunegrid <- expand.grid(mtry = (1:5)) #Change to 1:84 if testing for real, 1:3 was used for model development
 
 #this is the more accurate model out put 
 #it was ran on the super computer
@@ -47,11 +50,11 @@ tunegrid <- expand.grid(mtry = (1:3)) #Change to 1:84 if testing for real, 1:3 w
 
 # This model runs in legit 2 seconds
 classifier_RF<-train(
-  factor(ClassLTE1) ~ . - SiteID, 
-  data = Asdata2, 
+  data = AsTrain,
+  factor(ClassLTE1) ~ ., 
   metric = "Accuracy",
   method = "rf",
-  trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
+  trControl = trainControl(method="cv", number = 5),    #change number = 10 if doing for real
   tuneGrid  = tunegrid,
   ntree = 500,
   verboseIter = TRUE  # Enable verbose output for troubleshooting
@@ -60,7 +63,7 @@ classifier_RF<-train(
 classifier_RF
 
 # Predicting the Test set results 
-y_pred <- predict(classifier_RF, newdata = AsTest) 
+y_pred <- predict(classifier_RF, newdata = AsTest)
 
 # Confusion Matrix 
 confusion_mtx <- confusionMatrix(y_pred, AsTest$ClassLTE1)
