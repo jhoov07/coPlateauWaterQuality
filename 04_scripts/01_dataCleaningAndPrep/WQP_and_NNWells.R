@@ -7,6 +7,7 @@ library(tidyr)
 library(ggcorrplot)
 library(recipes)
 library(caret)
+library(caTools)
 
 
 setwd("/Volumes/HooverShare/Shared_Group_Data/20_projects/06_coPlateau_Rework/")
@@ -85,12 +86,29 @@ summary(rowSums(is.na(As_COPlat_Data_final))) #should be 0 NAs
 
 #Categorize wells by As conc
 As_COPlat_Data_final2 <- As_COPlat_Data_final %>%
-  mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 1, 2)) %>%
-  mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 1, 2)) %>%
-  mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 1, 2)) %>%
-  mutate(ClassLTE5 = ifelse(as.numeric(As) <= 5, 1, 2)) %>%
-  mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 1, 2)) %>%
-  mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 1, 2))
+  mutate(ClassLTE1 = ifelse(as.numeric(As) <= 1, 0, 1)) %>%
+  mutate(ClassLTE2 = ifelse(as.numeric(As) <= 2, 0, 1)) %>%
+  mutate(ClassLTE3 = ifelse(as.numeric(As) <= 3, 0, 1)) %>%
+  mutate(ClassLTE5 = ifelse(as.numeric(As) <= 5, 0, 1)) %>%
+  mutate(ClassLTE10 = ifelse(as.numeric(As) <= 10, 0, 1)) %>%
+  mutate(ClassGT10 = ifelse(as.numeric(As) > 10, 0, 1))
+
+# get the numb 70/30 training test split
+#split into training (70%) and testing set (30%), keep training set balances with overall distribution
+sample_set1<-sample.split(As_COPlat_Data_final2$ClassLTE1, SplitRatio = 0.7)
+sample_set2<-sample.split(As_COPlat_Data_final2$ClassLTE2, SplitRatio = 0.7)
+sample_set3<-sample.split(As_COPlat_Data_final2$ClassLTE3, SplitRatio = 0.7)
+sample_set5<-sample.split(As_COPlat_Data_final2$ClassLTE5, SplitRatio = 0.7)
+sample_set10<-sample.split(As_COPlat_Data_final2$ClassLTE10, SplitRatio = 0.7)
+sample_setGT10<-sample.split(As_COPlat_Data_final2$ClassGT10, SplitRatio = 0.7)
+
+As_COPlat_Data_final2 <- As_COPlat_Data_final2 %>%
+  mutate(trainClassLTE1_splt = ifelse(sample_set1 == TRUE, 1, 0)) %>%
+  mutate(trainClassLTE2_splt = ifelse(sample_set2 == TRUE, 1, 0)) %>%
+  mutate(trainClassLTE3_splt = ifelse(sample_set3 == TRUE, 1, 0)) %>%
+  mutate(trainClassLTE5_splt = ifelse(sample_set5 == TRUE, 1, 0)) %>%
+  mutate(trainClassLTE10_splt = ifelse(sample_set10 == TRUE, 1, 0)) %>%
+  mutate(trainClassGT10_splt = ifelse(sample_setGT10 == TRUE, 1, 0))
 
 write.csv(As_COPlat_Data_final2, file = "~/Desktop/All_As_Data.csv", row.names = FALSE)
 
