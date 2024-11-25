@@ -51,7 +51,7 @@ Asdata <- read.csv("All_As_Data.csv")
 
 
 # Filter data into train and test sets based on logical variable 'trainCat2'
-train <- Asdata[Asdata2$trainClassLTE1_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+train <- Asdata[Asdata$trainClassLTE1_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 test <- Asdata[Asdata$trainClassLTE1_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
@@ -59,12 +59,10 @@ rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(1, 4, 109:112, 158:163)] #Drop the As concentration, and the categorical variables we already transformed
-AsTest<-test[,-c(1, 4, 109:112, 158:163)]
+AsTrain<-train[,-c(1, 4, 109:112, 158:168)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-test[,-c(1, 4, 109:112, 158:168)]
 
-#Set a tune grid
-n<-ncol(AsTrain)-1
-tunegrid <- expand.grid(mtry = 1:n)
+
 
 #Ensure ClassLTE1 is a Factor (Categorical Variable)
 AsTrain$ClassLTE1 <- as.factor(AsTrain$ClassLTE1)
@@ -72,6 +70,11 @@ AsTest$ClassLTE1  <- as.factor(AsTest$ClassLTE1)
 
 # Fitting Random Forest to the train dataset 
 tunegrid <- expand.grid(mtry = (1:5)) #Change to 1:84 if testing for real, 1:3 was used for model development
+
+#Set a tune grid
+#n<-ncol(AsTrain)-1
+#tunegrid <- expand.grid(mtry = 1:n)
+
 
 #this is the more accurate model out put 
 #it was ran on the super computer
@@ -83,7 +86,7 @@ classifier_RF<-train(
   factor(ClassLTE1) ~ ., 
   metric = "Accuracy",
   method = "rf",
-  trControl = trainControl(method="cv", number = 10),    #change number = 10 if doing for real
+  trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
   tuneGrid  = tunegrid,
   ntree = 500,
   verboseIter = TRUE  # Enable verbose output for troubleshooting
