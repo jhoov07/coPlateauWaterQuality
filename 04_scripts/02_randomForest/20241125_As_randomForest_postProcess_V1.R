@@ -31,7 +31,7 @@ AsTest$ClassLTE2  <- as.factor(AsTest$ClassLTE2)
 
 
 #Load data
-classifier_RF <- readRDS("2024-11-25_rf.rds")
+classifier_RF <- readRDS("2024-11-25_classLTE2_cv10_rf.rds")
 
 classifier_RF
 
@@ -39,7 +39,7 @@ classifier_RF
 y_pred <- predict(classifier_RF, newdata = AsTest)
 
 # Confusion Matrix 
-confusion_mtx <- confusionMatrix(y_pred, AsTest$ClassLTE1)
+confusion_mtx <- confusionMatrix(y_pred, AsTest$ClassLTE2)
 confusion_mtx
 
 # Plotting model 
