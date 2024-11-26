@@ -45,6 +45,10 @@ Asdata <- Asdata[complete.cases(Asdata), ]
 #Subset to training set
 AsTrain<-subset(Asdata, trainCat3==TRUE)
 
+#Drop unused fields
+AsTrain<-train[,-c(1, 4, 109:112, 157, 159:168)] #Drop the As concentration, and the categorical variables we already transformed
+
+
 #Ensure As3Cat is a Factor (Categorical Variable)
 AsTrain$As3Cat <- as.factor(AsTrain$As3Cat)
 

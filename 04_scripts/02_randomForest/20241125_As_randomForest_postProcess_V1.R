@@ -31,7 +31,7 @@ AsTest$ClassLTE2  <- as.factor(AsTest$ClassLTE2)
 
 
 #Load data
-classifier_RF <- readRDS("2024-11-25_classLTE2_cv10_rf.rds")
+classifier_RF <- readRDS("2024-11-25_classLTE3_cv10_rf.rds")
 
 classifier_RF
 
