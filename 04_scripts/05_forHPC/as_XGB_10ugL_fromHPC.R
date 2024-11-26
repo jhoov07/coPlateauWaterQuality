@@ -1,12 +1,12 @@
 # This script will take execute extreme gradient boosting for an input dataset
 # such database will be outputted in wide or narrow format
-# Author: Mery Touceda-Suarez (mtoucedasuarez@arizona.edu) and Joe Hoover (jhoover@arizona.edu)
+# Author: Aaron Nuanez (aaronnuanez@arizona.edu) and Joe Hoover (jhoover@arizona.edu)
 # Date: July 2024
 
 # USAGE: 
 # Rscript [PATH-TO-SRIPT]/cas_XGB10ugL.R [IN-PATH] [OUT-PATHDIR] [OUT-NAME]
 # Example:
-# Rscript home/u18/jhoover/arsenic/scripts/as_XGB_10ugL.R /home/u18/jhoover/arsenic/data/2_20240724_randomForest_As_dataClean.csv /home/u18/jhoover/arsenic/data/ /home/u18/jhoover/arsenic/data/xgb_as_model
+# Rscript home/u18/aaronnuanez/arsenic/scripts/as_XGB_10ugL.R /home/u18/aaronnuanez/arsenic/data/2_20240724_randomForest_As_dataClean.csv /home/u18/jhoover/arsenic/data/ /home/u18/jhoover/arsenic/data/xgb_as_model
 
 
 # SETUP
