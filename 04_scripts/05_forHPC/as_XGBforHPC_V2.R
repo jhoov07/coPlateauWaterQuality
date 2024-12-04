@@ -6,7 +6,7 @@
 # USAGE: 
 # Rscript [PATH-TO-SRIPT]/cas_XGB10ugL.R [IN-PATH] [OUT-PATHDIR] [OUT-NAME]
 # Example:
-# Rscript home/u18/aaronnuanez/arsenic/scripts/as_XGB_10ugL.R /home/u18/aaronnuanez/arsenic/data/2_20240724_randomForest_As_dataClean.csv /home/u18/jhoover/arsenic/data/ /home/u18/jhoover/arsenic/data/xgb_as_model
+# Rscript home/u29/aaronnuanez/arsenic/scripts/as_XGB_10ugL.R /home/u29/aaronnuanez/arsenic/data/2_20240724_randomForest_As_dataClean.csv /home/u29/aaronnuanez/arsenic/data/ /home/u29/aaronnuanez/arsenic/data/xgb_as_model
 
 
 # SETUP
@@ -23,7 +23,7 @@ library(caTools)
 library(caret)
 library(gbm)
 library(xgboost) # for xgboost
-library(tidyverse) # general utility functions
+#library(tidyverse) # general utility functions
 
 # load arguments
 args<-commandArgs(TRUE)
@@ -39,18 +39,33 @@ set.seed(1234)  # Setting seed
 #Load data
 Asdata = read.csv(in_path, na.strings = "NULL")
 
-#Subset to training set
-AsTrain<-subset(Asdata, spl3cat==TRUE)
+# Filter data into train and test sets based on logical variable
+train <- Asdata[Asdata$trainClassLTE2_splt == TRUE, ] 
 
-#Drop unused fields for As3Cat outcome
-AsTrain<-AsTrain[,-c(1:5,212:214,216:217)]
+#Make SiteID the row name so we can drop that field
+rownames(train)<-train$SiteID
 
-outcomeM<-"As3Cat"
+#Drop unused fields
+AsTrain<-train[,-c(1, 4, 109:112, 158:168)] #LTE1
+#AsTrain<-train[,-c(1, 4, 109:112, 157, 159:168)] #LTE2
+#AsTrain<-train[,-c(1, 4, 109:112, 157:158, 160:168)] #LTE3
+#AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #LTE5
+#AsTrain<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #LTE10
+
+#Ensure ClassLTE2 is a Factor (Categorical Variable)
+AsTrain$ClassLTE2 <- as.factor(AsTrain$ClassLTE2)
+
+#Variables for file name
+outcomeM<-"ClassLTE2"
 cv<-"cv10"
+
+#Set a tune grid
+#n<-ncol(AsTrain)-1
+#tunegrid <- expand.grid(mtry = 1:n)
 
 #This model takes ~5 minutes to run on my laptop
 model<-train(
-  factor(As3Cat) ~ ., 
+  factor(ClassLTE2) ~ ., 
   data = AsTrain, 
   metric = "Accuracy",
   method = "xgbTree",
