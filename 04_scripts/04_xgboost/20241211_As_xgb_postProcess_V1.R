@@ -72,6 +72,7 @@ colnames(y_predJoin)[1]<-"Obsclass"
 colnames(y_predJoin)[2]<-"PrednoExceed"
 colnames(y_predJoin)[3]<-"Predexceed"
 
+#Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 cp <- cutpointr(y_predJoin, Predexceed, Obsclass, 
                 method = maximize_metric, metric = youden)
 summary(cp)
@@ -79,21 +80,21 @@ plot(cp)
 
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)
-a$sens<-a$tp/(a$tp+a$fn)
-a$spec<-a$tn/(a$tn+a$fp)
-a$j<-(a$tp/(a$tp+a$fn))+(a$tn/(a$tn+a$fp))-1
+a$sens<-a$tp/(a$tp+a$fn) #sensitivity
+a$spec<-a$tn/(a$tn+a$fp) #specificity
+a$j<-(a$tp/(a$tp+a$fn))+(a$tn/(a$tn+a$fp))-1 #j-index, also called Youden value
 
 ##Make a plot like USGS PFAS paper S8
-ggplot()
-ggplot(a, aes(x=x.sorted, y=j)) +
-  geom_line()
+df <- a %>%
+  select(x.sorted, j, sens, spec) %>%
+  gather(key = "variable", value = "value", -x.sorted)
 
-ggplot(a, aes(x=x.sorted)) + 
-  geom_line(aes(y = j), color = "darkred") + 
-  geom_line(aes(y = sens), color="steelblue") + 
-  geom_line(aes(y = spec), color="steelblue")
+ggplot(df, aes(x = x.sorted, y = value)) + 
+  geom_line(aes(color = variable, linetype = variable)) + 
+  scale_color_manual(values = c("black","darkred", "steelblue")) +
+  xlab("As Detection Threshold - value above this threshold is considered a detection") + ylab("Metric Estimate")
 
-#Assign predicted class using ROC threshhold 
+#Assign predicted class using ROC threshold from previous steps
 y_pred$class<-0
 #y_pred$class[y_pred$'1' > 0.1258]<-1 #for LTE1
 #y_pred$class[y_pred$'1' > 0.6034]<-1 #for LTE2
