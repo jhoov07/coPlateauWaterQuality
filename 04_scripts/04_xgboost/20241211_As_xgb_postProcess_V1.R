@@ -4,6 +4,7 @@ library(gbm)
 library(xgboost) # for xgboost
 library(caret)
 #library(tidyverse)
+#library(SHAPforxgboost)
 
 #install.packages("cutpointr") #install only once then comment out
 library(cutpointr)
@@ -16,6 +17,17 @@ rm(list=ls())
 #Load data
 Asdata <- read.csv("All_As_Data.csv")
 
+# Filter data into train and test sets based on logical variable
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
+
+#Drop unused fields
+trainAs<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
+testAs<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
+
+
+
+
 #Load XGB model
 #Arsenic_xgb<-readRDS("./XGB_rds/2024-12-08_ClassLTE1_cv10_xgb.rds")
 #Arsenic_xgb<-readRDS("./XGB_rds/2024-12-04_ClassLTE2_cv10_xgb.rds")
@@ -23,6 +35,9 @@ Asdata <- read.csv("All_As_Data.csv")
 #Arsenic_xgb<-readRDS("./XGB_rds/2024-12-05_ClassLTE5_cv10_xgb.rds")
 Arsenic_xgb<-readRDS("./XGB_rds/2024-12-08_ClassLTE10_cv10_xgb.rds")
 Arsenic_xgb
+
+#Make SiteID the row name so we can drop that field
+rownames(train)<-train$SiteID
 
 # Filter data into train and test sets based on logical variable 'trainCat2'
 #train <- Asdata[Asdata$trainClassLTE2_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
@@ -44,16 +59,13 @@ rownames(test)<-test$SiteID
 #AsTest<-test[,-c(1, 4, 109:112, 157:159, 161:168)] #for use with LTE5
 AsTest<-test[,-c(1, 4, 109:112, 157:160, 162:168)] #for use with LTE10
 
+
 #Ensure ClassLTE2 is a Factor (Categorical Variable)
 #AsTest$ClassLTE2 <- as.factor(AsTest$ClassLTE2)
 #AsTest$ClassLTE3 <- as.factor(AsTest$ClassLTE3)
 #AsTest$ClassLTE5 <- as.factor(AsTest$ClassLTE5)
 AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE10)
 
-
-#Load data
-#classifier_RF <- readRDS("2024-11-25_classLTE3_cv10_rf.rds")
-#classifier_RF
 
 # Predicting the Test set results 
 #Predictions
@@ -98,16 +110,17 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 y_pred$class<-0
 #y_pred$class[y_pred$'1' > 0.1258]<-1 #for LTE1
 #y_pred$class[y_pred$'1' > 0.6034]<-1 #for LTE2
-y_pred$class[y_pred$'1' > 0.6023]<-1 #for LTE3
+#y_pred$class[y_pred$'1' > 0.6023]<-1 #for LTE3
 #y_pred$class[y_pred$'1' > 0.1405]<-1 #for LTE5
-#y_pred$class[y_pred$'1' > 0.1259]<-1 #for LTE10
+y_pred$class[y_pred$'1' > 0.1259]<-1 #for LTE10
 
+#
 # Confusion Matrix 
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE1, positive = '1')
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE2, positive = '1')
-confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE3, positive = '1')
+#confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE3, positive = '1')
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE5, positive = '1')
-#confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE10, positive = '1')
+confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE10, positive = '1')
 confusion_mtx
 
 # Plotting model 
