@@ -92,7 +92,7 @@ model<-train(
     gamma = gamma, #Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.
     alpha = alpha, #L1 regularization term on weights. Increasing this value will make model more conservative
     lambda = lambda, #L2 regularization term on weights. Increasing this value will make model more conservative
-    min_child_weight = min_child_weight, #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning.
+    min_child_weight = min_child_weight #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning.
 )
 )
 
