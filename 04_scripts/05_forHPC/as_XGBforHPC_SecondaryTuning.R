@@ -91,7 +91,7 @@ model<-train(
     max_delta_step = max_delta_step, #Maximum delta step we allow each leaf output to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced.
     gamma = gamma, #Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.
     alpha = alpha, #L1 regularization term on weights. Increasing this value will make model more conservative
-    lambda = labmda, #L2 regularization term on weights. Increasing this value will make model more conservative
+    lambda = lambda, #L2 regularization term on weights. Increasing this value will make model more conservative
     min_child_weight = min_child_weight, #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning.
 )
 )
