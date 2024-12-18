@@ -31,16 +31,17 @@ args<-commandArgs(TRUE)
 ## Input files and directories
 in_path=args[1]
 out_pathDir=args[2]
-alpha=args[3]
-lambda=args[4]
-gamma=args[5]
-max_delta_step=args[6]
-min_child_weight=args[7]
-eta = args[8]  #Shrinkage Step size shrinkage used in update to prevent overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
-max_depth = args[9] #Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 indicates no limit on depth.
-nrounds = args[10]
-subsample = args[11] #Subsample ratio of the training instances. Setting it to 0.5 means that XGBoost would randomly sample half of the training data prior to growing trees and this will prevent overfitting.
-colsample_bytree = args[12]
+tune_var=args[3]
+alpha=args[4]
+lambda=args[5]
+gamma=args[6]
+max_delta_step=args[7]
+min_child_weight=args[8]
+eta = args[9]  #Shrinkage Step size shrinkage used in update to prevent overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
+max_depth = args[10] #Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 indicates no limit on depth.
+nrounds = args[11]
+subsample = args[12] #Subsample ratio of the training instances. Setting it to 0.5 means that XGBoost would randomly sample half of the training data prior to growing trees and this will prevent overfitting.
+colsample_bytree = args[13]
 
 # set data and seed values
 date<-Sys.Date()
@@ -96,6 +97,6 @@ model<-train(
 )
 
 #Save model as an object file
-rds_out_name <- paste(date, outcomeM, cv, "xgb.rds", sep = "_")
+rds_out_name <- paste(date, outcomeM, cv, tune_var, "xgb.rds", sep = "_")
 rds_out_path <- paste(out_pathDir, rds_out_name, sep="/")
 saveRDS(model, rds_out_path)
