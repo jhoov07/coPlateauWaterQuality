@@ -32,7 +32,7 @@ args<-commandArgs(TRUE)
 in_path=args[1]
 out_pathDir=args[2]
 alpha=args[3]
-labmda=args[4]
+lambda=args[4]
 gamma=args[5]
 max_delta_step=args[6]
 min_child_weight=args[7]

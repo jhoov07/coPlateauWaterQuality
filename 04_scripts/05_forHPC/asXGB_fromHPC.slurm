@@ -18,5 +18,15 @@ module load R/4.4
 in_path="/home/u29/aaronnuanez/arsenic/data/Cleaned_As_GIS_Filtered.csv"
 out_pathDir="/home/u29/aaronnuanez/arsenic/data/"
 #out_name="/home/u29/aaronnuanez/arsenic/data/xgb_as_model"
+alpha = 1
+lambda = 0
+gamma = 0
+max_delta_step = 0
+min_child_weight = 1
+eta = 0.005
+max_depth = 6 
+nrounds = 750
+subsample = 0.5 
+colsample_bytree = 0.75
 
 Rscript /home/u29/aaronnuanez/arsenic/scripts/as_XGBforHPC.R $in_path $out_pathDir
