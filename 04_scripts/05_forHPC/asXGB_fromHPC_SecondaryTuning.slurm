@@ -15,7 +15,7 @@
 module load R/4.4
 #echo 'R_LIBS=~/R/library_R_v4.4/' >> ~/.Renviron
 
-in_path="/home/u29/aaronnuanez/arsenic/data/Cleaned_As_GIS_Filtered.csv"
+in_path="/home/u29/aaronnuanez/arsenic/data/All_As_Data.csv"
 out_pathDir="/home/u29/aaronnuanez/arsenic/data/"
 tune_var = "a2"
 alpha = 1
