@@ -3,7 +3,7 @@ library(caTools)
 library(gbm)
 library(xgboost) # for xgboost
 library(caret)
-#library(tidyverse)
+library(tidyverse)
 #library(SHAPforxgboost)
 
 #install.packages("cutpointr") #install only once then comment out
@@ -23,8 +23,9 @@ test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ]
 
 #Drop unused fields
 trainAs<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
-testAs<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
 
+
+testAs<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
 
 
 
@@ -120,7 +121,7 @@ y_pred$class[y_pred$'1' > 0.1259]<-1 #for LTE10
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE2, positive = '1')
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE3, positive = '1')
 #confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE5, positive = '1')
-confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE10, positive = '1')
+confusion_mtx <- confusionMatrix(factor(y_pred$class), AsTest$ClassLTE10, positive = '1', mode="sens_spec")
 confusion_mtx
 
 # Plotting model 
@@ -147,6 +148,9 @@ Arsenic_xgb$resample %>%
   mutate(AvgAcc = mean(Accuracy)) %>%
   mutate(Avgkap = mean(Kappa))
 
+ddd<-Arsenic_xgb$results
+write.csv(ddd, file="20241208_As10_xgbAs_tuningOutput.csv")
+max(Arsenic_xgb$results[[8]])
 
 # Test data values
 accuracy
@@ -157,5 +161,5 @@ specificity
 importance <- varImp(Arsenic_xgb, scale = TRUE)
 
 # Plot variable importance
-plot(importance, top = 10, col = "blue",  main = "Variable Importance, XGB, As > 3ug/L")
+plot(importance, top = 150, col = "blue",  main = "Variable Importance, XGB, As > 3ug/L")
 

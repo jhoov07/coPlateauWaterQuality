@@ -40,7 +40,7 @@ set.seed(1234)  # Setting seed
 Asdata = read.csv(in_path, na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE1_splt == TRUE, ] 
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
@@ -52,7 +52,7 @@ AsTrain<-train[,-c(1, 4, 109:112, 158:168)] #Drop the As concentration, and the 
 AsTrain$ClassLTE1 <- as.factor(AsTrain$ClassLTE1)
 
 #Variables for file name
-outcomeM<-"ClassLTE1"
+outcomeM<-"ClassLTE10"
 cv<-"cv10"
 
 #Set a tune grid
@@ -68,13 +68,18 @@ model<-train(
   trControl = trainControl(method="cv", number = 10, verboseIter = TRUE),
   na.action = 'na.pass',
   tuneGrid = expand.grid(
+    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage Step size shrinkage used in update to prevent overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
+    max_depth = seq(from = 2, to = 14, by = 2), #Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 indicates no limit on depth. 
     nrounds = seq(from = 250, to = 1000, by = 250),
-    max_depth = seq(from = 2, to = 14, by = 2),
-    eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage
-    gamma = 0,
-    colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25),
-    min_child_weight = 1,
-    subsample = seq(from = 0.25, to = 0.75, by = 0.25)
+    subsample = seq(from = 0.25, to = 0.75, by = 0.25), #Subsample ratio of the training instances. Setting it to 0.5 means that XGBoost would randomly sample half of the training data prior to growing trees and this will prevent overfitting. 
+    colsample_bytree = seq(from = 0.25, to = 0.75, by = 0.25), #is the subsample ratio of columns when constructing each tree. Subsampling occurs once for every tree constructed.
+    
+    max_delta_step = 0, #Maximum delta step we allow each leaf output to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced.
+    gamma = 0, #Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.
+    alpha = 1, #L1 regularization term on weights. Increasing this value will make model more conservative
+    lambda = 0, #L2 regularization term on weights. Increasing this value will make model more conservative
+    min_child_weight = 1, #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning. 
+    
   )
 )
 
