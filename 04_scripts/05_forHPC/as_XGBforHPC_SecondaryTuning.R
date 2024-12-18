@@ -93,6 +93,7 @@ model<-train(
     lambda = labmda, #L2 regularization term on weights. Increasing this value will make model more conservative
     min_child_weight = min_child_weight, #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning.
 )
+)
 
 #Save model as an object file
 rds_out_name <- paste(date, outcomeM, cv, "xgb.rds", sep = "_")
