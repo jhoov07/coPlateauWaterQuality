@@ -58,7 +58,7 @@ train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
 train_y = train[,160]
 
 #define predictor and response variables in testing set
-train_y = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
+train_y = data.matrix(test[, -c(1, 4, 109:112, 157:168)])
 test_y = test[, 160]
 
 #define final training and testing sets

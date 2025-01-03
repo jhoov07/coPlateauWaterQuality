@@ -25,25 +25,8 @@ library(gbm)
 library(xgboost) # for xgboost
 library("SHAPforxgboost")
 library(data.table)
-#library(tidyverse) # general utility functions
+library(cutpointr)
 
-# load arguments
-#args<-commandArgs(TRUE)
-
-## Input files and directories
-#in_path=args[1]
-#out_pathDir=args[2]
-#tune_var=args[3]
-#gamma=args[4]
-#min_child_weight=args[5]
-
-#print(in_path)
-#print(out_pathDir)
-#print(alpha)
-#print(lambda)
-#print(gamma)
-#print(max_delta_step)
-#print(min_child_weight)
 
 rm(list=ls())
 
@@ -57,8 +40,8 @@ setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
-test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
+train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
@@ -71,12 +54,12 @@ a<-list("pH","Fe","A_Calcite","prism30yr","DepthToGW","C_Sb","A_Kaolinit",
 a
 
 #define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
+train_x = data.matrix(train[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
 train_y = train[,160]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(train[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-test_y = test[, 160]
+test_x = data.matrix(test[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
+test_y = test[,160]
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -122,7 +105,7 @@ colnames(y_predJoin)[2]<-"Predexceed"
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 cp <- cutpointr(y_predJoin, Predexceed, Obsclass, 
-                method = maximize_metric, metric = youden)
+                method = maximize_metric, metric = youden, pot_class = 1)
 summary(cp)
 plot(cp)
 
