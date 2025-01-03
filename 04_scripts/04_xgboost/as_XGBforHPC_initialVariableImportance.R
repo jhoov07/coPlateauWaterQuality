@@ -27,24 +27,7 @@ library("SHAPforxgboost")
 library(data.table)
 #library(tidyverse) # general utility functions
 
-# load arguments
-#args<-commandArgs(TRUE)
-
-## Input files and directories
-#in_path=args[1]
-#out_pathDir=args[2]
-#tune_var=args[3]
-#gamma=args[4]
-#min_child_weight=args[5]
-
-#print(in_path)
-#print(out_pathDir)
-#print(alpha)
-#print(lambda)
-#print(gamma)
-#print(max_delta_step)
-#print(min_child_weight)
-
+#Clean up workspace
 rm(list=ls())
 
 # set data and seed values
@@ -84,10 +67,9 @@ xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 #define watchlist
 watchlist = list(train=xgb_train, test=xgb_test)
 
-#Run model 10 times and calculate accuarcy and SD of accuracy
-dfAc<-data.frame()
+#Define parameters
 params = list(alpha = 0,
-              lambda = 5,
+              lambda = 1,
               gamma = 0,
               max_delta_step = 0,
               eta = 0.005,
@@ -98,29 +80,136 @@ params = list(alpha = 0,
               booster = "gbtree")
 
 ##XGB Train
-for(data in 1:10){
-  model = xgb.train(data = xgb_train, params = params,
+model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
                     nrounds = 750, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
+ 
+#Determine variable importance
+# Compute feature importance matrix
+importance_matrix = xgb.importance(colnames(xgb_train), model = model)
+head(importance_matrix)
+
+# Nice graph
+xgb.plot.importance(importance_matrix[1:123,])
+
+#Visual inspection shows a few big drop points
+#Break 1 at 0.3
+#Break 2 at 0.2
+#Breatk 3 at 0.07
+
+#prepare data to drop low importance variables
+
+library(tidyverse)
+qqq <- importance_matrix %>%
+  arrange(Gain)  # arrange in descending order
+
+head(qqq)
+
+#importanceList<-data.frame(lapply(importance_matrix, sort))
+qqq$filterID<-seq(length(qqq$Gain))
+
+library(reshape2)
+library(tidyverse)
+
+#Make data training data long format for easy filtering
+dfMetrics<-data.frame()
+for (i in 1:length(qqq$Gain)){
+  trainL<-melt(train_x)
+  colnames(trainL)[1]<-"SiteId"
+  colnames(trainL)[2]<-"Feature"
+  trainL2<-merge(trainL, qqq, by="Feature")
+
+  #Filter based on iteration
+  trainData2<-trainL2 %>%
+    filter(filterID > 0+i)
   
+  #Convert back to wide format
+  train_x2<-dcast(trainData2[,c(1:3)], SiteId~Feature, value.var = "value")
+  train_x3<-data.matrix(train_x2)
   
-  x<-1-last(model$evaluation_log$train_error)
-  y<-1-last(model$evaluation_log$test_error)
-  xy<-cbind(x,y)
-  dfAc<-rbind(dfAc, xy)
+  #Prep test data
+  testL<-melt(test_x)
+  colnames(testL)[1]<-"SiteId"
+  colnames(testL)[2]<-"Feature"
+  testL2<-merge(testL, qqq, by="Feature")
+  
+  testData2<-testL2 %>%
+    filter(filterID >=0+i)
+  
+  test_x2<-dcast(testData2[,c(1:3)], SiteId~Feature, value.var = "value")
+  test_x3<-data.matrix(test_x2)
+  
+  #define final training and testing sets
+  xgb_train3 = xgb.DMatrix(data = train_x3, label = train_y)
+  xgb_test3 = xgb.DMatrix(data = test_x3, label = test_y)
+  
+  #define watchlist
+  watchlist3 = list(train=xgb_train3, test=xgb_test3)
+  
+  params = list(alpha = 0,
+                lambda = 1,
+                gamma = 0,
+                max_delta_step = 0,
+                eta = 0.005,
+                max_depth = 6,
+                subsample = 0.50,
+                colsample_bytree = 0.75,
+                min_child_weight = 1,
+                booster = "gbtree")
+  
+  dfAc<-data.frame()
+  ##XGB Train
+  for(w in 1:5){
+    model = xgb.train(data = xgb_train, params = params,
+                      watchlist = watchlist,
+                      nrounds = 750, objective = "binary:logistic",
+                      eval_metric = list("error"), verbose = 1,
+                      print_every_n = 100)
+    
+    
+    x<-1-last(model$evaluation_log$train_error)
+    y<-1-last(model$evaluation_log$test_error)
+    xy<-cbind(x,y)
+    dfAc<-rbind(dfAc, xy)
+  }
+  
+  #Clean up and write to file
+  #colnames(dfAc)[1]<-"Train_Error"
+  #colnames(dfAc)[2]<-"Test_Error"
+  ab<-mean(dfAc[[1]])
+  ac<-sd(dfAc[[1]])
+  ad<-mean(dfAc[[2]])
+  ae<-sd(dfAc[[2]])
+  abc<-cbind(i,ab,ac,ad,ae)
+  dfMetrics<-rbind(dfMetrics, abc)
+  print(i)
+  
 }
 
-#Clean up and write to file
-colnames(dfAc)[1]<-"Train_Error"
-colnames(dfAc)[2]<-"Test_Error"
-mean(dfAc$Train_Error)
-sd(dfAc$Train_Error)
-mean(dfAc$Test_Error)
-sd(dfAc$Test_Error)
+write.csv(dfMetrics, file="20241223_as10XGB_variableDrop_accuracySDImpacts.csv")
 
-write.csv(dfAc, file="20241223_modelTuning_primaryHyperparameters_alpha2Lambda5.csv")
+
+
+#Remove low importance columns for testing
+
+
+
+
+
+
+##XGB Train
+modelReduced = xgb.train(data = xgb_train3, params = params,
+                         watchlist = watchlist3,
+                         nrounds = 750, objective = "binary:logistic",
+                         eval_metric = "error", verbose = 1,
+                         print_every_n = 100)
+
+
+
+
+
 
 
 
@@ -135,17 +224,6 @@ modelF = xgboost(data = xgb_train, params = params,
                   eval_metric = "error", verbose = 1,
                   print_every_n = 100)
 
-#Determine variable importance
-# Compute feature importance matrix
-importance_matrix = xgb.importance(colnames(xgb_train), model = model)
-head(importance_matrix)
-
-importance_matrix$realtiveGain<-importance_matrix$Gain/0.0759
-importance_matrix$filter<- 1
-importance_matrix$filter[importance_matrix$realtiveGain<0.25]<- 0
-
-# Nice graph
-xgb.plot.importance(importance_matrix[1:150,])
 
 
 #importance <- varImp(model, scale = TRUE)
@@ -165,48 +243,7 @@ colnames(trainL)[1]<-"SiteId"
 colnames(trainL)[2]<-"Feature"
 trainL2<-merge(trainL, importance_matrix, by="Feature")
 
-trainData2<-trainL2 %>%
-  filter(filter == 1)
 
-train_x2<-dcast(trainData2[,c(1:3)], SiteId~Feature, value.var = "value")
-train_x3<-data.matrix(train_x2)
-
-#Remove low importance columns for testing
-testL<-melt(test_x)
-colnames(testL)[1]<-"SiteId"
-colnames(testL)[2]<-"Feature"
-testL2<-merge(testL, importance_matrix, by="Feature")
-
-testData2<-testL2 %>%
-  filter(filter == 1)
-
-test_x2<-dcast(testData2[,c(1:3)], SiteId~Feature, value.var = "value")
-test_x3<-data.matrix(test_x2)
-
-#define final training and testing sets
-xgb_train3 = xgb.DMatrix(data = train_x3, label = train_y)
-xgb_test3 = xgb.DMatrix(data = test_x3, label = test_y)
-
-#define watchlist
-watchlist3 = list(train=xgb_train3, test=xgb_test3)
-
-params = list(alpha = 0,
-              lambda = 1,
-              gamma = 0,
-              max_delta_step = 0,
-              eta = 0.005,
-              max_depth = 6,
-              subsample = 0.50,
-              colsample_bytree = 0.75,
-              min_child_weight = 1,
-              booster = "gbtree")
-
-##XGB Train
-modelReduced = xgb.train(data = xgb_train3, params = params,
-                  watchlist = watchlist3,
-                  nrounds = 750, objective = "binary:logistic",
-                  eval_metric = "error", verbose = 1,
-                  print_every_n = 100)
 #Testing Data
 xgbpredRed <- predict (modelReduced, xgb_test3)
 xgbpredRed2 <- ifelse (xgbpredRed > 0.5,1,0)

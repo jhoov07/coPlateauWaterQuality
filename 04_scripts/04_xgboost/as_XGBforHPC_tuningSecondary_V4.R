@@ -84,7 +84,7 @@ xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 #define watchlist
 watchlist = list(train=xgb_train, test=xgb_test)
 
-#Run model 10 times and calculate accuarcy and SD of accuracy
+#Run model 10 times and calculate accuarcy and SD of accuracy, change hyperparameter value as needed
 dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 5,
