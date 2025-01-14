@@ -37,7 +37,7 @@ date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
 #Load data
-Asdata = read.csv(in_path, na.strings = "NULL")
+Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
 train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
@@ -46,10 +46,10 @@ train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ]
 rownames(train)<-train$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(1, 4, 109:112, 158:168)] #Drop the As concentration, and the categorical variables we already transformed
+AsTrain<-train[,-c(1, 4, 109:112, 158:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
 
 #Ensure ClassLTE2 is a Factor (Categorical Variable)
-AsTrain$ClassLTE1 <- as.factor(AsTrain$ClassLTE1)
+AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE10)
 
 #Variables for file name
 outcomeM<-"ClassLTE10"
@@ -61,13 +61,22 @@ cv<-"cv10"
 
 #This model takes ~5 minutes to run on my laptop
 model<-train(
-  factor(ClassLTE1) ~ ., 
+  factor(ClassLTE10) ~ ., 
   data = AsTrain, 
   metric = "Accuracy",
   method = "xgbTree",
   trControl = trainControl(method="cv", number = 10, verboseIter = TRUE),
   na.action = 'na.pass',
   tuneGrid = expand.grid(
+<<<<<<< HEAD
+    eta = 0.01,  #Shrinkage Step size shrinkage used in update to prevent overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
+    max_depth = 6, #Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 indicates no limit on depth. 
+    nrounds = 1000,
+    gamma = 0,
+    subsample = 0.25, #Subsample ratio of the training instances. Setting it to 0.5 means that XGBoost would randomly sample half of the training data prior to growing trees and this will prevent overfitting. 
+    colsample_bytree = 0.25,#is the subsample ratio of columns when constructing each tree. Subsampling occurs once for every tree constructed.
+    min_child_weight = 1   )
+=======
     eta = seq(from = 0.005, to = 0.0125, by = 0.0025),  #Shrinkage Step size shrinkage used in update to prevent overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.
     max_depth = seq(from = 2, to = 14, by = 2), #Maximum depth of a tree. Increasing this value will make the model more complex and more likely to overfit. 0 indicates no limit on depth. 
     nrounds = seq(from = 250, to = 1000, by = 250),
@@ -81,6 +90,7 @@ model<-train(
     min_child_weight = 1, #Minimum sum of instance weight (hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning. 
     
   )
+>>>>>>> e155bae784f136b0800fe20789b29a7e19da85c8
 )
 
 #Save model as an object file
