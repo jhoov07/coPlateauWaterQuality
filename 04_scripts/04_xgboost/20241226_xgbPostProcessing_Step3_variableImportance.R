@@ -46,20 +46,13 @@ test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ]
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
-#Make a list of the fewest number of variables with the highest overall prediction accuracy
-#highest accuracy is 0.768 using 12 variables with the highest gain values - from the csv output from step 2
-a<-list("pH","Fe","A_Calcite","prism30yr","DepthToGW","C_Sb","A_Kaolinit",
-        "C_Tot_14A","C_Hematite","Top5_Ca","A_Tot_Flds","C_Se")
-a
-
 #define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-#train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
-train_y = train[,160]
+train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
+train_y = train[,160] #change this field index if you change the outcome of interest
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-test_y = test[, 160]
+train_y = data.matrix(test[, -c(1, 4, 109:112, 157:168)])
+test_y = test[, 160] #change this field index if you change the outcome of interest
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -68,7 +61,7 @@ xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 #define watchlist
 watchlist = list(train=xgb_train, test=xgb_test)
 
-#Run model 10 times and calculate accuarcy and SD of accuracy, change hyperparameter value as needed
+#Input tuned primary and secondary hyperparameters from Steps 1 and 2
 dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 1,
@@ -82,73 +75,51 @@ params = list(alpha = 0,
               booster = "gbtree")
 
 ##XGB Train
-for(data in 1:10){
-  model = xgb.train(data = xgb_train, params = params,
+model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
                     nrounds = 1000, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
-  
-  
-  x<-1-last(model$evaluation_log$train_error)
-  y<-1-last(model$evaluation_log$test_error)
-  xy<-cbind(x,y); print(xy)
-  dfAc<-rbind(dfAc, xy)
-}
 
-#Clean up and write to file
-colnames(dfAc)[1]<-"Train_Error"
-colnames(dfAc)[2]<-"Test_Error"
-mean(dfAc$Train_Error)
-sd(dfAc$Train_Error)
-mean(dfAc$Test_Error)
-sd(dfAc$Test_Error)
-
-#write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
-
-#Testing Data
-xgbpred <- predict (model, xgb_test)
-xgbpred2 <- ifelse (xgbpred > 0.5,1,0)
-confusionMatrix (factor(xgbpred2), factor(test_y))
-
-
-# Compute feature importance matrix
+# Compute feature importance matrix from model with tuned hyperparameters
 importance_matrix = xgb.importance(colnames(xgb_train), model = model)
 head(importance_matrix)
 
-# Nice graph
-xgb.plot.importance(importance_matrix[1:12,])
+# Nice graph of variable importance
+xgb.plot.importance(importance_matrix)
 
-##
+## reorder attribute tablef rom most to least important variable, then create a new dataframe
 library(tidyverse)
 qqq <- importance_matrix %>%
   arrange(Gain)  # arrange in descending order
 
 head(qqq)
 
-#importanceList<-data.frame(lapply(importance_matrix, sort))
+#Create a filter order using the ordered list of variables in qqq dataframe
 qqq$filterID<-seq(length(qqq$Gain))
 
+#Load libraries to do some data frame reorganization
 library(reshape2)
 library(tidyverse)
 
 #Make data training data long format for easy filtering
+#length(qqq$Gain) this gives a count of the number of variables in the original data frame for the loop to iterate through
 dfMetrics<-data.frame()
 for (i in 1:length(qqq$Gain)){
-  trainL<-melt(train_x)
+  trainL<-melt(train_x) #convert to long format
   colnames(trainL)[1]<-"SiteId"
   colnames(trainL)[2]<-"Feature"
-  trainL2<-merge(trainL, qqq, by="Feature")
+  trainL2<-merge(trainL, qqq, by="Feature") #merge with dataframe that has variable importance ranks
   
   #Filter based on iteration
   trainData2<-trainL2 %>%
-    filter(filterID > 0+i)
+    filter(filterID > 0+i) #remove 0+i lowest importance variables. i is the loop iteration
   
   #Convert back to wide format
   train_x2<-dcast(trainData2[,c(1:3)], SiteId~Feature, value.var = "value")
   train_x3<-data.matrix(train_x2)
   
-  #Prep test data
+  #Prep test data so you work with the same number of variables as the training data
   testL<-melt(test_x)
   colnames(testL)[1]<-"SiteId"
   colnames(testL)[2]<-"Feature"
@@ -160,13 +131,14 @@ for (i in 1:length(qqq$Gain)){
   test_x2<-dcast(testData2[,c(1:3)], SiteId~Feature, value.var = "value")
   test_x3<-data.matrix(test_x2)
   
-  #define final training and testing sets
+  #define  training and testing sets
   xgb_train3 = xgb.DMatrix(data = train_x3, label = train_y)
   xgb_test3 = xgb.DMatrix(data = test_x3, label = test_y)
   
   #define watchlist
   watchlist3 = list(train=xgb_train3, test=xgb_test3)
   
+  #use fully tuned primary and secondary hyperparameters from steps 1 and 2
   params = list(alpha = 0,
                 lambda = 1,
                 gamma = 0,
@@ -218,4 +190,8 @@ colnames(dfMetrics)[5]<-"Test_SD"
 
 #Make a plot to show how accuracy varies by number of variables
 ggplot(dfMetrics, aes(x=i, y=Test_Error))+geom_line()
+
+#Evaluate the plot and identify any changes you observed between number of variables included and overall accuracy. 
+#Try to find the best accuracy with the least number of variables
+#Make note of the variables and then go to step 4 to run the reduced variable model
 

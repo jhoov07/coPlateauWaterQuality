@@ -23,7 +23,7 @@ library(caTools)
 library(caret)
 library(gbm)
 library(xgboost) # for xgboost
-library("SHAPforxgboost")
+#library("SHAPforxgboost")
 library(data.table)
 #library(tidyverse) # general utility functions
 
@@ -98,6 +98,24 @@ mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
 #write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
+
+#Evaluate the output files for each parameter, one at a time and identify the most appropriate value for each secondary parameter
+#In many cases the baseline will be the best value since higher values make the model more complicated witih no real accuracy improvement. 
+#I did not consider an incresse of 0.1 to be meaningful, just FYI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #Testing Data
 xgbpred <- predict (model, xgb_test)
