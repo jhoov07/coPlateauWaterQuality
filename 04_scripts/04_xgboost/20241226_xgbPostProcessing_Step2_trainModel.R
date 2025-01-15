@@ -99,6 +99,10 @@ sd(dfAc$Test_Error)
 
 #write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
 
+##### Ignore Below but don't delete
+
+
+
 #Testing Data
 xgbpred <- predict (model, xgb_test)
 xgbpred2 <- ifelse (xgbpred > 0.5,1,0)

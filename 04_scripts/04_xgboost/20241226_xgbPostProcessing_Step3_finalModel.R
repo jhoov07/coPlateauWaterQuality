@@ -111,6 +111,9 @@ xgbpred <- predict (model, xgb_test)
 xgbpred2 <- ifelse (xgbpred > 0.5,1,0)
 confusionMatrix (factor(xgbpred2), factor(test_y))
 
+##### Ignore Below but don't delete
+
+
 
 # Compute feature importance matrix
 importance_matrix = xgb.importance(colnames(xgb_train), model = model)
