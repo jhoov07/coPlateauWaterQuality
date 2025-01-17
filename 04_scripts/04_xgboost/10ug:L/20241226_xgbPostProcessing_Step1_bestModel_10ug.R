@@ -25,7 +25,7 @@ library(gbm)
 library(xgboost) # for xgboost
 #library("SHAPforxgboost")
 library(data.table)
-#library(tidyverse) # general utility functions
+library(tidyverse) # general utility functions
 
 
 rm(list=ls())
@@ -34,11 +34,12 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 
-#Arsenic_xgb<-readRDS("./XGB_rds/2024-12-08_ClassLTE10_cv10_xgb.rds")
-Arsenic_xgb<-readRDS("./XGB_rds/2024-12-05_ClassLTE5_cv10_xgb.rds")
+Arsenic_xgb<-readRDS("./XGB_rds/2024-12-08_ClassLTE10_cv10_xgb.rds")
+#Arsenic_xgb<-readRDS("./XGB_rds/2024-12-05_ClassLTE5_cv10_xgb.rds")
 Arsenic_xgb
 
 #Make SiteID the row name so we can drop that field
@@ -52,7 +53,7 @@ b<-ddd$AccuracySD[ddd$Accuracy==a] #standard deviation of 'best' model
 se<-b/sqrt(10); print(se) #1 standard error 
 aSe<-a-se; print(aSe) #'best' model minus 1 SE
 
-#Filter to movdels with accuracy within 1 SE
+#Filter to models with accuracy within 1 SE
 dd3 <- ddd %>%
   filter(Accuracy >= aSe)
 

@@ -18,7 +18,6 @@
 #install.packages("tidyverse")
 
 # load libraries
-
 library(caTools) 
 library(caret)
 library(gbm)
@@ -33,14 +32,17 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] 
-test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] 
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
@@ -48,11 +50,11 @@ rownames(test)<-test$SiteID
 
 #define predictor and response variables in training set, As= 5 ug/L
 train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
-train_y = train[,160]
+train_y = train[, 161]
 
 #define predictor and response variables in testing set
 test_x = data.matrix(test[, -c(1, 4, 109:112, 157:168)])
-test_y = test[, 160]
+test_y = test[, 161]
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -61,16 +63,16 @@ xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 #define watchlist
 watchlist = list(train=xgb_train, test=xgb_test)
 
-#Run model 10 times and calculate accuarcy and SD of accuracy, change hyperparameter value as needed
+#Run model 10 times and calculate accuracy and SD of accuracy, change hyperparameter value as needed
 dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 1,
               gamma = 0,
               max_delta_step = 0,
-              eta = 0.01,
+              eta = 0.0075,
               max_depth = 4,
               subsample = 0.5,
-              colsample_bytree = 0.75,
+              colsample_bytree = 0.5,
               min_child_weight = 1,
               booster = "gbtree")
 
@@ -97,7 +99,7 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-#write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
+write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters.csv")
 
 ##### Ignore Below but don't delete
 
