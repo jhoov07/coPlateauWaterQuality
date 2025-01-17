@@ -48,7 +48,7 @@ test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ]
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
-#define predictor and response variables in training set, As= 5 ug/L
+#define predictor and response variables in training set, As= 10 ug/L
 train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
 train_y = train[, 161]
 
@@ -99,7 +99,7 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters.csv")
+write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters_gamma1.csv")
 
 ##### Ignore Below but don't delete
 
