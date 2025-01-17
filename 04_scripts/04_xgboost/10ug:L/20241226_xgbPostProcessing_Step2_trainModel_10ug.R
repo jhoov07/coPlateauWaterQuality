@@ -99,7 +99,7 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters_gamma1.csv")
+write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters.csv")
 
 ##### Ignore Below but don't delete
 
