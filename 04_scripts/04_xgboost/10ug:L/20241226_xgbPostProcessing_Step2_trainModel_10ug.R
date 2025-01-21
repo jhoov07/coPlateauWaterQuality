@@ -68,11 +68,11 @@ dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 1,
               gamma = 0,
-              max_delta_step = 0,
-              eta = 0.0075,
-              max_depth = 4,
+              max_delta_step = 7,
+              eta = 0.005,
+              max_depth = 6,
               subsample = 0.5,
-              colsample_bytree = 0.5,
+              colsample_bytree = 0.75,
               min_child_weight = 1,
               booster = "gbtree")
 
@@ -80,7 +80,7 @@ params = list(alpha = 0,
 for(data in 1:10){
   model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
-                    nrounds = 1000, objective = "binary:logistic",
+                    nrounds = 750, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
   
@@ -99,9 +99,13 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-write.csv(dfAc, file = "~/Desktop/2025116_as10ugL_modelTuning_primaryHyperparameters.csv")
+write.csv(dfAc, file = "~/Desktop/2025121_as10ugL_modelTuning_primaryHyperparameters_maxdeltastep7.csv")
 
 ##### Ignore Below but don't delete
+
+
+
+
 
 
 

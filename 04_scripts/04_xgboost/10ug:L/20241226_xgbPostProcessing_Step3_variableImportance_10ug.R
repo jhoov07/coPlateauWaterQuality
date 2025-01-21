@@ -33,14 +33,16 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] 
-test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] 
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
@@ -48,18 +50,15 @@ rownames(test)<-test$SiteID
 
 #Make a list of the fewest number of variables with the highest overall prediction accuracy
 #highest accuracy is 0.768 using 12 variables with the highest gain values - from the csv output from step 2
-a<-list("pH","Fe","A_Calcite","prism30yr","DepthToGW","C_Sb","A_Kaolinit",
-        "C_Tot_14A","C_Hematite","Top5_Ca","A_Tot_Flds","C_Se")
-a
 
-#define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-#train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
-train_y = train[,160]
+#define predictor and response variables in training set, As= 10 ug/L, keep variables defined above
+#train_x = data.matrix(train[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
+train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
+train_y = train[,161]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(1, 3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-test_y = test[, 160]
+test_x = data.matrix(test[, -c(1, 4, 109:112, 157:168)])
+test_y = test[, 161]
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -70,12 +69,12 @@ watchlist = list(train=xgb_train, test=xgb_test)
 
 #Run model 10 times and calculate accuarcy and SD of accuracy, change hyperparameter value as needed
 dfAc<-data.frame()
-params = list(alpha = 0,
-              lambda = 1,
-              gamma = 0,
-              max_delta_step = 0,
-              eta = 0.01,
-              max_depth = 4,
+params = list(alpha = 2,
+              lambda = 5,
+              gamma = 1,
+              max_delta_step = 1,
+              eta = 0.005,
+              max_depth = 6,
               subsample = 0.5,
               colsample_bytree = 0.75,
               min_child_weight = 1,
@@ -85,7 +84,7 @@ params = list(alpha = 0,
 for(data in 1:10){
   model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
-                    nrounds = 1000, objective = "binary:logistic",
+                    nrounds = 750, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
   
@@ -104,7 +103,7 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-#write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
+#write.csv(dfAc, file="20241223_as10ugL_modelTuning_primaryHyperparameters.csv")
 
 #Testing Data
 xgbpred <- predict (model, xgb_test)
