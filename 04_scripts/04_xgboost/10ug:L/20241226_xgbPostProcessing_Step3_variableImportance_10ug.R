@@ -69,12 +69,12 @@ watchlist = list(train=xgb_train, test=xgb_test)
 
 #Run model 10 times and calculate accuarcy and SD of accuracy, change hyperparameter value as needed
 dfAc<-data.frame()
-params = list(alpha = 0,
-              lambda = 1,
-              gamma = 0,
-              max_delta_step = 0,
-              eta = 0.01,
-              max_depth = 4,
+params = list(alpha = 2,
+              lambda = 5,
+              gamma = 1,
+              max_delta_step = 1,
+              eta = 0.005,
+              max_depth = 6,
               subsample = 0.5,
               colsample_bytree = 0.75,
               min_child_weight = 1,
@@ -84,7 +84,7 @@ params = list(alpha = 0,
 for(data in 1:10){
   model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
-                    nrounds = 1000, objective = "binary:logistic",
+                    nrounds = 750, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
   
