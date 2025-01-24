@@ -34,30 +34,32 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] 
-test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] 
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Make a list of the fewest number of variables with the highest overall prediction accuracy
-a<-list("pH","Fe","A_Calcite","prism30yr","DepthToGW","C_Sb","A_Kaolinit",
-        "C_Tot_14A","C_Hematite","Top5_Ca","A_Tot_Flds","C_Se")
+a<-list("pH","prism30yr","A_Cs","A_Aragon","C_Hematite","Fe","Top5_S",
+        "C_Cr","A_Calcite","DepthToGW")
 
-#define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-train_y = train[,160]
+#define predictor and response variables in training set, As= 10 ug/L, keep variables defined above
+train_x = data.matrix(train[, c(1, 3, 5, 29, 25, 99, 2, 17, 71, 27, 108)])
+train_y = train[,161]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
-test_y = test[,160]
+test_x = data.matrix(test[, c(1, 3, 5, 29, 25, 99, 2, 17, 71, 27, 108)])
+test_y = test[,161]
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -67,10 +69,10 @@ xgb_test = xgb.DMatrix(data = test_x, label = test_y)
 watchlist = list(train=xgb_train, test=xgb_test)
 
 #Set parameters from all the tuning, steps 2 and 3
-params = list(alpha = 0,
-              lambda = 1,
-              gamma = 0,
-              max_delta_step = 0,
+params = list(alpha = 2,
+              lambda = 5,
+              gamma = 1,
+              max_delta_step = 1,
               eta = 0.005,
               max_depth = 6,
               subsample = 0.50,
@@ -89,7 +91,7 @@ model = xgboost(data = xgb_train, params = params,
 
 #Testing Data
 xgbpred <- predict (model, xgb_test)
-xgbpred2 <- ifelse (xgbpred > 0.5,1,0)
+xgbpred2 <- ifelse (xgbpred > 0.2218,1,0)
 confusionMatrix (factor(xgbpred2), factor(test_y)) #keep this for reporting
 
 #Adjust the "true" threshold using Youden value

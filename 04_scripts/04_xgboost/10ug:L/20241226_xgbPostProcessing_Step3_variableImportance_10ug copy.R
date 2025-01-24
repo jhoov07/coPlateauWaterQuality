@@ -33,27 +33,29 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable
-train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] 
-test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] 
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] 
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] 
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 
-#define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
+#define predictor and response variables in training set, As= 10 ug/L, keep variables defined above
 train_x = data.matrix(train[, -c(1, 4, 109:112, 157:168)])
-train_y = train[,160]
+train_y = train[,161]
 
 #define predictor and response variables in testing set
 test_x = data.matrix(test[, -c(1, 4, 109:112, 157:168)])
-test_y = test[, 160]
+test_y = test[, 161]
 
 #define final training and testing sets
 xgb_train = xgb.DMatrix(data = train_x, label = train_y)
@@ -64,12 +66,12 @@ watchlist = list(train=xgb_train, test=xgb_test)
 
 #Run the model with tuned parameters
 dfAc<-data.frame()
-params = list(alpha = 0,
-              lambda = 1,
-              gamma = 0,
-              max_delta_step = 0,
-              eta = 0.01,
-              max_depth = 4,
+params = list(alpha = 2,
+              lambda = 5,
+              gamma = 1,
+              max_delta_step = 1,
+              eta = 0.005,
+              max_depth = 6,
               subsample = 0.5,
               colsample_bytree = 0.75,
               min_child_weight = 1,
@@ -78,7 +80,7 @@ params = list(alpha = 0,
 ##XGB Train
 model = xgb.train(data = xgb_train, params = params,
                     watchlist = watchlist,
-                    nrounds = 1000, objective = "binary:logistic",
+                    nrounds = 750, objective = "binary:logistic",
                     eval_metric = list("error"), verbose = 1,
                     print_every_n = 100)
   
@@ -88,7 +90,7 @@ importance_matrix = xgb.importance(colnames(xgb_train), model = model)
 head(importance_matrix)
 
 # Nice graph
-xgb.plot.importance(importance_matrix)
+xgb.plot.importance(importance_matrix[c(1:25)])
 
 ##
 library(tidyverse)
@@ -138,10 +140,10 @@ for (i in 1:length(qqq$Gain)){
   #define watchlist
   watchlist3 = list(train=xgb_train3, test=xgb_test3)
   
-  params = list(alpha = 0,
-                lambda = 1,
-                gamma = 0,
-                max_delta_step = 0,
+  params = list(alpha = 2,
+                lambda = 5,
+                gamma = 1,
+                max_delta_step = 1,
                 eta = 0.005,
                 max_depth = 6,
                 subsample = 0.50,
@@ -184,7 +186,7 @@ colnames(dfMetrics)[4]<-"Test_Error"
 colnames(dfMetrics)[5]<-"Test_SD"
 #colnames(dfAc)[2]<-"Test_Error"
 
-#write.csv(dfMetrics, file="20241226_as5XGB_variableDrop_accuracySDImpacts.csv")
+write.csv(dfMetrics, file="~/Desktop/2025122_as10XGB_variableDrop_accuracySDImpacts.csv")
 
 
 #Make a plot to show how accuracy varies by number of variables
