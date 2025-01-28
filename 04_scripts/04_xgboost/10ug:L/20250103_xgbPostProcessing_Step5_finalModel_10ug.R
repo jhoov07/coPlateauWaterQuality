@@ -26,6 +26,7 @@ library(xgboost) # for xgboost
 library("SHAPforxgboost")
 library(data.table)
 library(cutpointr)
+library(tidyverse)
 
 
 rm(list=ls())
@@ -50,15 +51,15 @@ rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Make a list of the fewest number of variables with the highest overall prediction accuracy
-a<-list("pH","prism30yr","A_Cs","A_Aragon","C_Hematite","Fe","Top5_S",
-        "C_Cr","A_Calcite","DepthToGW")
+a<-list("pH", "prism30yr", "A_Cs", "A_Aragon", "C_Hematite", "Fe", "Top5_S", "C_Cr", "A_Calcite", 
+        "DepthToGW", "C_Mo", "Top5_Ca", "A_Tot_14A", "C_Amorph", "C_Analcime")
 
 #define predictor and response variables in training set, As= 10 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(1, 3, 5, 29, 25, 99, 2, 17, 71, 27, 108)])
+train_x = data.matrix(train[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 108, 80, 11, 58, 65, 66)])
 train_y = train[,161]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(1, 3, 5, 29, 25, 99, 2, 17, 71, 27, 108)])
+test_x = data.matrix(test[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 108, 80, 11, 58, 65, 66)])
 test_y = test[,161]
 
 #define final training and testing sets
@@ -91,7 +92,7 @@ model = xgboost(data = xgb_train, params = params,
 
 #Testing Data
 xgbpred <- predict (model, xgb_test)
-xgbpred2 <- ifelse (xgbpred > 0.2218,1,0)
+xgbpred2 <- ifelse (xgbpred > 0.5,1,0)
 confusionMatrix (factor(xgbpred2), factor(test_y)) #keep this for reporting
 
 #Adjust the "true" threshold using Youden value
