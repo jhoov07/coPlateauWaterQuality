@@ -34,7 +34,10 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
@@ -48,15 +51,16 @@ rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Make a list of the fewest number of variables with the highest overall prediction accuracy
-a<-list("pH","Fe","A_Calcite","prism30yr","DepthToGW","C_Sb","A_Kaolinit",
-        "C_Tot_14A","C_Hematite","Top5_Ca","A_Tot_Flds","C_Se")
+a<-list("pH", "Fe", "prism30yr", "A_Calcite", "DepthToGW", "A_Kaolinit", "C_Se", "C_Sb", "A_Quartz", 
+        "Top5_Ca", "A_Tot_Flds", "C_Hematite", "C_Tot_14A", "A_Hg", "A_Tl", "A_C_Tot", "C_Cr", "C_Kaolinit", 
+        "Top5_As", "Top5_Ba")
 
 #define predictor and response variables in training set, As= 5 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
+train_x = data.matrix(train[, c(3,2,5,27,108,38,88,87,47,11,60,99,106,36,56,26,71,102,8,9)])
 train_y = train[,160]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(3, 2, 27,5, 108,87,38,106, 99,11,60,88)])
+test_x = data.matrix(test[, c(3,2,5,27,108,38,88,87,47,11,60,99,106,36,56,26,71,102,8,9)])
 test_y = test[,160]
 
 #define final training and testing sets
@@ -69,10 +73,10 @@ watchlist = list(train=xgb_train, test=xgb_test)
 #Set parameters from all the tuning, steps 2 and 3
 params = list(alpha = 0,
               lambda = 1,
-              gamma = 0,
+              gamma = 2,
               max_delta_step = 0,
-              eta = 0.005,
-              max_depth = 6,
+              eta = 0.001,
+              max_depth = 4,
               subsample = 0.50,
               colsample_bytree = 0.75,
               min_child_weight = 1,
@@ -80,7 +84,7 @@ params = list(alpha = 0,
 
 #Fully tuned model
 model = xgboost(data = xgb_train, params = params,
-                   nrounds = 750, objective = "binary:logistic",
+                   nrounds = 1000, objective = "binary:logistic",
                    eval_metric = "error", verbose = 1,
                    print_every_n = 100)
   
