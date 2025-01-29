@@ -33,7 +33,9 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
@@ -66,7 +68,7 @@ dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 1,
               gamma = 0,
-              max_delta_step = 0,
+              max_delta_step = 7,
               eta = 0.01,
               max_depth = 4,
               subsample = 0.5,
@@ -97,7 +99,7 @@ sd(dfAc$Train_Error)
 mean(dfAc$Test_Error)
 sd(dfAc$Test_Error)
 
-#write.csv(dfAc, file="20241223_as5ugL_modelTuning_primaryHyperparameters.csv")
+write.csv(dfAc, file="~/Desktop/2025128_as5ugL_modelTuning_primaryHyperparameters_maxdeltastep7.csv")
 
 ##### Ignore Below but don't delete
 

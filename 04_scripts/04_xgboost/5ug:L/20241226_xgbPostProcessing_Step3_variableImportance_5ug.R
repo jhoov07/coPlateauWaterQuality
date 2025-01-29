@@ -33,7 +33,9 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
 Asdata = read.csv("All_As_Data.csv", na.strings = "NULL")
@@ -66,7 +68,7 @@ watchlist = list(train=xgb_train, test=xgb_test)
 dfAc<-data.frame()
 params = list(alpha = 0,
               lambda = 1,
-              gamma = 0,
+              gamma = 2,
               max_delta_step = 0,
               eta = 0.01,
               max_depth = 4,
@@ -140,10 +142,10 @@ for (i in 1:length(qqq$Gain)){
   
   params = list(alpha = 0,
                 lambda = 1,
-                gamma = 0,
+                gamma = 2,
                 max_delta_step = 0,
-                eta = 0.005,
-                max_depth = 6,
+                eta = 0.01,
+                max_depth = 4,
                 subsample = 0.50,
                 colsample_bytree = 0.75,
                 min_child_weight = 1,
@@ -154,7 +156,7 @@ for (i in 1:length(qqq$Gain)){
   for(w in 1:5){
     model = xgb.train(data = xgb_train, params = params,
                       watchlist = watchlist,
-                      nrounds = 750, objective = "binary:logistic",
+                      nrounds = 1000, objective = "binary:logistic",
                       eval_metric = list("error"), verbose = 1,
                       print_every_n = 100)
     
@@ -184,9 +186,54 @@ colnames(dfMetrics)[4]<-"Test_Error"
 colnames(dfMetrics)[5]<-"Test_SD"
 #colnames(dfAc)[2]<-"Test_Error"
 
-#write.csv(dfMetrics, file="20241226_as5XGB_variableDrop_accuracySDImpacts.csv")
+write.csv(dfMetrics, file="~/Desktop/2025128_as5XGB_variableDrop_accuracySDImpacts.csv")
 
+
+
+
+
+
+library(caTools) 
+library(caret)
+library(gbm)
+library(xgboost) # for xgboost
+library("SHAPforxgboost")
+library(data.table)
+#library(tidyverse) # general utility functions
+
+
+# set data and seed values
+date<-Sys.Date()
+set.seed(1234)  # Setting seed 
+
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/5ugL_XGBTuning")
+
+rm(list=ls())
+
+data<-read.csv("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/5ugL_XGBTuning/2025128_as5XGB_variableDrop_accuracySDImpacts.csv")
+dataTS<-ts(data[,3])
+# Calculate a simple moving average with a window size of 3
+sma_result <- TTR::SMA(dataTS, n = 5)
+# Plot the original time series and the moving average
+plot(dataTS, col = "blue", main = "Time Series with Moving Average")
+lines(sma_result, col = "red")
 
 #Make a plot to show how accuracy varies by number of variables
 ggplot(dfMetrics, aes(x=i, y=Test_Error))+geom_line()
+
+
+
+# Install and load required packages
+#install.packages("forecast")
+library(forecast)
+
+# Calculate a simple moving average with a window size of 3
+sma_result <- TTR::SMA(ts_data[,3])
+
+# Plot the original time series and the moving average
+plot(ts_data, col = "blue", main = "Time Series with Simple Moving Average")
+lines(sma_result, col = "red")
+legend("topright", legend = c("Original", "Simple Moving Average"), 
+       col = c("blue", "red"), lty = 1)
 

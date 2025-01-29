@@ -25,7 +25,7 @@ library(gbm)
 library(xgboost) # for xgboost
 #library("SHAPforxgboost")
 library(data.table)
-#library(tidyverse) # general utility functions
+library(tidyverse) # general utility functions
 
 
 rm(list=ls())
@@ -34,7 +34,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 
 #Arsenic_xgb<-readRDS("./XGB_rds/2024-12-08_ClassLTE10_cv10_xgb.rds")
