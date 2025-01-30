@@ -28,6 +28,10 @@ library(data.table)
 library(cutpointr)
 library(tidyverse)
 
+#for spatial data
+library(raster)
+library(sp)
+
 
 rm(list=ls())
 
@@ -35,8 +39,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
@@ -55,11 +59,11 @@ a<-list("pH", "prism30yr", "A_Cs", "A_Aragon", "C_Hematite", "Fe", "Top5_S", "C_
         "DepthToGW", "C_Mo", "Top5_Ca", "A_Tot_14A", "C_Amorph", "C_Analcime")
 
 #define predictor and response variables in training set, As= 10 ug/L, keep variables defined above
-train_x = data.matrix(train[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 108, 80, 11, 58, 65, 66)])
+train_x = data.matrix(train[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 80, 11, 58, 65, 66)]) #remove 108 to test the spatial prediction since I'm missing that layer, between 27 and 80
 train_y = train[,161]
 
 #define predictor and response variables in testing set
-test_x = data.matrix(test[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 108, 80, 11, 58, 65, 66)])
+test_x = data.matrix(test[, c(3, 5, 29, 25, 99, 2, 17, 71, 27, 80, 11, 58, 65, 66)])
 test_y = test[,161]
 
 #define final training and testing sets
@@ -130,3 +134,111 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 shap_long <- shap.prep(xgb_model = model, X_train = train_x)
 # **SHAP summary plot**
 shap.plot.summary(shap_long)
+
+#Spatial prediction
+wd <- ("/Users/hoover/desktop/")
+
+# Open your reference Raster
+#Reference_Raster <- list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern = "Fe_500m.tif$")
+#Reference_Raster <- raster(Reference_Raster)
+
+# Open the other raster
+#Raster <- list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern=".tif$")
+#Raster <- raster(Raster)
+
+## ----list-files-tif--------------------------------------------------
+rasterlist2 <-  list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern=".tif$")
+rasterlist2
+
+#Load each raster to check extent and crop as needed
+A_Aragon<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Aragon_500m.tif" )
+A_Calcite<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Calcite_500m.tif" )
+A_Cs<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Cs_500m.tif" )
+A_Tot_14A<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Tot_14A.tif" )
+
+C_Amorph<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Amorph.tif")
+C_Analcime<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Analcime.tif")
+C_Cr<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Cr_500m.tif")
+C_Hematite<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Hematite_500m.tif")
+C_Mo<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Mo.tif")
+
+Fe<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Fe_500m.tif" )
+pH<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/pH_500m.tif" )
+prism30yr<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/prism30yr_500m.tif" )
+Top5_Ca<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Top5_Ca.tif")
+Top5_S<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Top5_S_500m.tif")
+
+#Change names so they match the XGB model
+A_Aragon@data@names<-"A_Aragon"
+A_Calcite@data@names<-"A_Calcite"
+A_Cs@data@names<-"A_Cs"
+A_Tot_14A@data@names<-"A_Tot_14A"
+
+C_Amorph@data@names<-"C_Amorph"
+C_Analcime@data@names<-"C_Analcime"
+C_Cr@data@names<-"C_Cr"
+C_Hematite@data@names<-"C_Hematite"
+C_Mo@data@names<-"C_Mo"
+
+Fe@data@names<-"Fe"
+pH@data@names<-"pH"
+prism30yr@data@names<-"prism30yr"
+Top5_Ca@data@names<-"Top5_Ca"
+Top5_S@data@names<-"Top5_S"
+
+#Resample
+A_Aragon<-resample(A_Aragon, Fe, method = "ngb")
+A_Calcite<-resample(A_Calcite, Fe, method = "ngb")
+A_Cs<-resample(A_Cs, Fe, method = "ngb")
+A_Tot_14A<-resample(A_Tot_14A, Fe, method = "ngb")
+
+C_Amorph<-resample(C_Amorph, Fe, method = "ngb")
+C_Analcime<-resample(C_Analcime, Fe, method = "ngb")
+C_Cr<-resample(C_Cr, Fe, method = "ngb")
+C_Hematite<-resample(C_Hematite, Fe, method = "ngb")
+C_Mo<-resample(C_Mo, Fe, method = "ngb")
+
+prism30yr <- resample(prism30yr, Fe, method = "ngb")
+Top5_Ca <- resample(Top5_Ca, Fe, method = "ngb")
+Top5_S <- resample(Top5_S, Fe, method = "ngb")
+
+# create raster stack and convert to a maxtrix so it works with predict function for XGB
+rstack1 <- as.matrix(stack(A_Aragon,A_Calcite,A_Cs,A_Tot_14A,
+                 C_Amorph,C_Analcime,C_Cr,C_Hematite,C_Mo,
+                 Fe,pH,prism30yr,Top5_Ca,Top5_S))
+
+rstack1 <- stack(pH, prism30yr, A_Cs, A_Aragon, C_Hematite, Fe, Top5_S, 
+                           C_Cr, A_Calcite, C_Mo, Top5_Ca, A_Tot_14A,
+                           C_Amorph,C_Analcime)
+rstack2<-rasterToPoints(rstack1)
+
+#Make spatial prediction
+spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)]))
+colnames(spatialPred)[1]<-"AsPredict"
+
+rstack3<-as.data.frame(rstack2)
+rstack3$AsPred<-spatialPred$AsPredict
+
+#Convert to raster
+crs<-paste(Fe@srs)
+r<-rasterFromXYZ(rstack3[,c(1,2,17)], res=c(500,500))
+
+#Make a plot and write to file
+plot(r)
+
+#Write to file
+writeRaster(r, "probAs10ugL", format='GTiff')
+
+
+
+
+spatialPred2 <- predict (model, rstack2[,-c(1,2)], )
+
+#Assign output probability to rstack2
+
+
+
+
+plot(Fe)
+str(Fe)
+

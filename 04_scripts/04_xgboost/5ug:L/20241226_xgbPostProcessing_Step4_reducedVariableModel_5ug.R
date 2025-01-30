@@ -120,4 +120,56 @@ confusionMatrix (factor(xgbpred2), factor(test_y))
 #Rerun with different variable subset if needed, might take some tinkering to identify the correct number of variables to keep
 #Make note of the variables to keep then go to script 5 and run the final model and calculate model metrics
 
+wd <- ("/Users/hoover/desktop/")
+
+# Open your reference Raster
+#Reference_Raster <- list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern = "Fe_500m.tif$")
+#Reference_Raster <- raster(Reference_Raster)
+
+# Open the other raster
+#Raster <- list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern=".tif$")
+#Raster <- raster(Raster)
+
+## ----list-files-tif--------------------------------------------------
+rasterlist2 <-  list.files(paste0(wd,"15VariablesforXGB10ugL"), full.names=TRUE, pattern=".tif$")
+rasterlist2
+
+#Load each raster to check extent and crop as needed
+A_Aragon<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Aragon_500m.tif" )
+A_Calcite<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Calcite_500m.tif" )
+A_Cs<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Cs_500m.tif" )
+A_Tot_14A<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/A_Tot_14A.tif" )
+
+C_Amorph<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Amorph.tif")
+C_Analcime<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Analcime.tif")
+C_Cr<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Cr_500m.tif")
+C_Hematite<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Hematite_500m.tif")
+C_Mo<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/C_Mo.tif")
+
+Fe<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Fe_500m.tif" )
+pH<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/pH_500m.tif" )
+prism30yr<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/prism30yr_500m.tif" )
+Top5_Ca<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Top5_Ca.tif")
+Top5_S<-raster("/Users/hoover/desktop/15VariablesforXGB10ugL/Top5_S_500m.tif")
+
+#Resample
+A_Aragon<-resample(A_Aragon, Fe, method = "ngb")
+A_Calcite<-resample(A_Calcite, Fe, method = "ngb")
+A_Cs<-resample(A_Cs, Fe, method = "ngb")
+A_Tot_14A<-resample(A_Tot_14A, Fe, method = "ngb")
+
+C_Amorph<-resample(C_Amorph, Fe, method = "ngb")
+C_Analcime<-resample(C_Analcime, Fe, method = "ngb")
+C_Cr<-resample(C_Cr, Fe, method = "ngb")
+C_Hematite<-resample(C_Hematite, Fe, method = "ngb")
+C_Mo<-resample(C_Mo, Fe, method = "ngb")
+
+prism30yr <- resample(prism30yr, Fe, method = "ngb")
+Top5_Ca <- resample(Top5_Ca, Fe, method = "ngb")
+Top5_S <- resample(Top5_S, Fe, method = "ngb")
+
+# create raster stack
+rstack1 <- stack(A_Aragon,A_Calcite,A_Cs,A_Tot_14A,
+                 C_Amorph,C_Analcime,C_Cr,C_Hematite,C_Mo,
+                 Fe,pH,prism30yr,Top5_Ca,Top5_S)
 
