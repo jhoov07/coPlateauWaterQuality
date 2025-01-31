@@ -34,8 +34,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 
 #Load data
@@ -131,3 +131,94 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 shap_long <- shap.prep(xgb_model = model, X_train = train_x)
 # **SHAP summary plot**
 shap.plot.summary(shap_long)
+
+
+#Load raster files for prediction model
+#for spatial data
+library(raster)
+library(sp)
+library(terra)
+
+wd <- ("/Users/hoover/desktop/")
+rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
+rasterlist2
+
+d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+
+#Load each raster to check extent and crop as needed
+A_C_Tot<-raster(paste(d,"A_C_Tot.tif", sep=""))
+A_Calcite<-raster(paste(d,"A_Calcite.tif", sep=""))
+A_Hg<-raster(paste(d,"A_Hg.tif", sep=""))
+A_Kaolinit<-raster(paste(d,"A_Kaolinit.tif", sep=""))
+A_Quartz<-raster(paste(d,"A_Quartz.tif", sep=""))
+A_Tl<-raster(paste(d,"A_Tl.tif", sep=""))
+A_Tot_Flds<-raster(paste(d,"A_Tot_Flds.tif", sep=""))
+
+C_Cr<-raster(paste(d,"C_Cr.tif", sep=""))
+C_Hematite<-raster(paste(d,"C_Hematite.tif", sep=""))
+#C_Kaolinit<-raster(paste(d,"C_Kaolinit.tif", sep=""))
+C_Sb<-raster(paste(d,"C_Sb.tif", sep=""))
+C_Se<-raster(paste(d,"C_Se.tif", sep=""))
+#C_Tot_14A<-raster(paste(d,"C_Tot_14A.tif", sep=""))
+
+DepthToGW<-raster(paste(d,"DepthToGW.tif", sep=""))
+Fe<-raster(paste(d,"Fe.tif", sep=""))
+pH<-raster(paste(d,"pH.tif", sep=""))
+prism30yr<-raster(paste(d,"prism30yr.tif", sep=""))
+
+Top5_As<-raster(paste(d,"Top5_As.tif", sep=""))
+Top5_Ba<-raster(paste(d,"Top5_Ba.tif", sep=""))
+Top5_Ca<-raster(paste(d,"Top5_Ca.tif", sep=""))
+
+#Change names so they match the XGB model
+A_C_Tot@data@names<-"A_C_Tot"
+A_Calcite@data@names<-"A_Calcite"
+A_Hg@data@names<-"A_Hg"
+A_Kaolinit@data@names<-"A_Kaolinit"
+A_Quartz@data@names<-"A_Quartz"
+A_Tl@data@names<-"A_Tl"
+A_Tot_Flds@data@names<-"A_Tot_Flds"
+
+C_Cr@data@names<-"C_Cr"
+C_Hematite@data@names<-"C_Hematite"
+#C_Kaolinit@data@names<-"C_Kaolinit"
+C_Sb@data@names<-"C_Sb"
+C_Se@data@names<-"C_Se"
+#C_Tot_14A@data@names<-"C_Tot_14A"
+
+DepthToGW@data@names<-"DepthToGW"
+Fe@data@names<-"Fe"
+pH@data@names<-"pH"
+prism30yr@data@names<-"prism30yr"
+
+Top5_As@data@names<-"Top5_As"
+Top5_Ba@data@names<-"Top5_Ba"
+Top5_Ca@data@names<-"Top5_Ca"
+
+[1] "pH"         "Fe"         "prism30yr"  "A_Calcite"  "DepthToGW"  "A_Kaolinit" "C_Se"       "C_Sb"      
+[9] "A_Quartz"   "Top5_Ca"    "A_Tot_Flds" "C_Hematite" "C_Tot_14A"  "A_Hg"       "A_Tl"       "A_C_Tot"   
+[17] "C_Cr"       "C_Kaolinit" "Top5_As"    "Top5_Ba"  
+
+# create raster stack and convert to a maxtrix so it works with predict function for XGB
+rstack1 <- stack(pH, Fe, prism30yr, A_Calcite, DepthToGW, A_Kaolinit, C_Se, C_Sb, A_Quartz,
+                 Top5_Ca, A_Tot_Flds, C_Hematite, C_Tot_14A, A_Hg, A_Tl, A_C_Tot,
+                 C_Cr, , C_Kaolinit, Top5_As, Top5_Ba)
+rstack2<-rasterToPoints(rstack1)
+
+#Make spatial prediction
+spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)]))
+colnames(spatialPred)[1]<-"AsPredict"
+
+rstack3<-as.data.frame(rstack2)
+rstack3$AsPred<-spatialPred$AsPredict
+
+#Convert to raster
+#crs<-paste(Fe@srs)
+r<-rasterFromXYZ(rstack3[,c(1,2,18)], res=c(500,500))
+
+#Make a plot and write to file
+plot(r)
+
+#Write to file
+writeRaster(r, "20250131_probAs5ugL", format='GTiff')
+

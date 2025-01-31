@@ -209,17 +209,3 @@ plot(r)
 
 #Write to file
 writeRaster(r, "20250130_probAs10ugL", format='GTiff')
-
-
-
-
-spatialPred2 <- predict (model, rstack2[,-c(1,2)], )
-
-#Assign output probability to rstack2
-
-
-
-
-plot(Fe)
-str(Fe)
-
