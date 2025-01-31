@@ -220,5 +220,5 @@ r<-rasterFromXYZ(rstack3[,c(1,2,23)], res=c(500,500))
 plot(r)
 
 #Write to file
-writeRaster(r, "20250131_probAs5ugL", format='GTiff')
+writeRaster(r, "20250131_probAs5ugL_V2", format='GTiff')
 
