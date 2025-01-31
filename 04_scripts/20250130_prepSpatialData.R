@@ -147,11 +147,11 @@ writeRaster(C_Analcime, paste(d, "C_Analcime.tif", sep=""))
 writeRaster(C_Cr, paste(d, "C_Cr.tif", sep=""))
 writeRaster(C_Hematite, paste(d, "C_Hematite.tif", sep=""))
 
-#writeRaster(C_Kaolinit, paste(d, "C_Kaolinit.tif", sep=""))
+writeRaster(C_Kaolinit, paste(d, "C_Kaolinit.tif", sep=""))
 writeRaster(C_Mo, paste(d, "C_Mo.tif", sep=""))
 writeRaster(C_Sb, paste(d, "C_Sb.tif", sep=""))
 writeRaster(C_Se, paste(d, "C_Se.tif", sep=""))
-#writeRaster(C_Tot_14A, paste(d, "C_Tot_14A.tif", sep=""))
+writeRaster(C_Tot_14A, paste(d, "C_Tot_14A.tif", sep=""))
 
 writeRaster(DepthToGW, paste(d, "DepthToGW.tif", sep=""))
 writeRaster(pH, paste(d, "pH.tif", sep=""))

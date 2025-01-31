@@ -75,7 +75,7 @@ params = list(alpha = 0,
               lambda = 1,
               gamma = 2,
               max_delta_step = 0,
-              eta = 0.001,
+              eta = 0.01,
               max_depth = 4,
               subsample = 0.50,
               colsample_bytree = 0.75,
@@ -156,10 +156,10 @@ A_Tot_Flds<-raster(paste(d,"A_Tot_Flds.tif", sep=""))
 
 C_Cr<-raster(paste(d,"C_Cr.tif", sep=""))
 C_Hematite<-raster(paste(d,"C_Hematite.tif", sep=""))
-#C_Kaolinit<-raster(paste(d,"C_Kaolinit.tif", sep=""))
+C_Kaolinit<-raster(paste(d,"C_Kaolinit.tif", sep=""))
 C_Sb<-raster(paste(d,"C_Sb.tif", sep=""))
 C_Se<-raster(paste(d,"C_Se.tif", sep=""))
-#C_Tot_14A<-raster(paste(d,"C_Tot_14A.tif", sep=""))
+C_Tot_14A<-raster(paste(d,"C_Tot_14A.tif", sep=""))
 
 DepthToGW<-raster(paste(d,"DepthToGW.tif", sep=""))
 Fe<-raster(paste(d,"Fe.tif", sep=""))
@@ -170,7 +170,7 @@ Top5_As<-raster(paste(d,"Top5_As.tif", sep=""))
 Top5_Ba<-raster(paste(d,"Top5_Ba.tif", sep=""))
 Top5_Ca<-raster(paste(d,"Top5_Ca.tif", sep=""))
 
-#Change names so they match the XGB model
+#Rename fields to match model names
 A_C_Tot@data@names<-"A_C_Tot"
 A_Calcite@data@names<-"A_Calcite"
 A_Hg@data@names<-"A_Hg"
@@ -181,10 +181,10 @@ A_Tot_Flds@data@names<-"A_Tot_Flds"
 
 C_Cr@data@names<-"C_Cr"
 C_Hematite@data@names<-"C_Hematite"
-#C_Kaolinit@data@names<-"C_Kaolinit"
+C_Kaolinit@data@names<-"C_Kaolinit"
 C_Sb@data@names<-"C_Sb"
 C_Se@data@names<-"C_Se"
-#C_Tot_14A@data@names<-"C_Tot_14A"
+C_Tot_14A@data@names<-"C_Tot_14A"
 
 DepthToGW@data@names<-"DepthToGW"
 Fe@data@names<-"Fe"
@@ -195,14 +195,14 @@ Top5_As@data@names<-"Top5_As"
 Top5_Ba@data@names<-"Top5_Ba"
 Top5_Ca@data@names<-"Top5_Ca"
 
-[1] "pH"         "Fe"         "prism30yr"  "A_Calcite"  "DepthToGW"  "A_Kaolinit" "C_Se"       "C_Sb"      
-[9] "A_Quartz"   "Top5_Ca"    "A_Tot_Flds" "C_Hematite" "C_Tot_14A"  "A_Hg"       "A_Tl"       "A_C_Tot"   
-[17] "C_Cr"       "C_Kaolinit" "Top5_As"    "Top5_Ba"  
+#[1] "pH"         "Fe"         "prism30yr"  "A_Calcite"  "DepthToGW"  "A_Kaolinit" "C_Se"       "C_Sb"      
+#[9] "A_Quartz"   "Top5_Ca"    "A_Tot_Flds" "C_Hematite" "C_Tot_14A"  "A_Hg"       "A_Tl"       "A_C_Tot"   
+#[17] "C_Cr"       "C_Kaolinit" "Top5_As"    "Top5_Ba"  
 
 # create raster stack and convert to a maxtrix so it works with predict function for XGB
 rstack1 <- stack(pH, Fe, prism30yr, A_Calcite, DepthToGW, A_Kaolinit, C_Se, C_Sb, A_Quartz,
                  Top5_Ca, A_Tot_Flds, C_Hematite, C_Tot_14A, A_Hg, A_Tl, A_C_Tot,
-                 C_Cr, , C_Kaolinit, Top5_As, Top5_Ba)
+                 C_Cr, C_Kaolinit, Top5_As, Top5_Ba)
 rstack2<-rasterToPoints(rstack1)
 
 #Make spatial prediction
@@ -214,7 +214,7 @@ rstack3$AsPred<-spatialPred$AsPredict
 
 #Convert to raster
 #crs<-paste(Fe@srs)
-r<-rasterFromXYZ(rstack3[,c(1,2,18)], res=c(500,500))
+r<-rasterFromXYZ(rstack3[,c(1,2,23)], res=c(500,500))
 
 #Make a plot and write to file
 plot(r)
