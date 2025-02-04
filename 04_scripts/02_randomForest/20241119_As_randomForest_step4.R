@@ -17,7 +17,6 @@ set.seed(1234)  # Setting seed
 #Load data
 Asdata <- read.csv("All_As_Data.csv")
 
-
 # Filter data into train and test sets based on logical variable 'trainCat2'
 train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
@@ -30,9 +29,60 @@ rownames(test)<-test$SiteID
 AsTrain<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
 AsTest<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
 
+AsTrain_x<-AsTrain[,-151]
+AsTrain_y<-AsTrain[,151]
+
+#Try variable tuning
+library("VSURF")
+toys.vsurf <- VSURF(x = AsTrain_x, y = AsTrain_y, mtry = 54, parallel = TRUE, ncores = 10, clusterType = "FORK")
+
+summary(toys.vsurf)
+plot(toys.vsurf)
+
+toys.vsurf$varselect.interp
+
+#method selects: 2, 27, 97, 8, 13, 25
+#pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
+
+#AsTrain<-AsTrain[,c(2, 27, 97, 8, 13, 25, 151)] #Drop the As concentration, and the categorical variables we already transformed
+#AsTest<-AsTest[,c(2, 27, 97, 8, 13, 25, 151)]
+
 #Ensure ClassLTE1 is a Factor (Categorical Variable)
 AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE10)
 AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE10)
+
+#Run random forest model
+#mtry is from step 1, might want to try different number of trees too
+model<-randomForest(data=AsTrain, ClassLTE10~., mtry=54, ntree=500, importance = TRUE); 
+print(model)
+
+# Predicting the Test set results 
+y_pred <- predict(model, newdata = AsTest)
+
+# Confusion Matrix 
+confusion_mtx <- confusionMatrix(y_pred, AsTest$ClassLTE10, positive ="1")
+confusion_mtx
+
+#pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
+
+#Partial dependence plots to help us sort out the impact on an individual variable on As concentrations
+partialPlot(model, AsTest, pH, "1", xlab="pH", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, A_Cs, "1", xlab="A_Cs", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, C_Hematite, "1", xlab="C_Hematite", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, Top5_Be, "1", xlab="Top5_Be", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, Top5_Ni, "1", xlab="Top5_Ni", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, A_Calcite, "1", xlab="A_Calcite", ylab="As Class", lwd=4, col="green")
+
+
+#
+varImpPlot(model, sort=T, n.var= 6, main= "Variable Importance", pch=16)
+impt<-data.frame(model$importance)
+print(impt[order(impt$MeanDecreaseGini, decreasing = TRUE), ]   )
+
+
+
+##Seems like a drop around variable #10
+# pH, Fe, A_Aragon, C_Cr, DepthToGW, C_Ni, prism30yr, A_Calcite, A_Tot_14A, C_Mo, Top5_S, C_Hematite, A_Cs, Top5_Ni
 
 # Fitting Random Forest to the train dataset 
 tunegrid <- expand.grid(mtry = (1:10)) #Change to 1:84 if testing for real, 1:3 was used for model development
@@ -93,7 +143,7 @@ kappa_value
 sensitivity
 specificity
 
-importance <- varImp(classifier_RF, scale = FALSE)
+
 
 # Plot variable importance
 plot(importance, top = 10, col = "blue",  main = "Random Forest Classification")
