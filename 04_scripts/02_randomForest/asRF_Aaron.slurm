@@ -19,4 +19,4 @@ in_path="/home/u29/aaronnuanez/arsenic/data/All_As_Data.csv"
 out_path="/home/u29/aaronnuanez/arsenic/data/"
 
 
-Rscript /home/u29/aaronnuanez/arsenic/scripts/RF/20250131_As_rRF_forHPC_V1_5ugL.R $in_path $out_path
+Rscript /home/u29/aaronnuanez/arsenic/scripts/20250131_As_rRF_forHPC_V1_5ugL.R $in_path $out_path
