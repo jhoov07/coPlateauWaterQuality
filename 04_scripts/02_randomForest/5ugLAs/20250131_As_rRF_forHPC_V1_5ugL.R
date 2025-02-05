@@ -18,7 +18,7 @@ library(tidyverse)
 
 
 #setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -46,14 +46,14 @@ rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
-AsTest<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
+AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-test[,-c(1, 4, 109:112, 157:159, 161:168)]
 
 
 
 #Ensure ClassLTE1 is a Factor (Categorical Variable)
-AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE10)
-AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE10)
+AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE5)
+AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE5)
 
 # Fitting Random Forest to the train dataset 
 tunegrid <- expand.grid(mtry = (1:150)) #Change to 1:84 if testing for real, 1:3 was used for model development
