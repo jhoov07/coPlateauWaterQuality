@@ -10,7 +10,7 @@
 #SBATCH --partition=standard
 #SBATCH --account=hoover
 #SBATCH --mail-type=BEGIN,END
-#SBATCH --mail-user= aaronnuanez@hpc.arizona.edu
+#SBATCH --mail-user=aaronnuanez@hpc.arizona.edu
 
 module load R/4.4
 #echo 'R_LIBS=~/R/library_R_v4.4/' >> ~/.Renviron
