@@ -52,8 +52,8 @@ AsTest<-test[,-c(1, 4, 109:112, 157:159, 161:168)]
 
 
 #Ensure ClassLTE1 is a Factor (Categorical Variable)
-AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE5)
-AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE5)
+AsTrain$ClassLTE5 <- as.factor(AsTrain$ClassLTE5)
+AsTest$ClassLTE5  <- as.factor(AsTest$ClassLTE5)
 
 # Fitting Random Forest to the train dataset 
 tunegrid <- expand.grid(mtry = (1:150)) #Change to 1:84 if testing for real, 1:3 was used for model development
