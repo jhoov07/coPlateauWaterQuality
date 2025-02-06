@@ -38,8 +38,8 @@ set.seed(1234)  # Setting seed
 Asdata = read.csv(in_path, na.strings = "NULL")
 
 # Filter data into train and test sets based on logical variable 'trainCat2'
-train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
-test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
@@ -65,7 +65,7 @@ tunegrid <- expand.grid(mtry = (1:150)) #Change to 1:84 if testing for real, 1:3
 # Fitting Random Forest to the train dataset 
 classifier_RF<-train(
   data = AsTrain,
-  factor(ClassLTE10) ~ ., 
+  factor(ClassLTE5) ~ ., 
   metric = "Accuracy",
   method = "rf",
   trControl = trainControl(method="cv", number = 2),    #change number = 10 if doing for real
