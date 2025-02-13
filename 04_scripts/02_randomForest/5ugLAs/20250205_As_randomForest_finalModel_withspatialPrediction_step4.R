@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -17,49 +17,53 @@ set.seed(1234)  # Setting seed
 Asdata <- read.csv("All_As_Data.csv")
 
 # Filter data into train and test sets based on logical variable 'trainCat2'
-train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
-test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
-AsTest<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
+AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-test[,-c(1, 4, 109:112, 157:159, 161:168)]
 
 AsTrain_y<-AsTrain[,151]
 AsTest_y<-AsTest[,151]
 
-#method indicates these variables(field indexes): 2, 27, 97, 8, 13, 25
-#pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
+#method indicates these variables(field indexes): 25, 2, 3, 105, 1, 104, 9, 97, 36, 58
+# A_Calcite, pH, prismy30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C_Hematite, A_Kaolinit, A_Tot_Flds
 
-#Keep only useful precitors from variable selection step
-AsTrain<-AsTrain[,c(2, 27, 97, 8, 13, 25, 151)] #Drop the As concentration, and the categorical variables we already transformed
-AsTest<-AsTest[,c(2, 27, 97, 8, 13, 25, 151)]
+#Keep only useful predictors from variable selection step
+AsTrain<-AsTrain[,c(25, 2, 3, 105, 1, 104, 9, 97, 36, 58, 151)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-AsTest[,c(25, 2, 3, 105, 1, 104, 9, 97, 36, 58, 151)]
 
-#Ensure ClassLTE1 is a Factor (Categorical Variable)
-AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE10)
-AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE10)
+#Ensure ClassLTE5 is a Factor (Categorical Variable)
+AsTrain$ClassLTE5 <- as.factor(AsTrain$ClassLTE5)
+AsTest$ClassLTE5  <- as.factor(AsTest$ClassLTE5)
 
 #Run random forest model
 #mtry is from step 1, might want to try different number of trees too
-model<-randomForest(data=AsTrain, factor(ClassLTE10)~., mtry=2, ntree=500, importance = TRUE); 
+model<-randomForest(data=AsTrain, factor(ClassLTE5)~., mtry=116, ntree=500, importance = TRUE); 
 print(model)
 
 #Partial dependence plots to help us sort out the impact on an individual variable on As concentrations
-partialPlot(model, AsTest, pH, "1", xlab="pH", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, A_Cs, "1", xlab="A_Cs", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, C_Hematite, "1", xlab="C_Hematite", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, Top5_Be, "1", xlab="Top5_Be", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, Top5_Ni, "1", xlab="Top5_Ni", ylab="As Class", lwd=4, col="green")
 partialPlot(model, AsTest, A_Calcite, "1", xlab="A_Calcite", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, pH, "1", xlab="pH", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, prism30yr, "1", xlab="prism30yr", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, C_Tot_K_fs, "1", xlab="C_Tot_K_fs", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, Fe, "1", xlab="Fe", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, C_Tot_14A, "1", xlab="C_Tot_14A", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, Top5_Ca, "1", xlab="Top5_Ca", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, C_Hematite, "1", xlab="C_Hematite", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, A_Kaolinit, "1", xlab="A_Kaolinit", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, A_Tot_Flds, "1", xlab="A_Tot_Flds", ylab="As Class", lwd=4, col="green")
 
 # Predicting the Test set results 
 y_pred <- predict(model, newdata = AsTest)
 
 # Confusion Matrix 
-confusion_mtx <- confusionMatrix(y_pred, factor(AsTest$ClassLTE10), positive ="1")
+confusion_mtx <- confusionMatrix(y_pred, factor(AsTest$ClassLTE5), positive ="1")
 confusion_mtx
 
 
@@ -102,15 +106,16 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 
 
 #Spatial predictions
-#method indicates these variables(field indexes): 2, 27, 97, 8, 13, 25
-#pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
+#method indicates these variables(field indexes): 25, 2, 3, 105, 1, 104, 9, 97, 36, 58
+# A_Calcite, pH, prismy30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C_Hematite, A_Kaolinit, A_Tot_Flds
 
 #Load raster files for prediction model
-wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/hoover/desktop/")
+wd <- ("/Users/aaronnuanez/desktop/")
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 #library(terra)
 

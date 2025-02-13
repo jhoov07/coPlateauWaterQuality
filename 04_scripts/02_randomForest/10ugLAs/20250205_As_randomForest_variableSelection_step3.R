@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -76,7 +76,7 @@ classifier_RF
 
 #Run random forest model
 #mtry is from step 1, might want to try different number of trees too
-model<-randomForest(data=AsTrain, factor(ClassLTE10)~., mtry=2, ntree=500, importance = TRUE); 
+model<-randomForest(data=AsTrain, factor(ClassLTE10)~., mtry=5, ntree=500, importance = TRUE); 
 print(model)
 
 # Predicting the Test set results 
