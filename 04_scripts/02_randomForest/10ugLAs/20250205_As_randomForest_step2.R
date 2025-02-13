@@ -4,9 +4,9 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Downloads")
+#setwd("/Users/hoover/Downloads")
 #setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
-
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -31,7 +31,7 @@ AsTest$ClassLTE2  <- as.factor(AsTest$ClassLTE2)
 
 
 #Load data
-classifier_RF <- readRDS("2025-01-31_rf.rds")
+classifier_RF <- readRDS("./RF_rds/2025-02-06_rf_10ugL.rds")
 classifier_RF
 
 #best mtry is 54
