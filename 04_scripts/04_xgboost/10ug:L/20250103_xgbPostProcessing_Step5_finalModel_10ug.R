@@ -39,8 +39,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")
@@ -138,11 +138,14 @@ shap.plot.summary(shap_long)
 
 
 #Load raster files for prediction model
-wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/hoover/desktop/")
+wd <- ("/Users/aaronnuanez/desktop/")
+
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 #library(terra)
 
@@ -208,4 +211,4 @@ r<-rasterFromXYZ(rstack3[,c(1,2,18)], res=c(500,500))
 plot(r)
 
 #Write to file
-writeRaster(r, "20250130_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_XGB_probAs10ugL", format='GTiff')

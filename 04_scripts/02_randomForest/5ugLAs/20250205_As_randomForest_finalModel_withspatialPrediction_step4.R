@@ -115,28 +115,40 @@ wd <- ("/Users/aaronnuanez/desktop/")
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
+#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
 d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
-#library(terra)
+library(raster)
+library(sp)
+library(terra)
 
 #Load each raster to check extent and crop as needed
-pH<-raster(paste(d,"pH.tif", sep=""))
-A_Cs<-raster(paste(d,"A_Cs.tif", sep=""))
-C_Hematite<-raster(paste(d,"C_Hematite.tif", sep=""))
-Top5_Be<-raster(paste(d,"Top5_Be.tif", sep=""))
-Top5_Ni<-raster(paste(d,"Top5_Ni.tif", sep=""))
 A_Calcite<-raster(paste(d,"A_Calcite.tif", sep=""))
+pH<-raster(paste(d,"pH.tif", sep=""))
+prism30yr<-raster(paste(d,"prism30yr.tif", sep=""))
+C_Tot_K_fs<-raster(paste(d,"C_Tot_K_fs.tif", sep=""))
+Fe<-raster(paste(d,"Fe.tif", sep=""))
+C_Tot_14A<-raster(paste(d,"C_Tot_14A.tif", sep=""))
+Top5_Ca<-raster(paste(d,"Top5_Ca.tif", sep=""))
+C_Hematite<-raster(paste(d,"C_Hematite.tif", sep=""))
+A_Kaolinit<-raster(paste(d,"A_Kaolinit.tif", sep=""))
+A_Tot_Flds<-raster(paste(d,"A_Tot_Flds.tif", sep=""))
+
 
 #Change names so they match the XGB model
-pH@data@names<-"pH"
-A_Cs@data@names<-"A_Cs"
-C_Hematite@data@names<-"C_Hematite"
-Top5_Be@data@names<-"Top5_Be"
-Top5_Ni@data@names<-"Top5_Ni"
 A_Calcite@data@names<-"A_Calcite"
+pH@data@names<-"pH"
+prism30yr@data@names<-"prism30yr"
+C_Tot_K_fs@data@names<-"C_Tot_K_fs"
+Fe@data@names<-"Fe"
+C_Tot_14A@data@names<-"C_Tot_14A"
+Top5_Ca@data@names<-"Top5_Ca"
+C_Hematite@data@names<-"C_Hematite"
+A_Kaolinit@data@names<-"A_Kaolinit"
+A_Tot_Flds@data@names<-"A_Tot_Flds"
 
 # create raster stack and convert to a maxtrix so it works with predict function for XGB
-rstack1 <- stack(pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite)
+rstack1 <- stack(A_Calcite, pH, prism30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C_Hematite, A_Kaolinit, A_Tot_Flds)
 rstack2<-rasterToPoints(rstack1)
 
 #Make spatial prediction
@@ -153,4 +165,4 @@ r<-rasterFromXYZ(rstack3[,c(1,2,8)], res=c(500,500))
 plot(r)
 
 #Write to file
-writeRaster(r, "20250130_randomForest_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs5ugL", format='GTiff')

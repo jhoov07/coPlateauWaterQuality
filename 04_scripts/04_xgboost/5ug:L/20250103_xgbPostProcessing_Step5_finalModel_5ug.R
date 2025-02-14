@@ -34,8 +34,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 
 #Load data
@@ -139,11 +139,16 @@ library(raster)
 library(sp)
 library(terra)
 
-wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/hoover/desktop/")
+wd <- ("/Users/aaronnuanez/desktop/")
+
+
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
+
 
 #Load each raster to check extent and crop as needed
 A_C_Tot<-raster(paste(d,"A_C_Tot.tif", sep=""))
@@ -220,5 +225,5 @@ r<-rasterFromXYZ(rstack3[,c(1,2,23)], res=c(500,500))
 plot(r)
 
 #Write to file
-writeRaster(r, "20250131_probAs5ugL_V2", format='GTiff')
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_XGB_probAs5ugL", format='GTiff')
 

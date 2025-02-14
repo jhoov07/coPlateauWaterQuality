@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -106,13 +106,18 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 #pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
 
 #Load raster files for prediction model
-wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/hoover/desktop/")
+wd <- ("/Users/aaronnuanez/desktop/")
+
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
-#library(terra)
+library(raster)
+library(sp)
+library(terra)
 
 #Load each raster to check extent and crop as needed
 pH<-raster(paste(d,"pH.tif", sep=""))
@@ -148,4 +153,4 @@ r<-rasterFromXYZ(rstack3[,c(1,2,8)], res=c(500,500))
 plot(r)
 
 #Write to file
-writeRaster(r, "20250130_randomForest_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs10ugL", format='GTiff')
