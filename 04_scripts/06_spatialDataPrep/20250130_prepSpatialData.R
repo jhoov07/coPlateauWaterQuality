@@ -50,7 +50,7 @@ C_Mo<-rast(paste(wd,"/C_Mo.tif", sep=""))
 C_Sb<-rast(paste(wd,"/C_Sb.tif", sep=""))
 C_Se<-rast(paste(wd,"/C_Se.tif", sep=""))
 C_Tot_14A<-rast(paste(wd,"/C_Tot_14A.tif", sep=""))
-C_Tot_K_s<-rast(paste(wd,"/C_Tot_K_s.tif", sep=""))
+C_Tot_K_fs<-rast(paste(wd,"/C_Tot_K_fs.tif", sep=""))
 
 
 DepthToGW<-rast(paste(wd,"/DepthToGW_V2.tif", sep=""))
@@ -145,7 +145,7 @@ Top5_Ni<-crop(Top5_Ni, Fe, mask = TRUE)
 
 
 #Write cropped rasters to file
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 writeRaster(A_Aragon, paste(d, "A_Aragon.tif", sep=""))
 writeRaster(A_C_Tot, paste(d, "A_C_Tot.tif", sep=""))
