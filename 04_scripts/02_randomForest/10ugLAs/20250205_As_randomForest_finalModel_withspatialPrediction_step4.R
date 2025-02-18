@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -106,14 +106,14 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 #pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
 
 #Load raster files for prediction model
-#wd <- ("/Users/hoover/desktop/")
-wd <- ("/Users/aaronnuanez/desktop/")
+wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/aaronnuanez/desktop/")
 
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
-d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
+d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 library(raster)
 library(sp)
@@ -140,17 +140,18 @@ rstack1 <- stack(pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite)
 rstack2<-rasterToPoints(rstack1)
 
 #Make spatial prediction
-spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)]))
-colnames(spatialPred)[1]<-"AsPredict"
+spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)], type="prob"))
+colnames(spatialPred)[1]<-"ProbNotExceed"
+colnames(spatialPred)[2]<-"ProbExceed"
 
 rstack3<-as.data.frame(rstack2)
-rstack3$AsPred<-spatialPred$AsPredict
+rstack3$AsPred<-spatialPred$ProbExceed
 
 #Convert to raster
-r<-rasterFromXYZ(rstack3[,c(1,2,8)], res=c(500,500))
+r<-rasterFromXYZ(rstack3[,c(1,2,9)], res=c(500,500))
 
 #Make a plot and write to file
 plot(r)
 
 #Write to file
-writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250218_randomForest_probAs10ugL", format='GTiff')

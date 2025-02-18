@@ -18,8 +18,8 @@
 #[19] "Top5_Ba.tif"        "Top5_Ca.tif"       "C_Tot_K_fs.tif"
 
 rm(list=ls()) #clean up the workspace
-#wd <- ("/Users/hoover/desktop/tifsForModeling") #write using local folder since the files are too large for GitHub
-wd <- ("/Users/aaronnuanez/desktop/tifsForModeling") #write using local folder since the files are too large for GitHub
+wd <- ("/Users/hoover/desktop/tifsForModeling") #write using local folder since the files are too large for GitHub
+#wd <- ("/Users/aaronnuanez/desktop/tifsForModeling") #write using local folder since the files are too large for GitHub
 
 
 
