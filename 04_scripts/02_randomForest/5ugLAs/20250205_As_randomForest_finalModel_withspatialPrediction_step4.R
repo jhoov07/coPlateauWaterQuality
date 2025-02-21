@@ -21,8 +21,8 @@ train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] #Need up update this field
 test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
-rownames(train)<-train$SiteID
-rownames(test)<-test$SiteID
+rownames(train)<-paste(train$SiteID, train$Data_Source, sep="_")
+rownames(test)<-paste(test$SiteID, test$Data_Source, sep="_")
 
 #Drop unused fields
 AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #Drop the As concentration, and the categorical variables we already transformed
@@ -80,10 +80,19 @@ colnames(y_predJoin)[2]<-"PredClass"
 colnames(y_predJoin)[3]<-"ProbNotexceed"
 colnames(y_predJoin)[4]<-"ProbExceed"
 
-#y_predJoin$SiteID<-as.factor(rownames(y_predJoin))
+y_predJoin$SiteID<-as.factor(rownames(y_predJoin))
+
+#Assign values for mapping, 0 = true negative, 1 = true positive; 2 = false negative; 3 = false positive
+y_predJoin$outcomeClass<-NA
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 0 & y_predJoin$PredClass==0]<-0
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==1]<-1
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==0]<-2
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 0 & y_predJoin$PredClass==1]<-3
+summary(factor(y_predJoin$outcomeClass))
+
 
 #Write to file for us in GIS
-#write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping.csv")
+write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V2.csv")
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 library(cutpointr)
