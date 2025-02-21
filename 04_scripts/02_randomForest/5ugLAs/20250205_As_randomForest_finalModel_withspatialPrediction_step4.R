@@ -80,7 +80,17 @@ colnames(y_predJoin)[2]<-"PredClass"
 colnames(y_predJoin)[3]<-"ProbNotexceed"
 colnames(y_predJoin)[4]<-"ProbExceed"
 
-y_predJoin$SiteID<-as.factor(rownames(y_predJoin))
+y_predJoin$SiteInfo<-as.factor(rownames(y_predJoin))
+
+y_predJoin$DataSource<-NA
+y_predJoin$DataSource[grep("NNWells", y_predJoin$SiteInfo)]<-"NNWells"
+y_predJoin$DataSource[grep("WQP", y_predJoin$SiteInfo)]<-"WQP"
+summary(factor(y_predJoin$DataSource))
+
+#Site ID
+y_predJoin$SiteID<-NA
+y_predJoin$SiteID<-as.numeric(gsub("\\D", "", y_predJoin$SiteInfo))
+summary(factor(y_predJoin$SiteID))
 
 #Assign values for mapping, 0 = true negative, 1 = true positive; 2 = false negative; 3 = false positive
 y_predJoin$outcomeClass<-NA
@@ -89,10 +99,11 @@ y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==1]<-1
 y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==0]<-2
 y_predJoin$outcomeClass[y_predJoin$Obsclass== 0 & y_predJoin$PredClass==1]<-3
 summary(factor(y_predJoin$outcomeClass))
+summary(factor(y_predJoin$outcomeClass))
 
 
 #Write to file for us in GIS
-write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V2.csv")
+write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V3.csv")
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 library(cutpointr)
