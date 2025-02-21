@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -72,16 +72,22 @@ rfpred <- data.frame(predict (model, AsTest, type="prob"))
 
 #Adjust the "true" threshold using Youden value
 #For a figure
-y_predJoin<-data.frame(cbind(AsTest_y, rfpred))#change field to match outcome modeled, this applies to LT10
+y_predJoin<-data.frame(cbind(AsTest_y, y_pred ,rfpred))#change field to match outcome modeled, this applies to LT10
 
 #rename fields for ease of use
 colnames(y_predJoin)[1]<-"Obsclass"
-colnames(y_predJoin)[2]<-"PredNotexceed"
-colnames(y_predJoin)[3]<-"PredExceed"
+colnames(y_predJoin)[2]<-"PredClass"
+colnames(y_predJoin)[3]<-"ProbNotexceed"
+colnames(y_predJoin)[4]<-"ProbExceed"
+
+#y_predJoin$SiteID<-as.factor(rownames(y_predJoin))
+
+#Write to file for us in GIS
+#write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping.csv")
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 library(cutpointr)
-cp <- cutpointr(y_predJoin, PredExceed, Obsclass, 
+cp <- cutpointr(y_predJoin, ProbExceed, Obsclass, 
                 method = maximize_metric, metric = youden, pot_class = 1)
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
