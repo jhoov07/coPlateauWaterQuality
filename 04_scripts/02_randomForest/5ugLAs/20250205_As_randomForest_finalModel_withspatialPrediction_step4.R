@@ -103,7 +103,7 @@ summary(factor(y_predJoin$outcomeClass))
 
 
 #Write to file for us in GIS
-write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V3.csv")
+#write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V3.csv")
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 library(cutpointr)
@@ -136,16 +136,17 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 # A_Calcite, pH, prismy30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C_Hematite, A_Kaolinit, A_Tot_Flds
 
 #Load raster files for prediction model
-#wd <- ("/Users/hoover/desktop/")
-wd <- ("/Users/aaronnuanez/desktop/")
+wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/aaronnuanez/desktop/")
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
-d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
+d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 library(raster)
 library(sp)
+library(sf)
 library(terra)
 
 #Load each raster to check extent and crop as needed
@@ -178,17 +179,40 @@ rstack1 <- stack(A_Calcite, pH, prism30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C
 rstack2<-rasterToPoints(rstack1)
 
 #Make spatial prediction
-spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)]))
-colnames(spatialPred)[1]<-"AsPredict"
+spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)], type="prob"))
+colnames(spatialPred)[2]<-"AsPredict"
 
 rstack3<-as.data.frame(rstack2)
 rstack3$AsPred<-spatialPred$AsPredict
 
 #Convert to raster
-r<-rasterFromXYZ(rstack3[,c(1,2,8)], res=c(500,500))
+r<-rasterFromXYZ(rstack3[,c(1,2,13)], res=c(500,500))
+
+ggplot(r)+geom_sf(my_sf, aes(fill=FIPS))
+
+library(tidyterra)
+ggplot() + geom_spatraster(data = r)
+
+
+#Load state boundary
+my_sf <- read_sf("/Users/hoover/downloads/s_05mr24/fourcorners.shp")
 
 #Make a plot and write to file
+# Basic plot of this shape file:
+#par(mar = c(0, 0, 0, 0))
+#plot(st_geometry(my_sf), col = "#f2f2f2", bg = "skyblue", lwd = 0.25, border = 1)
+plot(my_sf)
 plot(r)
+
+ggplot(r) +
+  theme_void()
+
+
+ggplot() + 
+  geom_sf(data = my_sf) +
+  geom_sf(data = r) +
+  ggtitle("NEON Harvard Forest Field Site") + 
+  coord_sf()
 
 #Write to file
 writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs5ugL", format='GTiff')
