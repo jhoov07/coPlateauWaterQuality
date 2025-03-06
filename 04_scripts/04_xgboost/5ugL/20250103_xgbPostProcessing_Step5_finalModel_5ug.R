@@ -34,8 +34,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 
 #Load data
@@ -129,8 +129,17 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 
 # To prepare the long-format data:
 shap_long <- shap.prep(xgb_model = model, X_train = train_x)
+ 
+contr<-predict(model, test_x, predcontrib = T)
+
 # **SHAP summary plot**
 shap.plot.summary(shap_long)
+
+contr<-predict(model, test_x, predcontrib = T)
+xgb.plot.shap(data = test_x, shap_contrib = contr, model = model, top_n = 20, n_col = 4)
+
+
+#xgb.plot.shap(shap_values)
 
 
 #Load raster files for prediction model

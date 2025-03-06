@@ -187,32 +187,10 @@ rstack3$AsPred<-spatialPred$AsPredict
 
 #Convert to raster
 r<-rasterFromXYZ(rstack3[,c(1,2,13)], res=c(500,500))
+crs(r) <- "EPSG:5070"
+projection(r)
 
-ggplot(r)+geom_sf(my_sf, aes(fill=FIPS))
-
-library(tidyterra)
-ggplot() + geom_spatraster(data = r)
-
-
-#Load state boundary
-my_sf <- read_sf("/Users/hoover/downloads/s_05mr24/fourcorners.shp")
-
-#Make a plot and write to file
-# Basic plot of this shape file:
-#par(mar = c(0, 0, 0, 0))
-#plot(st_geometry(my_sf), col = "#f2f2f2", bg = "skyblue", lwd = 0.25, border = 1)
-plot(my_sf)
 plot(r)
 
-ggplot(r) +
-  theme_void()
-
-
-ggplot() + 
-  geom_sf(data = my_sf) +
-  geom_sf(data = r) +
-  ggtitle("NEON Harvard Forest Field Site") + 
-  coord_sf()
-
 #Write to file
-writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs5ugL", format='GTiff')
+writeRaster(r, "/Users/hoover/Desktop/20250228_randomForest_probAs5ugL", format='GTiff')

@@ -39,8 +39,8 @@ rm(list=ls())
 date<-Sys.Date()
 set.seed(1234)  # Setting seed 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data/")
 
 #Load data
 #Asdata = read.csv(in_path, na.strings = "NULL")

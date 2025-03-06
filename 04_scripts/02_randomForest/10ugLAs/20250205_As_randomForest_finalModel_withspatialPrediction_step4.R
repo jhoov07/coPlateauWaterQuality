@@ -82,6 +82,8 @@ cp <- cutpointr(y_predJoin, PredExceed, Obsclass,
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
 
+
+
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)
 a$sens<-a$tp/(a$tp+a$fn) #sensitivity
@@ -149,9 +151,11 @@ rstack3$AsPred<-spatialPred$ProbExceed
 
 #Convert to raster
 r<-rasterFromXYZ(rstack3[,c(1,2,9)], res=c(500,500))
+crs(r) <- "EPSG:5070"
+projection(r)
 
 #Make a plot and write to file
 plot(r)
 
 #Write to file
-writeRaster(r, "/Users/aaronnuanez/Desktop/20250218_randomForest_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/hoover/Desktop/20250228_randomForest_probAs10ugL", format='GTiff')
