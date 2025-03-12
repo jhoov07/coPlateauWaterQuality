@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -21,8 +21,8 @@ train <- Asdata[Asdata$trainClassLTE5_splt == TRUE, ] #Need up update this field
 test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
-rownames(train)<-train$SiteID
-rownames(test)<-test$SiteID
+rownames(train)<-paste(train$SiteID, train$Data_Source, sep="_")
+rownames(test)<-paste(test$SiteID, test$Data_Source, sep="_")
 
 #Drop unused fields
 AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #Drop the As concentration, and the categorical variables we already transformed
@@ -72,18 +72,44 @@ rfpred <- data.frame(predict (model, AsTest, type="prob"))
 
 #Adjust the "true" threshold using Youden value
 #For a figure
-y_predJoin<-data.frame(cbind(AsTest_y, rfpred))#change field to match outcome modeled, this applies to LT10
+y_predJoin<-data.frame(cbind(AsTest_y, y_pred ,rfpred))#change field to match outcome modeled, this applies to LT10
 
 #rename fields for ease of use
 colnames(y_predJoin)[1]<-"Obsclass"
-colnames(y_predJoin)[2]<-"PredNotexceed"
-colnames(y_predJoin)[3]<-"PredExceed"
+colnames(y_predJoin)[2]<-"PredClass"
+colnames(y_predJoin)[3]<-"ProbNotexceed"
+colnames(y_predJoin)[4]<-"ProbExceed"
+
+y_predJoin$SiteInfo<-as.factor(rownames(y_predJoin))
+
+y_predJoin$DataSource<-NA
+y_predJoin$DataSource[grep("NNWells", y_predJoin$SiteInfo)]<-"NNWells"
+y_predJoin$DataSource[grep("WQP", y_predJoin$SiteInfo)]<-"WQP"
+summary(factor(y_predJoin$DataSource))
+
+#Site ID
+y_predJoin$SiteID<-NA
+y_predJoin$SiteID<-as.numeric(gsub("\\D", "", y_predJoin$SiteInfo))
+summary(factor(y_predJoin$SiteID))
+
+#Assign values for mapping, 0 = true negative, 1 = true positive; 2 = false negative; 3 = false positive
+y_predJoin$outcomeClass<-NA
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 0 & y_predJoin$PredClass==0]<-0
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==1]<-1
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 1 & y_predJoin$PredClass==0]<-2
+y_predJoin$outcomeClass[y_predJoin$Obsclass== 0 & y_predJoin$PredClass==1]<-3
+summary(factor(y_predJoin$outcomeClass))
+summary(factor(y_predJoin$outcomeClass))
+
+
+#Write to file for us in GIS
+#write.csv(y_predJoin, file="20250221_5ugL_rf_testDataForMapping_V3.csv")
 
 #Use cutpoint to identify threshold for As 'detection' balancing sensitivity and specificity using Youden metric
 library(cutpointr)
-cp <- cutpointr(y_predJoin, PredExceed, Obsclass, 
+cp <- cutpointr(y_predJoin, ProbExceed, Obsclass, 
                 method = maximize_metric, metric = youden, pot_class = 1)
-summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
+summary(cp) #make note of the cutpoint value for comparison with lines 91-93 above
 plot(cp)
 
 #Extract ROC Curve data for plotting
@@ -110,16 +136,17 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 # A_Calcite, pH, prismy30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C_Hematite, A_Kaolinit, A_Tot_Flds
 
 #Load raster files for prediction model
-#wd <- ("/Users/hoover/desktop/")
-wd <- ("/Users/aaronnuanez/desktop/")
+wd <- ("/Users/hoover/desktop/")
+#wd <- ("/Users/aaronnuanez/desktop/")
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
-d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
+d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 library(raster)
 library(sp)
+library(sf)
 library(terra)
 
 #Load each raster to check extent and crop as needed
@@ -152,17 +179,26 @@ rstack1 <- stack(A_Calcite, pH, prism30yr, C_Tot_K_fs, Fe, C_Tot_14A, Top5_Ca, C
 rstack2<-rasterToPoints(rstack1)
 
 #Make spatial prediction
-spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)]))
-colnames(spatialPred)[1]<-"AsPredict"
+spatialPred <- as.data.frame(predict (model, rstack2[,-c(1,2)], type="prob"))
+colnames(spatialPred)[2]<-"AsPredict"
 
 rstack3<-as.data.frame(rstack2)
 rstack3$AsPred<-spatialPred$AsPredict
 
 #Convert to raster
-r<-rasterFromXYZ(rstack3[,c(1,2,8)], res=c(500,500))
+<<<<<<< HEAD
+r<-rasterFromXYZ(rstack3[,c(1,2,11)], res=c(500,500))
+=======
+r<-rasterFromXYZ(rstack3[,c(1,2,13)], res=c(500,500))
+crs(r) <- "EPSG:5070"
+projection(r)
+>>>>>>> 76459b16812439ad6e7f523698b2762a5d84ea57
 
-#Make a plot and write to file
 plot(r)
 
 #Write to file
-writeRaster(r, "/Users/aaronnuanez/Desktop/20250214_randomForest_probAs5ugL", format='GTiff')
+<<<<<<< HEAD
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250218_randomForest_probAs5ugL", format='GTiff')
+=======
+writeRaster(r, "/Users/hoover/Desktop/20250228_randomForest_probAs5ugL", format='GTiff')
+>>>>>>> 76459b16812439ad6e7f523698b2762a5d84ea57

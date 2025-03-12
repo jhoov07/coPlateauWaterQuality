@@ -4,8 +4,8 @@ library(caret)
 library(tidyverse)
 
 
-setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
-#setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
+#setwd("/Users/hoover/Documents/GitHub/coPlateauWaterQuality/03_data/")
+setwd("/Users/aaronnuanez/Documents/GitHub/coPlateauWaterQuality/03_data")
 
 rm(list=ls())
 
@@ -82,6 +82,8 @@ cp <- cutpointr(y_predJoin, PredExceed, Obsclass,
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
 
+
+
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)
 a$sens<-a$tp/(a$tp+a$fn) #sensitivity
@@ -106,14 +108,14 @@ ggplot(df, aes(x = x.sorted, y = value)) +
 #pH, A_Cs, C_Hematite, Top5_Be, Top5_Ni, A_Calcite
 
 #Load raster files for prediction model
-wd <- ("/Users/hoover/desktop/")
-#wd <- ("/Users/aaronnuanez/desktop/")
+#wd <- ("/Users/hoover/desktop/")
+wd <- ("/Users/aaronnuanez/desktop/")
 
 rasterlist2 <-  list.files(paste0(wd,"spatialPredFormattedTifs"), full.names=TRUE, pattern=".tif$")
 rasterlist2
 
-d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
-#d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
+#d<-"/Users/hoover/desktop/spatialPredFormattedTifs/"
+d<-"/Users/aaronnuanez/desktop/spatialPredFormattedTifs/"
 
 library(raster)
 library(sp)
@@ -149,9 +151,11 @@ rstack3$AsPred<-spatialPred$ProbExceed
 
 #Convert to raster
 r<-rasterFromXYZ(rstack3[,c(1,2,9)], res=c(500,500))
+crs(r) <- "EPSG:5070"
+projection(r)
 
 #Make a plot and write to file
 plot(r)
 
 #Write to file
-writeRaster(r, "/Users/aaronnuanez/Desktop/20250218_randomForest_probAs10ugL", format='GTiff')
+writeRaster(r, "/Users/hoover/Desktop/20250228_randomForest_probAs10ugL", format='GTiff')
