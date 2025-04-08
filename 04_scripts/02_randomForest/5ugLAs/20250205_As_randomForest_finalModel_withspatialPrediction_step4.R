@@ -24,6 +24,7 @@ test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ] #Need up update this field
 rownames(train)<-paste(train$SiteID, train$Data_Source, sep="_")
 rownames(test)<-paste(test$SiteID, test$Data_Source, sep="_")
 
+
 #Drop unused fields
 AsTrain<-train[,-c(1, 4, 109:112, 157:159, 161:168)] #Drop the As concentration, and the categorical variables we already transformed
 AsTest<-test[,-c(1, 4, 109:112, 157:159, 161:168)]
@@ -111,6 +112,15 @@ cp <- cutpointr(y_predJoin, ProbExceed, Obsclass,
                 method = maximize_metric, metric = youden, pot_class = 1)
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
+
+# Predicting the Test set results 
+y_predAdj <- data.frame(predict(model, newdata = AsTest, type="prob"))
+y_predAdj$class<-0
+y_predAdj$class[y_predAdj$X1>=0.396]<-1
+
+# Confusion Matrix 
+confusion_mtx <- confusionMatrix(factor(y_predAdj$class), factor(AsTest$ClassLTE5), positive ="1")
+confusion_mtx
 
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)

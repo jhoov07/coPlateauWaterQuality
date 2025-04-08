@@ -50,6 +50,35 @@ test <- Asdata[Asdata$trainClassLTE5_splt == FALSE, ]
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
+#CDF plot for As by training/testing
+hist_plot<-ggplot(Asdata, aes(x = As, color = factor(trainClassLTE5_splt))) +
+  #stat_ecdf(size = 1) +  # ECDF (Empirical Cumulative Distribution Function)
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +  # Histogram with bins
+  labs(title = "Groundwater As Histogram",
+       x = "As (ug/L)",
+       y = "Wells (Count)") +
+  scale_x_continuous(breaks = seq(5, 70, by = 5),  # Custom tick marks
+                                     limits = c(0, 70)) + # Set x-axis range 
+  scale_y_continuous(limits = c(0, 600)) +  # Limit y-axis range
+  theme_minimal() +
+  scale_color_manual(values = c("blue", "red"))  # Customize colors
+
+ggsave(filename = "histogram.png", plot = hist_plot, width = 6, height = 4, dpi = 300)
+
+
+#Temp
+#counts
+# Define the threshold
+threshold <- 5
+
+# Count records where 'Value' exceeds the threshold
+count_exceeding <- sum(train$As >= threshold); print(count_exceeding)
+count_lessThan <- sum(train$As < threshold); print(count_lessThan)
+
+# Count records where 'Value' exceeds the threshold
+count_exceeding <- sum(test$As >= threshold); print(count_exceeding)
+count_lessThan <- sum(test$As < threshold); print(count_lessThan)
+
 #Make a list of the fewest number of variables with the highest overall prediction accuracy
 a<-list("pH", "Fe", "prism30yr", "A_Calcite", "DepthToGW", "A_Kaolinit", "C_Se", "C_Sb", "A_Quartz", 
         "Top5_Ca", "A_Tot_Flds", "C_Hematite", "C_Tot_14A", "A_Hg", "A_Tl", "A_C_Tot", "C_Cr", "C_Kaolinit", 
@@ -109,6 +138,12 @@ cp <- cutpointr(y_predJoin, Predexceed, Obsclass,
                 method = maximize_metric, metric = youden, pot_class = 1)
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
+ab<-cp$optimal_cutpoint
+
+#Testing Data
+xgbpred <- predict (model, xgb_test)
+xgbpredAdj <- ifelse (xgbpred >=ab,1,0)
+confusionMatrix (factor(xgbpredAdj), factor(test_y), positive = "1") #keep this for reporting
 
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)

@@ -113,6 +113,13 @@ cp <- cutpointr(y_predJoin, Predexceed, Obsclass,
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
 
+ab<-cp$optimal_cutpoint
+
+#Testing Data
+xgbpred <- predict (model, xgb_test)
+xgbpredAdj <- ifelse (xgbpred >=ab,1,0)
+confusionMatrix (factor(xgbpredAdj), factor(test_y), positive = "1") #keep this for reporting
+
 #Extract ROC Curve data for plotting
 a<-as.data.frame(cp$roc_curve)
 a$sens<-a$tp/(a$tp+a$fn) #sensitivity
@@ -136,8 +143,17 @@ shap_long <- shap.prep(xgb_model = model, X_train = train_x)
 # **SHAP summary plot**
 shap.plot.summary(shap_long)
 
+# Calculate SHAP values
+shap_values <- shap.values(xgb_model = model, X_train = train_x)
 
-#Load raster files for prediction model
+library(SHAPforxgboost)
+# Plot SHAP values for a specific feature (e.g., Sepal.Length)
+shap.plot.dependence(data_long = shap_long, x="pH")
+shap.plot.dependence(data_long = shap_long, x="Fe")
+shap.plot.dependence(data_long = shap_long, x="A_Calcite")
+shap.plot.dependence(data_long = shap_long, x="DepthToGW")
+
+#Load raster files for predictionshap_long_iris#Load raster files for prediction model
 #wd <- ("/Users/hoover/desktop/")
 wd <- ("/Users/aaronnuanez/desktop/")
 

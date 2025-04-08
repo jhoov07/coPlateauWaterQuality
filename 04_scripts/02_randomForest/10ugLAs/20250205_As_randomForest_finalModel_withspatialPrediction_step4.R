@@ -47,13 +47,19 @@ AsTest$ClassLTE10  <- as.factor(AsTest$ClassLTE10)
 model<-randomForest(data=AsTrain, factor(ClassLTE10)~., mtry=2, ntree=500, importance = TRUE); 
 print(model)
 
+
 #Partial dependence plots to help us sort out the impact on an individual variable on As concentrations
-partialPlot(model, AsTest, pH, "1", xlab="pH", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, A_Cs, "1", xlab="A_Cs", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, C_Hematite, "1", xlab="C_Hematite", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, Top5_Be, "1", xlab="Top5_Be", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, Top5_Ni, "1", xlab="Top5_Ni", ylab="As Class", lwd=4, col="green")
-partialPlot(model, AsTest, A_Calcite, "1", xlab="A_Calcite", ylab="As Class", lwd=4, col="green")
+partialDatapH<-partialPlot(model, AsTest, pH, "1", xlab="pH", ylab="Relative Logit Contribution for As > 10 ug/L", lwd=3, col="black")
+partial_df <- data.frame(
+  ph = partialDatapH$x,
+  Predicted = partialDatapH$y
+)
+
+#partialPlot(model, AsTest, A_Cs, "1", xlab="A_Cs", ylab="", lwd=4, col="green")
+#partialPlot(model, AsTest, C_Hematite, "1", xlab="C_Hematite", ylab="As Class", lwd=4, col="green")
+#partialPlot(model, AsTest, Top5_Be, "1", xlab="Top5_Be", ylab="As Class", lwd=4, col="green")
+#partialPlot(model, AsTest, Top5_Ni, "1", xlab="Top5_Ni", ylab="As Class", lwd=4, col="green")
+partialPlot(model, AsTest, A_Calcite, "1", xlab="Calcite (mg/kg) - A Horizon", ylab="Relative Logit Contribution for As > 10 ug/L", lwd=3, col="black")
 
 # Predicting the Test set results 
 y_pred <- predict(model, newdata = AsTest)
@@ -81,6 +87,15 @@ cp <- cutpointr(y_predJoin, PredExceed, Obsclass,
                 method = maximize_metric, metric = youden, pot_class = 1)
 summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
 plot(cp)
+
+# Predicting the Test set results 
+y_predAdj <- data.frame(predict(model, newdata = AsTest, type="prob"))
+y_predAdj$class<-0
+y_predAdj$class[y_predAdj$X1>=0.158]<-1
+
+# Confusion Matrix 
+confusion_mtx <- confusionMatrix(factor(y_predAdj$class), factor(AsTest$ClassLTE10), positive ="1")
+confusion_mtx
 
 
 

@@ -79,6 +79,31 @@ classifier_RF
 model<-randomForest(data=AsTrain, factor(ClassLTE5)~., mtry=3, ntree=500, importance = TRUE); 
 print(model)
 
+
+# Extract variable importance
+importance_df <- data.frame(
+  Variable = rownames(importance(model)),
+  Importance = importance(model)[, "MeanDecreaseGini"]  # Using Gini importance
+)
+
+# Select top 10 most important variables
+top_vars <- importance_df %>%
+  arrange(desc(Importance)) %>%
+  slice_head(n = 15)  # Keep top 10 variables
+
+# Create variable importance plot
+xy<-ggplot(top_vars, aes(x = reorder(Variable, Importance), y = Importance)) +
+  geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +
+  coord_flip() +  # Flip for better readability
+  labs(title = "Variable Importance, Random Forest at 5 ug/L Threshold",
+       x = "Variable",
+       y = "Importance (Mean Decrease in Gini)") +
+  theme_classic()
+
+# Save the plot as a PNG file
+ggsave(filename = "20250320_rf5ugL_vip.png", plot = xy, width = 6, height = 4, dpi = 300)
+
+
 # Predicting the Test set results 
 y_pred <- predict(model, newdata = AsTest)
 
