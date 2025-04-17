@@ -110,7 +110,7 @@ summary(factor(y_predJoin$outcomeClass))
 library(cutpointr)
 cp <- cutpointr(y_predJoin, ProbExceed, Obsclass, 
                 method = maximize_metric, metric = youden, pot_class = 1)
-summary(cp) #make note of the cutpoint value for comparision with lines 91-93 above
+summary(cp) #make note of the cutpoint value for comparison with lines 91-93 above
 plot(cp)
 
 # Predicting the Test set results 
@@ -196,11 +196,19 @@ rstack3<-as.data.frame(rstack2)
 rstack3$AsPred<-spatialPred$AsPredict
 
 #Convert to raster
+<<<<<<< HEAD
+r<-rasterFromXYZ(rstack3[,c(1,2,11)], res=c(500,500))
+=======
 r<-rasterFromXYZ(rstack3[,c(1,2,13)], res=c(500,500))
 crs(r) <- "EPSG:5070"
 projection(r)
+>>>>>>> 76459b16812439ad6e7f523698b2762a5d84ea57
 
 plot(r)
 
 #Write to file
+<<<<<<< HEAD
+writeRaster(r, "/Users/aaronnuanez/Desktop/20250218_randomForest_probAs5ugL", format='GTiff')
+=======
 writeRaster(r, "/Users/hoover/Desktop/20250228_randomForest_probAs5ugL", format='GTiff')
+>>>>>>> 76459b16812439ad6e7f523698b2762a5d84ea57
