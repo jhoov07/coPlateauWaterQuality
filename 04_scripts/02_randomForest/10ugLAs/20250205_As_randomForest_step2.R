@@ -14,24 +14,24 @@ rm(list=ls())
 Asdata <- read.csv("All_As_Data.csv")
 
 # Filter data into train and test sets based on logical variable 'trainCat2'
-train <- Asdata[Asdata$trainClassLTE2_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
-test <- Asdata[Asdata$trainClassLTE2_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+train <- Asdata[Asdata$trainClassLTE10_splt == TRUE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
+test <- Asdata[Asdata$trainClassLTE10_splt == FALSE, ] #Need up update this field and dataframe to match what is produce in lines 21-24
 
 #Make SiteID the row name so we can drop that field
 rownames(train)<-train$SiteID
 rownames(test)<-test$SiteID
 
 #Drop unused fields
-AsTrain<-train[,-c(1, 4, 109:112, 157, 159:168)] #Drop the As concentration, and the categorical variables we already transformed
-AsTest<-test[,-c(1, 4, 109:112, 157, 159:168)]
+AsTrain<-train[,-c(1, 4, 109:112, 157:160, 162:168)] #Drop the As concentration, and the categorical variables we already transformed
+AsTest<-test[,-c(1, 4, 109:112, 157:160, 162:168)]
 
 #Ensure ClassLTE2 is a Factor (Categorical Variable)
-AsTrain$ClassLTE2 <- as.factor(AsTrain$ClassLTE2)
-AsTest$ClassLTE2  <- as.factor(AsTest$ClassLTE2)
+#AsTrain$ClassLTE10 <- as.factor(AsTrain$ClassLTE2)
+#AsTest$ClassLTE210  <- as.factor(AsTest$ClassLTE2)
 
 
 #Load data
-classifier_RF <- readRDS("./RF_rds/2025-02-06_rf_10ugL.rds")
+classifier_RF <- readRDS("./RF_rds/2025-06-16_rf_10ugL.rds")
 classifier_RF
 
 #best mtry is 54
