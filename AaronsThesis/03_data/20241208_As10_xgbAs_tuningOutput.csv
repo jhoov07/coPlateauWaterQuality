@@ -1,0 +1,2 @@
+"","eta","max_depth","nrounds","subsample","colsample_bytree","gamma","min_child_weight","Accuracy","Kappa","AccuracySD","KappaSD"
+"1",0.005,6,750,0.5,0.75,"0","1",0.846029776674938,0.354549680276761,0.0178347155438375,0.0770208364630538
