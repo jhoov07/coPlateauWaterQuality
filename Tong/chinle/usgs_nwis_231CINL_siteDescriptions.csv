@@ -1,0 +1,31 @@
+#
+#
+# US Geological Survey
+# retrieved: 2025-10-17 19:17:04 EDT
+# URL: https://nwis.waterdata.usgs.gov/nwis/inventory
+#
+# The Site File stores location and general information about groundwater,
+# surface water, and meteorological sites
+# for sites in USA.
+#
+# The following selected fields are included in this output:
+#
+#  agency_cd       -- Agency
+#  site_no         -- Site identification number
+#  station_nm      -- Site name
+#
+#
+# query started 2025-10-17 19:17:04 EDT
+#
+# there are 7 sites matching the search criteria.
+#
+#
+agency_cd	site_no	station_nm
+5s	15s	50s
+USGS	373016108200300	JOBIN (BULL 1124)COLO 2
+USGS	375121108491400	JOBIN (BULL 1124)COLO 3
+USGS	381548108435100	JOBIN (BULL 1124)COLO 5
+USGS	381932108542801	NB04701913DAA
+USGS	382313108570501	NB04801927ACC01
+USGS	382344108583701	NB04801921CCD01
+USGS	393205106422101	SC00608316BDB
