@@ -1,0 +1,84 @@
+#
+#
+# US Geological Survey
+# retrieved: 2025-10-20 13:20:15 EDT
+# URL: https://nwis.waterdata.usgs.gov/nwis/inventory
+#
+# The Site File stores location and general information about groundwater,
+# surface water, and meteorological sites
+# for sites in USA.
+#
+# The following selected fields are included in this output:
+#
+#  agency_cd       -- Agency
+#  site_no         -- Site identification number
+#  station_nm      -- Site name
+#  site_tp_cd      -- Site type
+#  lat_va          -- DMS latitude
+#  long_va         -- DMS longitude
+#  dec_lat_va      -- Decimal latitude
+#  dec_long_va     -- Decimal longitude
+#  coord_meth_cd   -- Latitude-longitude method
+#  coord_acy_cd    -- Latitude-longitude accuracy
+#  coord_datum_cd  -- Latitude-longitude datum
+#  dec_coord_datum_cd -- Decimal Latitude-longitude datum
+#  district_cd     -- District code
+#  state_cd        -- State code
+#  county_cd       -- County code
+#  country_cd      -- Country code
+#  land_net_ds     -- Land net location description
+#  map_nm          -- Name of location map
+#  map_scale_fc    -- Scale of location map
+#  alt_va          -- Altitude of Gage/land surface
+#  alt_meth_cd     -- Method altitude determined
+#  alt_acy_va      -- Altitude accuracy
+#  alt_datum_cd    -- Altitude datum
+#  huc_cd          -- Hydrologic unit code
+#  basin_cd        -- Drainage basin code
+#  topo_cd         -- Topographic setting code
+#  data_types_cd   -- Flags for the type of data collected
+#  instruments_cd  -- Flags for instruments at site
+#  construction_dt -- Date of first construction
+#  inventory_dt    -- Date site established or inventoried
+#  drain_area_va   -- Drainage area
+#  contrib_drain_area_va -- Contributing drainage area
+#  tz_cd           -- Mean Greenwich time offset
+#  local_time_fg   -- Local standard time flag
+#  reliability_cd  -- Data reliability code
+#  gw_file_cd      -- Data-other GW files
+#  nat_aqfr_cd     -- National aquifer code
+#  aqfr_cd         -- Local aquifer code
+#  aqfr_type_cd    -- Local aquifer type code
+#  well_depth_va   -- Well depth
+#  hole_depth_va   -- Hole depth
+#  depth_src_cd    -- Source of depth data
+#  project_no      -- Project number
+#  rt_bol          -- Real-time data flag
+#  peak_begin_date -- Peak-streamflow data begin date
+#  peak_end_date   -- Peak-streamflow data end date
+#  peak_count_nu   -- Peak-streamflow data count
+#  qw_begin_date   -- Water-quality data begin date
+#  qw_end_date     -- Water-quality data end date
+#  qw_count_nu     -- Water-quality data count
+#  gw_begin_date   -- Field water-level measurements begin date
+#  gw_end_date     -- Field water-level measurements end date
+#  gw_count_nu     -- Field water-level measurements count
+#  sv_begin_date   -- Site-visit data begin date
+#  sv_end_date     -- Site-visit data end date
+#  sv_count_nu     -- Site-visit data count
+#
+#
+# query started 2025-10-20 13:20:15 EDT
+#
+# there are 7 sites matching the search criteria.
+#
+#
+agency_cd	site_no	station_nm	site_tp_cd	lat_va	long_va	dec_lat_va	dec_long_va	coord_meth_cd	coord_acy_cd	coord_datum_cd	dec_coord_datum_cd	district_cd	state_cd	county_cd	country_cd	land_net_ds	map_nm	map_scale_fc	alt_va	alt_meth_cd	alt_acy_va	alt_datum_cd	huc_cd	basin_cd	topo_cd	data_types_cd	instruments_cd	construction_dt	inventory_dt	drain_area_va	contrib_drain_area_va	tz_cd	local_time_fg	reliability_cd	gw_file_cd	nat_aqfr_cd	aqfr_cd	aqfr_type_cd	well_depth_va	hole_depth_va	depth_src_cd	project_no	rt_bol	peak_begin_date	peak_end_date	peak_count_nu	qw_begin_date	qw_end_date	qw_count_nu	gw_begin_date	gw_end_date	gw_count_nu	sv_begin_date	sv_end_date	sv_count_nu
+5s	15s	50s	7s	11s	12s	18n	18n	1s	1s	10s	10s	3s	2s	3s	2s	23s	32s	7s	8s	1s	5s	10s	16s	2s	1s	30s	30s	8s	8s	8s	8s	6s	1s	1s	30s	10s	8s	1s	8s	8s	1s	12s	3n	10d	10d	8n	10d	10d	8n	10d	10d	8n	10d	10d	8n
+USGS	373016108200300	JOBIN (BULL 1124)COLO 2	LA-OU	373016	1082003	37.50443846	-108.33480690	M	S	NAD27	NAD83	49	08	083	US								14030002			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	NNNNNNNN		231CINL					1464915400													
+USGS	375121108491400	JOBIN (BULL 1124)COLO 3	LA-OU	375121	1084914	37.85582314	-108.82121370	M	S	NAD27	NAD83	49	08	033	US								14030002			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	NNNNNNNN		231CINL					1464915400													
+USGS	381548108435100	JOBIN (BULL 1124)COLO 5	LA-OU	381548	1084351	38.26332360	-108.73148660	M	S	NAD27	NAD83	49	08	085	US								14030002			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	NNNNNNNN		231CINL					1464915400													
+USGS	381932108542801	NB04701913DAA	GW	381932	1085428	38.32554515	-108.90843690	M	M	NAD27	NAD83	08	08	085	US	NENESES013T0047NR0019WN			 5130.00	M	20	NGVD29	14030002		T	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19720101				MST	Y	C	YYNYNYNN		231CINL	U	205				0	--	--	0	1974-05-01	1974-05-02	2	1974-05-01	1982-08-02	10	--	--	0
+USGS	382313108570501	NB04801927ACC01	GW	382313.3	1085704.8	38.38702778	-108.95133330	G	1	NAD83	NAD83	08	08	085	US	SWSWNES27 T048N R019W	ROC CREEK	  24000	 5412.0	N	 10	NAVD88	14030002		S	NNNANNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19770901	20110621			MST	Y	C	YY		231CINL	U	190	190	A	00DSS0100	0	--	--	0	2011-06-21	2011-06-21	1	--	--	0	--	--	0
+USGS	382344108583701	NB04801921CCD01	GW	382344.3	1085836.7	38.39563889	-108.97686110	G	1	NAD83	NAD83	08	08	085	US	SESWSWS21 T048N R019W	ROC CREEK	  24000	 5534.0	N	 10	NAVD88	14030002		V	NNNANNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19840801	20110622			MST	Y	C	YY		231CINL	U	100	100	O	00DSS0100	0	--	--	0	2011-06-22	2011-06-22	1	--	--	0	--	--	0
+USGS	393205106422101	SC00608316BDB	SP	393205	1064221	39.53470730	-106.70642450	M	F	NAD27	NAD83	08	08	037	US	NWSENWS016T0006SR0083WS			 8400.00	M	 10	NGVD29	14010003			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	YYNNNNNN		231CINL						0	--	--	0	1976-05-10	1976-05-10	1	--	--	0	--	--	0

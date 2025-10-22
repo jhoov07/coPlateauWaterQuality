@@ -1,0 +1,30 @@
+#
+#
+# US Geological Survey
+# retrieved: 2025-10-17 19:13:06 EDT
+# URL: https://nwis.waterdata.usgs.gov/nwis/inventory
+#
+# The Site File stores location and general information about groundwater,
+# surface water, and meteorological sites
+# for sites in USA.
+#
+# The following selected fields are included in this output:
+#
+#  agency_cd       -- Agency
+#  site_no         -- Site identification number
+#  station_nm      -- Site name
+#
+#
+# query started 2025-10-17 19:13:06 EDT
+#
+# there are 6 sites matching the search criteria.
+#
+#
+agency_cd	site_no	station_nm
+5s	15s	50s
+USGS	381458111231301	 (D-29- 5)32bad- 1
+USGS	381622111243401	 (D-29- 5)19cba- 1
+USGS	383228111110601	 (D-26- 7)20baa- 1
+USGS	384317111083201	 (D-24- 7)16daa- 1
+USGS	384541110481801	 (D-24-10) 3bba-S1
+USGS	385321110393901	 (D-22-11)23bdc- 1

@@ -1,0 +1,85 @@
+#
+#
+# US Geological Survey
+# retrieved: 2025-10-20 13:22:28 EDT
+# URL: https://nwis.waterdata.usgs.gov/nwis/inventory
+#
+# The Site File stores location and general information about groundwater,
+# surface water, and meteorological sites
+# for sites in USA.
+#
+# The following selected fields are included in this output:
+#
+#  agency_cd       -- Agency
+#  site_no         -- Site identification number
+#  station_nm      -- Site name
+#  site_tp_cd      -- Site type
+#  lat_va          -- DMS latitude
+#  long_va         -- DMS longitude
+#  dec_lat_va      -- Decimal latitude
+#  dec_long_va     -- Decimal longitude
+#  coord_meth_cd   -- Latitude-longitude method
+#  coord_acy_cd    -- Latitude-longitude accuracy
+#  coord_datum_cd  -- Latitude-longitude datum
+#  dec_coord_datum_cd -- Decimal Latitude-longitude datum
+#  district_cd     -- District code
+#  state_cd        -- State code
+#  county_cd       -- County code
+#  country_cd      -- Country code
+#  land_net_ds     -- Land net location description
+#  map_nm          -- Name of location map
+#  map_scale_fc    -- Scale of location map
+#  alt_va          -- Altitude of Gage/land surface
+#  alt_meth_cd     -- Method altitude determined
+#  alt_acy_va      -- Altitude accuracy
+#  alt_datum_cd    -- Altitude datum
+#  huc_cd          -- Hydrologic unit code
+#  basin_cd        -- Drainage basin code
+#  topo_cd         -- Topographic setting code
+#  data_types_cd   -- Flags for the type of data collected
+#  instruments_cd  -- Flags for instruments at site
+#  construction_dt -- Date of first construction
+#  inventory_dt    -- Date site established or inventoried
+#  drain_area_va   -- Drainage area
+#  contrib_drain_area_va -- Contributing drainage area
+#  tz_cd           -- Mean Greenwich time offset
+#  local_time_fg   -- Local standard time flag
+#  reliability_cd  -- Data reliability code
+#  gw_file_cd      -- Data-other GW files
+#  nat_aqfr_cd     -- National aquifer code
+#  aqfr_cd         -- Local aquifer code
+#  aqfr_type_cd    -- Local aquifer type code
+#  well_depth_va   -- Well depth
+#  hole_depth_va   -- Hole depth
+#  depth_src_cd    -- Source of depth data
+#  project_no      -- Project number
+#  rt_bol          -- Real-time data flag
+#  peak_begin_date -- Peak-streamflow data begin date
+#  peak_end_date   -- Peak-streamflow data end date
+#  peak_count_nu   -- Peak-streamflow data count
+#  qw_begin_date   -- Water-quality data begin date
+#  qw_end_date     -- Water-quality data end date
+#  qw_count_nu     -- Water-quality data count
+#  gw_begin_date   -- Field water-level measurements begin date
+#  gw_end_date     -- Field water-level measurements end date
+#  gw_count_nu     -- Field water-level measurements count
+#  sv_begin_date   -- Site-visit data begin date
+#  sv_end_date     -- Site-visit data end date
+#  sv_count_nu     -- Site-visit data count
+#
+#
+# query started 2025-10-20 13:22:28 EDT
+#
+# there are 8 sites matching the search criteria.
+#
+#
+agency_cd	site_no	station_nm	site_tp_cd	lat_va	long_va	dec_lat_va	dec_long_va	coord_meth_cd	coord_acy_cd	coord_datum_cd	dec_coord_datum_cd	district_cd	state_cd	county_cd	country_cd	land_net_ds	map_nm	map_scale_fc	alt_va	alt_meth_cd	alt_acy_va	alt_datum_cd	huc_cd	basin_cd	topo_cd	data_types_cd	instruments_cd	construction_dt	inventory_dt	drain_area_va	contrib_drain_area_va	tz_cd	local_time_fg	reliability_cd	gw_file_cd	nat_aqfr_cd	aqfr_cd	aqfr_type_cd	well_depth_va	hole_depth_va	depth_src_cd	project_no	rt_bol	peak_begin_date	peak_end_date	peak_count_nu	qw_begin_date	qw_end_date	qw_count_nu	gw_begin_date	gw_end_date	gw_count_nu	sv_begin_date	sv_end_date	sv_count_nu
+5s	15s	50s	7s	11s	12s	18n	18n	1s	1s	10s	10s	3s	2s	3s	2s	23s	32s	7s	8s	1s	5s	10s	16s	2s	1s	30s	30s	8s	8s	8s	8s	6s	1s	1s	30s	10s	8s	1s	8s	8s	1s	12s	3n	10d	10d	8n	10d	10d	8n	10d	10d	8n	10d	10d	8n
+USGS	351407109165601	A-21-29 08ADA1	GW	351407	1091656	35.23530287	-109.28287550	M	F	NAD27	NAD83	04	04	001	US	SESWNES08 T21N  R29E  G	SANDERS	  24000	 5910.	M	  2	NGVD29	15020007			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19900518	19900518			MST	N	C	YYNNNYNN		231PFDFU		70.	70.	D	PRZ	0	--	--	0	--	--	0	1990-07-26	1991-06-04	8	--	--	0
+USGS	351407109165602	A-21-29 08ADA2	GW	351407	1091656	35.23530287	-109.28287550	M	F	NAD27	NAD83	04	04	001	US	SESWNES08 T21N  R29E  G	SANDERS	  24000	 5910.	M	  2	NGVD29	15020007			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19900518	19900518			MST	N	C	YYNNNYNN		231PFDFU		130.	130.	D	PRZ	0	--	--	0	1990-06-07	1990-10-17	2	1990-07-26	1991-06-04	8	--	--	0
+USGS	352354108133201	14N.13W.33.314	GW	352354	1081332	35.39836059	-108.22617930	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231PFDFU						0	--	--	0	1948-12-06	1948-12-06	1	--	--	0	--	--	0
+USGS	352610108081801	14N.12W.20.111	GW	352610	1080818	35.43613818	-108.13895500	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231PFDFU						0	--	--	0	1950-05-11	1950-05-11	1	--	--	0	--	--	0
+USGS	352613108080801	14N.12W.20.121	GW	352613	1080808	35.43697150	-108.13617700	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231PFDFU						0	--	--	0	1948-11-15	1953-03-09	2	--	--	0	--	--	0
+USGS	353016108310501	15N.16W.27.2312	GW	353016	1083105	35.50446736	-108.51868940	M	U	NAD27	NAD83	35	35	031	US								15020006			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231PFDFU						0	--	--	0	1953-04-03	1953-04-03	1	--	--	0	--	--	0
+USGS	355955109031901	18 089-03.10X00.10	GW	355955	1090319	35.99862047	-109.05592900	M	S	NAD27	NAD83	04	04	001	US		BUELL PARK	  62500	 7190.	M	 20	NGVD29	15020006		V	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19551005				MST	N	C	YYYYNNNN		231PFDFU		489.	489.		CHNRES	0	--	--	0	1955-09-26	1955-09-26	1	--	--	0	--	--	0
+USGS	365853112380901	B-41-03 05     UNSURV	SP	365853	1123809	36.98137420	-112.63659300	M	S	NAD27	NAD83	04	04	015	US	      S05 T41N  R03W  G	KAIBAB	  24000	 5040.	M	 20	NGVD29	15010003		S	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN		19961115			MST	N	C	YYYYNNNN		231PFDFL					KANRES	0	--	--	0	--	--	0	--	--	0	1996-11-15	1996-11-15	1

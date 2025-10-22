@@ -1,0 +1,93 @@
+#
+#
+# US Geological Survey
+# retrieved: 2025-10-20 13:23:41 EDT
+# URL: https://nwis.waterdata.usgs.gov/nwis/inventory
+#
+# The Site File stores location and general information about groundwater,
+# surface water, and meteorological sites
+# for sites in USA.
+#
+# The following selected fields are included in this output:
+#
+#  agency_cd       -- Agency
+#  site_no         -- Site identification number
+#  station_nm      -- Site name
+#  site_tp_cd      -- Site type
+#  lat_va          -- DMS latitude
+#  long_va         -- DMS longitude
+#  dec_lat_va      -- Decimal latitude
+#  dec_long_va     -- Decimal longitude
+#  coord_meth_cd   -- Latitude-longitude method
+#  coord_acy_cd    -- Latitude-longitude accuracy
+#  coord_datum_cd  -- Latitude-longitude datum
+#  dec_coord_datum_cd -- Decimal Latitude-longitude datum
+#  district_cd     -- District code
+#  state_cd        -- State code
+#  county_cd       -- County code
+#  country_cd      -- Country code
+#  land_net_ds     -- Land net location description
+#  map_nm          -- Name of location map
+#  map_scale_fc    -- Scale of location map
+#  alt_va          -- Altitude of Gage/land surface
+#  alt_meth_cd     -- Method altitude determined
+#  alt_acy_va      -- Altitude accuracy
+#  alt_datum_cd    -- Altitude datum
+#  huc_cd          -- Hydrologic unit code
+#  basin_cd        -- Drainage basin code
+#  topo_cd         -- Topographic setting code
+#  data_types_cd   -- Flags for the type of data collected
+#  instruments_cd  -- Flags for instruments at site
+#  construction_dt -- Date of first construction
+#  inventory_dt    -- Date site established or inventoried
+#  drain_area_va   -- Drainage area
+#  contrib_drain_area_va -- Contributing drainage area
+#  tz_cd           -- Mean Greenwich time offset
+#  local_time_fg   -- Local standard time flag
+#  reliability_cd  -- Data reliability code
+#  gw_file_cd      -- Data-other GW files
+#  nat_aqfr_cd     -- National aquifer code
+#  aqfr_cd         -- Local aquifer code
+#  aqfr_type_cd    -- Local aquifer type code
+#  well_depth_va   -- Well depth
+#  hole_depth_va   -- Hole depth
+#  depth_src_cd    -- Source of depth data
+#  project_no      -- Project number
+#  rt_bol          -- Real-time data flag
+#  peak_begin_date -- Peak-streamflow data begin date
+#  peak_end_date   -- Peak-streamflow data end date
+#  peak_count_nu   -- Peak-streamflow data count
+#  qw_begin_date   -- Water-quality data begin date
+#  qw_end_date     -- Water-quality data end date
+#  qw_count_nu     -- Water-quality data count
+#  gw_begin_date   -- Field water-level measurements begin date
+#  gw_end_date     -- Field water-level measurements end date
+#  gw_count_nu     -- Field water-level measurements count
+#  sv_begin_date   -- Site-visit data begin date
+#  sv_end_date     -- Site-visit data end date
+#  sv_count_nu     -- Site-visit data count
+#
+#
+# query started 2025-10-20 13:23:41 EDT
+#
+# there are 16 sites matching the search criteria.
+#
+#
+agency_cd	site_no	station_nm	site_tp_cd	lat_va	long_va	dec_lat_va	dec_long_va	coord_meth_cd	coord_acy_cd	coord_datum_cd	dec_coord_datum_cd	district_cd	state_cd	county_cd	country_cd	land_net_ds	map_nm	map_scale_fc	alt_va	alt_meth_cd	alt_acy_va	alt_datum_cd	huc_cd	basin_cd	topo_cd	data_types_cd	instruments_cd	construction_dt	inventory_dt	drain_area_va	contrib_drain_area_va	tz_cd	local_time_fg	reliability_cd	gw_file_cd	nat_aqfr_cd	aqfr_cd	aqfr_type_cd	well_depth_va	hole_depth_va	depth_src_cd	project_no	rt_bol	peak_begin_date	peak_end_date	peak_count_nu	qw_begin_date	qw_end_date	qw_count_nu	gw_begin_date	gw_end_date	gw_count_nu	sv_begin_date	sv_end_date	sv_count_nu
+5s	15s	50s	7s	11s	12s	18n	18n	1s	1s	10s	10s	3s	2s	3s	2s	23s	32s	7s	8s	1s	5s	10s	16s	2s	1s	30s	30s	8s	8s	8s	8s	6s	1s	1s	30s	10s	8s	1s	8s	8s	1s	12s	3n	10d	10d	8n	10d	10d	8n	10d	10d	8n	10d	10d	8n
+USGS	342635109042601	A-12-31 16BBD	SP	342635	1090426	34.44309840	-109.07452860	M	S	NAD27	NAD83	04	04	001	US	SENWNWS16 T12N  R31E  G	MESA PARADA	  24000	 6350.	M	 10	NGVD29	15020003		C	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	N	C	YYYYNNNN		231SNSL					STJ	0	--	--	0	1975-03-20	1975-03-20	1	--	--	0	1975-03-20	1975-03-20	1
+USGS	345048108443301	07N.18W.09.323	GW	345048	1084433	34.84670510	-108.74313470	M	S	NAD27	NAD83	35	35	006	US	SWNESWS09 T07N  R18W	MESITA DE YESO	  24000	 6964.00	M	 10	NGVD29	15020004		S	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	YYNNNNNN	N300COPLTS	231SNSL					4635230000	0	--	--	0	1980-11-04	1980-11-04	2	--	--	0	--	--	0
+USGS	345108108473701	07N.19W.12.142	GW	345108	1084737	34.85226020	-108.79424720	M	S	NAD27	NAD83	35	35	006	US	NESENWS12 T07N  R19W	ATARQUE LAKE	  24000	 7128.00	M	 10	NGVD29	15020004		H	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	C	YYNNNNNN	N300COPLTS	231SNSL					4635230000	0	--	--	0	1980-10-30	1980-10-30	1	--	--	0	--	--	0
+USGS	350656109254501	A-20-27 24CAC	GW	350656	1092545	35.11558070	-109.42982770	M	S	NAD27	NAD83	04	04	001	US	SWNESWS24 T20N  R27E  G	NAVAJO SPRINGS	  24000	 5772.	M	 10	NGVD29	15020007		F	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	196210				MST	N	C	YYNYNNNN		231SNSL		650.	1330.		PRZ													
+USGS	350657109244101	A-20-28 19CAC	GW	350657	1092441	35.11585865	-109.41204910	M	S	NAD27	NAD83	04	04	001	US	SWNESWS19 T20N  R28E  G	NAVAJO SPRINGS	  24000	 5813.	M	 10	NGVD29	15020007		V	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	196108				MST	N	C	YYNYNNNN		231SNSL		204.	1479.		PRZ	0	--	--	0	1975-11-18	1975-11-18	1	--	--	0	--	--	0
+USGS	350717109253301	A-20-27 24BDA1	GW	350717	1092533	35.12141398	-109.42649430	M	S	NAD27	NAD83	04	04	001	US	NESENWS24 T20N  R27E  G	NAVAJO SPRINGS	  24000	 5780.	M	 10	NGVD29	15020007		V	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	196407				MST	N	C	YYNYNNNN		231SNSL		52.	1340.		PRZ	0	--	--	0	1975-11-18	1975-11-18	1	--	--	0	--	--	0
+USGS	350718109253401	A-20-27 24BDA2	GW	350718	1092534	35.12169175	-109.42677200	M	S	NAD27	NAD83	04	04	001	US	NESENWS24 T20N  R27E  G	NAVAJO SPRINGS	  24000	 5780.	M	 10	NGVD29	15020007		V	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	N	C	NYNYNNNN		231SNSL					PRZ													
+USGS	352136108015101	13N.11W.17.114A	GW	352136	1080151	35.36003045	-108.03145160	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231SNSL						0	--	--	0	1948-06-23	1948-06-23	1	--	--	0	--	--	0
+USGS	352143107560201	13N.10W.18.212	GW	352143	1075602	35.36197559	-107.93450520	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231SNSL						0	--	--	0	1976-06-18	1976-12-22	2	--	--	0	--	--	0
+USGS	352213108051601	13N.12W.10.2444	GW	352213	1080516	35.37030730	-108.08839760	M	U	NAD27	NAD83	35	35	031	US								13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231SNSL						0	--	--	0	1967-08-23	1967-08-23	1	--	--	0	--	--	0
+USGS	352418108131501	14N.13W.33.124	GW	352418	1081315	35.40502710	-108.22145700	M	U	NAD27	NAD83	35	35	031	US		THOREAU, NM	  24000	 7155	N	4.3	NAVD88	13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	YNNNNNNN	N300COPLTS	231SNSL						0	--	--	0	1948-08-18	1964-09-30	11	--	--	0	--	--	0
+USGS	352512108131901	14N.13W.28.1234	GW	352512	1081319	35.42002669	-108.22256830	M	U	NAD27	NAD83	35	35	031	US		THOREAU, NM	  24000	 7236	N	4.3	NAVD88	13020207			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	YNNNNYNN	N300COPLTS	231SNSL						0	--	--	0	1948-12-03	1954-02-05	2	1948-12-03	1954-02-05	2	--	--	0
+USGS	353051108270701	15N.15W.20.313	GW	353051	1082707	35.51418960	-108.45257630	M	U	NAD27	NAD83	35	35	031	US								15020006			NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN					MST	Y	U	NNNNNNNN	N300COPLTS	231SNSL						0	--	--	0	1958-03-01	1972-03-28	4	--	--	0	--	--	0
+USGS	353910109040301	18 108-03.80X06.70	GW	353910	1090403	35.65279578	-109.06814860	M	T	NAD27	NAD83	04	04	001	US		ZITH-TUSAYAN BUT 4NE	  24000	 6740.	M	 20	NGVD29	15020006		C	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19570916				MST	N	C	YYYYNYNN		231SNSL		150.	150.		CHNRES	0	--	--	0	--	--	0	1957-09-16	1957-09-16	1	--	--	0
+USGS	362800109172401	11 052-02.22X02.28	GW	362800	1091724	36.46666776	-109.29065810	M	S	NAD27	NAD83	04	04	001	US		YELLOWSTONE CANYON	  62500	 6085.	M	 20	NGVD29	14080204		S	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19560727				MST	N	C	YYYYNNNN		231SNSL	C	430.	430.		CHNRES	0	--	--	0	1956-07-01	1956-07-02	2	1956-07-27	1956-07-27	1	--	--	0
+USGS	363042109282001	11 035-12.31X16.35	GW	363042	1092820	36.51166750	-109.47288380	M	S	NAD27	NAD83	04	04	001	US		LOS GIGANTES BUTTES	  62500	 5360.	M	 20	NGVD29	14080204		V	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNO	NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN	19360912				MST	N	C	YYNYNYNN		231SNSL	C	132.	132.		CHNRES	0	--	--	0	1949-07-22	1949-07-22	1	1936-09-12	1936-09-12	1	--	--	0
